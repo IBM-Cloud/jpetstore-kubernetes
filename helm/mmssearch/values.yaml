@@ -1,0 +1,14 @@
+# Default values for modernpets.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: registry.ng.bluemix.net/<NAMESPACE> # Ex: registry.ng.bluemix.net/mynamespace
+  pullPolicy: Always
+
+ingress:
+  enabled: true
+  hosts:
+    - mmssearch.<Ingress Subdomain> # Ex: mmssearch.myclustername.us-south.containers.mybluemix.net

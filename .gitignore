@@ -1,0 +1,4 @@
+.secrets/
+jpetstore/war/WEB-INF/lib/jpetstore.jar
+
+mmssearch/mms-secrets.json

@@ -1,0 +1,78 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ template "modernpets.fullname" . }}-jpetstoreweb
+  labels:
+    app: {{ template "modernpets.name" . }}-jpetstoreweb
+    chart: {{ template "modernpets.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+    sidecar.istio.io/inject: "true"
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "modernpets.name" . }}-jpetstoreweb
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "modernpets.name" . }}-jpetstoreweb
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}-jpetstoreweb
+        image: {{ .Values.image.repository }}/jpetstoreweb
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
+          - name: VERSION
+            value: "1"
+        ports:
+        - containerPort: 9080
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 9080
+          initialDelaySeconds: 10
+          periodSeconds: 5
+
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: {{ template "modernpets.fullname" . }}-jpetstoredb
+  labels:
+    app: {{ template "modernpets.name" . }}-jpetstoredb
+    chart: {{ template "modernpets.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+    sidecar.istio.io/inject: "true"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ template "modernpets.name" . }}-jpetstoredb
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "modernpets.name" . }}-jpetstoredb
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}-jpetstoredb
+        image: {{ .Values.image.repository }}/jpetstoredb
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: 3306
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            value: "foobar"
+          - name: MYSQL_DATABASE
+            value: "jpetstore"
+          - name: MYSQL_USER
+            value: "jpetstore"
+          - name: MYSQL_PASSWORD
+            value: "foobar"

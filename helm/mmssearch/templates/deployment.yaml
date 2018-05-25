@@ -1,0 +1,43 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ template "mmssearch.fullname" . }}-mmssearch
+  labels:
+    app: {{ template "mmssearch.name" . }}-mmssearch
+    chart: {{ template "mmssearch.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+    sidecar.istio.io/inject: "true"
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "mmssearch.name" . }}-mmssearch
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "mmssearch.name" . }}-mmssearch
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}-mmssearch
+        image: {{ .Values.image.repository }}/mmssearch
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: 8080
+        env:
+        - name: DB_LOCATION
+          value: "tcp(db)/jpetstore"
+        volumeMounts:
+         - name: service-secrets
+           mountPath: "/etc/secrets"
+           readOnly: true
+      volumes:
+      - name: service-secrets
+        secret:
+          secretName: mms-secret
+          items:
+          - key: mms-secrets
+            path: mms-secrets.json

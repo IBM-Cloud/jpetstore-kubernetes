@@ -1,0 +1,6 @@
+Interact with the new application by sending a picture to your Twilio phone number or use the web chat interface:
+{{- if .Values.ingress.enabled }}
+  {{- range .Values.ingress.hosts }}
+    http://{{ . }}{{ $.Values.ingress.path }}
+  {{- end }}
+{{- end }}

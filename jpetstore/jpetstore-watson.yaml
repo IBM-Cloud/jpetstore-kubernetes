@@ -1,0 +1,57 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: mmssearch
+spec:
+  selector:
+    app: mmssearch
+  ports:
+  - port: 8080
+    targetPort: 8080
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: mmssearch
+  annotations:
+    sidecar.istio.io/inject: "true"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mmssearch
+    spec:
+      containers:
+      - name: mmssearch
+        image: <REGISTRY NAMESPACE>/mmssearch
+        ports:
+        - containerPort: 8080
+        env:
+        - name: DB_LOCATION
+          value: "tcp(db)/jpetstore"
+        volumeMounts:
+         - name: service-secrets
+           mountPath: "/run/secrets"
+           readOnly: true
+      volumes:
+      - name: service-secrets
+        secret:
+          secretName: mms-secret
+          items:
+          - key: mms-secrets
+            path: mms-secrets.json
+---
+kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+  name: jpetstore-ingress-mms
+spec:
+  rules:
+  - host: mmssearch.<CLUSTER DOMAIN>
+    http:
+      paths:
+      - path: /sms
+        backend:
+          serviceName: mmssearch
+          servicePort: 8080

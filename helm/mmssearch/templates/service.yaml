@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mmssearch
+  labels:
+    app: {{ template "mmssearch.name" . }}-mmssearch
+    chart: {{ template "mmssearch.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  selector:
+    app: {{ template "mmssearch.name" . }}-mmssearch
+    release: {{ .Release.Name }}
+  ports:
+  - port: 8080
+    targetPort: 8080

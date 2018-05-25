@@ -1,0 +1,164 @@
+/* Styling for the chat bot */
+.chatbot {
+    background-color: white;
+    border: 2px solid #EAEAEA;
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+@media only screen and (max-width: 800px) {
+
+    .chatbot {
+      border: none;
+      order: -1;
+      margin-top: 0;
+      margin-bottom: 1rem;
+      width: 100%;
+      max-width: none;
+    }
+  
+    .dialogcontainer {
+      flex: none;
+      height: 400px;
+    }
+  
+  }
+.anaBanner {
+  height: 48px;
+  line-height: 48px;
+  background-color: #5586D6;
+  vertical-align: middle;
+  padding-left: 15px;
+  color: white;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.dialogcontainer {
+    margin: 0;
+    height: 60%;
+    padding: 5px;
+    background-image: -moz-linear-gradient(bottom, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), url("../images/ana.svg");
+    background-image: -webkit-linear-gradient(bottom, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), url("../images/ana.svg");
+    background-image: -ms-linear-gradient(bottom, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), url("../images/ana.svg");
+    background-image: linear-gradient(bottom, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), url("../images/ana.svg");
+    background-attachment: inherit;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 100px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.dialoginput {
+    border: none;
+    border-top: 2px solid #EAEAEA;
+    width: 100%;
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    font-weight: bold;
+    color: #225282;
+}
+
+.pictureUpload {
+    padding-left: 10px;
+}
+
+.message {
+    margin-top: 0.5em;
+    font-size: 16px;
+    position: relative;
+}
+
+.userTitle {
+    text-align: right;
+    padding: 0.5em;
+    font-weight: normal;
+    color: #919FA8;
+}
+
+.ana {
+    padding: 0.5em;
+    border-radius: 5px;
+    background-color: #F7F9F9;
+    margin-left: 0.5em;
+    margin-right: 30%;
+    -webkit-align-self: flex-start;
+    align-self: flex-start;
+	-webkit-animation: fadein 2s;
+       -moz-animation: fadein 2s;
+        -ms-animation: fadein 2s;
+         -o-animation: fadein 2s;
+            animation: fadein 2s;
+}
+
+.ana:before {
+  content: ' ';
+  position: absolute;
+  width: 0;
+  height: 0;
+  left: 14px;
+  top: 15px;
+  border: 7px solid;
+  border-color: transparent transparent #F7F9F9 transparent;
+}
+
+.anaTitle {
+    text-align: left;
+    padding: 0.5em;
+    font-weight: normal;
+    color: #606568;
+}
+
+.user {
+    padding: 0.5em;
+    border-radius: 5px;
+    background-color: #EEF2FA;
+    margin-right: 0.5em;
+    margin-left: 30%;
+    -webkit-align-self: flex-end;
+    align-self: flex-end;
+	-webkit-animation: fadein 1s;
+       -moz-animation: fadein 1s;
+        -ms-animation: fadein 1s;
+         -o-animation: fadein 1s;
+            animation: fadein 1s;
+}
+
+.user:before {
+  content: ' ';
+  position: absolute;
+  width: 0;
+  height: 0;
+  left: 284px;
+  top: 15px;
+  border: 7px solid;
+  border-color: transparent transparent #EEF2FA transparent;
+}
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Firefox < 16 */
+@-moz-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Internet Explorer */
+@-ms-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}

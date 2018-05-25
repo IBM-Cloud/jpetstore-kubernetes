@@ -1,0 +1,104 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: web
+spec:
+  selector:
+    app: jpetstoreweb
+  ports:
+  - port: 80
+    targetPort: 9080
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: jpetstoreweb
+  annotations:
+    sidecar.istio.io/inject: "true"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: jpetstoreweb
+    spec:
+      containers:
+      - name: jpetstoreweb
+        image: <REGISTRY NAMESPACE>/jpetstoreweb
+        env:
+          - name: VERSION
+            value: "1"
+        ports:
+        - containerPort: 9080
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 9080
+          initialDelaySeconds: 10
+          periodSeconds: 5
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: db
+spec:
+  selector:
+    app: jpetstoredb
+  ports:
+  - port: 3306
+    targetPort: 3306
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: jpetstoredb
+  annotations:
+    sidecar.istio.io/inject: "true"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: jpetstoredb
+    spec:
+      containers:
+      - name: jpetstoredb
+        image: <REGISTRY NAMESPACE>/jpetstoredb
+        ports:
+        - containerPort: 3306
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            value: "foobar"
+          - name: MYSQL_DATABASE
+            value: "jpetstore"
+          - name: MYSQL_USER
+            value: "jpetstore"
+          - name: MYSQL_PASSWORD
+            value: "foobar"
+---
+kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+  name: jpetstore-ingress
+spec:
+  rules:
+  - host: jpetstore.<CLUSTER DOMAIN>
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: web
+          servicePort: 80
+---
+kind: EgressRule
+apiVersion: config.istio.io/v1alpha2
+metadata:
+  name: watson-egress-rule
+spec:
+  destination:
+    service: gateway-a.watsonplatform.net
+  ports:
+    - port: 80
+      protocol: http
+    - port: 443
+      protocol: https

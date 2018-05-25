@@ -1,0 +1,37 @@
+<html>
+
+<head>
+  <title>Messaging</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="ana.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+  <script src="jquery.min.js"></script>
+
+</head>
+
+<body class="homepage">
+  <div class="container">
+    <section class="layout">
+      <div class="chatbot">
+        <div class="anaBanner">JPetStore Chat</div>
+        <div id="chatBox" class="dialogcontainer">
+
+        </div>
+        <div class="dialoginput">
+          <form method="POST" enctype="multipart/form-data" id="fileUploadForm">
+            <div class = "pictureUpload">
+              <i class="fas fa-upload"></i>
+              <input type="file" id="picture" name="picture" onchange="grabImage(this);" />
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+</body>
+<script src="script.js"></script>
+
+</html>

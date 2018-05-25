@@ -1,0 +1,33 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ template "modernpets.name" . }}-jpetstoreweb
+  labels:
+    app: {{ template "modernpets.name" . }}-jpetstoreweb
+    chart: {{ template "modernpets.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  rules:
+  {{- range .Values.ingress.hosts }}
+    - host: {{ . }}
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: web
+              servicePort: 80
+  {{- end }}
+
+#---
+#kind: EgressRule
+#apiVersion: config.istio.io/v1alpha2
+#metadata:
+#  name: watson-egress-rule
+#spec:
+#  destination:
+#    service: gateway-a.watsonplatform.net
+#  ports:
+#    - port: 80
+#      protocol: http
+##      protocol: https

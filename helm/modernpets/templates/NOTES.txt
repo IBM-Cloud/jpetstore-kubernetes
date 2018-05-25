@@ -1,0 +1,6 @@
+In a few seconds, your application should be live at:
+{{- if .Values.ingress.enabled }}
+  {{- range .Values.ingress.hosts }}
+    http://{{ . }}{{ $.Values.ingress.path }}/
+  {{- end }}
+{{- end }}

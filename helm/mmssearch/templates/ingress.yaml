@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ template "mmssearch.name" . }}-mmssearch
+  labels:
+    app: {{ template "mmssearch.name" . }}-mmssearch
+    chart: {{ template "mmssearch.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  rules:
+  {{- range .Values.ingress.hosts }}
+    - host: {{ . }}
+      http:
+        paths:
+        - path: /
+          backend:
+            serviceName: mmssearch
+            servicePort: 8080
+  {{- end }}

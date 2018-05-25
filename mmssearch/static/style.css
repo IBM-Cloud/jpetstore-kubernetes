@@ -1,0 +1,20 @@
+body,
+html {
+    background-color: #F8F8F9;
+    margin: 0 auto;
+    font-family: Lato,sans-serif;
+    color: #283D56;
+    -webkit-font-smoothing: antialiased;
+}
+
+.layout {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
