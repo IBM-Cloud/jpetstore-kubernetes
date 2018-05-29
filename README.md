@@ -14,7 +14,7 @@ There is a (IBM internal only) demo [script available here](https://ibm.box.com/
 
 Follow these steps to set up the environment you need for this demo. You will create a Kubernetes cluster, an instance of the Watson Visual Recognition service and an optional [Twilio](https://www.twilio.com/) account (if you want to shop for pets using text messaging).
 
-1. Set up a Kubernetes cluster by going to the [Container Service on IBM Cloud](http://www.ibm.com/cloud/container-service) and [provision a Standard **Paid** cluster](https://console.bluemix.net/docs/containers/container_index.html#clusters) (it might take up to 15 minutes to provision, so be patient). A Free cluster will *not* work because this demo uses Ingress resources.
+1. Set up a cluster by going to the [Kubernetes Service on IBM Cloud](http://www.ibm.com/cloud/container-service) and [provision a Standard **Paid** cluster](https://console.bluemix.net/docs/containers/container_index.html#clusters) (it might take up to 15 minutes to provision, so be patient). A Free cluster will *not* work because this demo uses Ingress resources.
 
 2. Follow the instructions in the **Access** tab of your cluster to gain access to your cluster using [**kubectl**](https://kubernetes.io/docs/reference/kubectl/overview/).
 
@@ -108,7 +108,7 @@ The docker images for each of the micro-services need to be built and then pushe
    docker build . -t ${MYREGISTRY}/${MYNAMESPACE}/jpetstoreweb
    docker push ${MYREGISTRY}/${MYNAMESPACE}/jpetstoreweb
    ```
-   If you see `Unauthorized ` while pushing the imare, run `ibmcloud cr login` to ensure you are logged into the IBM Cloud and have access to the container registry.
+   If you see `Unauthorized ` while pushing the image, run `ibmcloud cr login` to ensure you are logged into the IBM Cloud and have access to the container registry.
 
 7. Next, build and push the **jpetstoredb** image:
 
