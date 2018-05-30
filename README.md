@@ -6,7 +6,7 @@ This demo allows you to take an existing Java web application (JPetStore) that r
 1. move it to [Kubernetes on the IBM Cloud](https://www.ibm.com/cloud/container-service)
 1. then extend it with  [Watson Visual Recognition](https://www.ibm.com/watson/services/visual-recognition/) and SMS text messaging (using [Twilio](https://www.twilio.com/)) capabilities.
 
-There is a (IBM internal only) demo [script available here](https://ibm.box.com/s/f506hbfpjxrsty2dktcwv5kid1juz66p).
+IBMers can access the demo script and additional collateral from [here](https://github.ibm.com/Bluemix/cloud-portfolio-solutions/tree/master/demos/modernize-jpetstore).
 
 ![](readme_images/architecture.png)
 
@@ -141,11 +141,14 @@ There are two different ways to deploy the three micro-services to a Kubernetes 
 
 1. Install [Helm](https://docs.helm.sh/using_helm/#installing-helm). (`brew install kubernetes-helm` on MacOS)
 
-2. Find your **Ingress Subdomain** by running `ibmcloud cs cluster-get YOUR_CLUSTER_NAME` , it will look similar to "mycluster.us-south.containers.mybluemix.net" 
+2. Find your **Ingress Subdomain** by running `ibmcloud cs cluster-get YOUR_CLUSTER_NAME` , it will look similar to "mycluster.us-south.containers.mybluemix.net".
 
-3. Open `../helm/modernpets/values.yaml` and update the  `repository` and `hosts` lines with your namespace and Ingress Subdomain
+3. Open `../helm/modernpets/values.yaml` and make the following changes.
 
-4. Repeat the update in the `../helm/mmssearch/values.yaml` file
+    - Update `repository` and replace `<NAMESPACE>` with your Container Registry namespace.
+    - Update `hosts` and replace `<Ingress Subdomain>` with your Ingress Subdomain.
+
+4. Repeat the previous step and update `../helm/mmssearch/values.yaml` with the same changes.
 
 5. Next, install JPetStore and Visual Search using the helm yaml files you just created:
 
