@@ -59,7 +59,7 @@ Follow these steps to set up the environment you need for this demo. You will cr
 
 Optional. This step is only required if you want to add text messaging capabilities. Skip this section if you only want to interact using the web chat.
 
-1. Visit [Twilio](http://twilio.com), sign up for a free account and **buy a number** with MMS capabilties by creating a project/feature on the Dashboard.
+1. Visit [Twilio](http://twilio.com), sign up for a free account and **buy a number** with MMS capabilities by creating a project/feature on the Dashboard.
 2. Open the **mms-secrets.json** file and replace:
 
    1.  **sid** and **token** values with your **AccountSID** and the **AuthToken** from the Twilio Account Dashboard.
@@ -205,7 +205,7 @@ If you'd like to send and receive texts from the pet store on your Mac, do the f
     - If the Text Message Forwarding option is not present, confirm that your Apple ID is enabled under **Send & Receive**.
 2. Access the [Getting Started page](https://www.twilio.com/console/sms/getting-started/build) from your Twilio account home page
 3. In the **Send a Message** widget, enter the Twilio number you bought into the **To:** text field.
-4. Add a message into the **Body** text field and click the **Make Request** button.
+4. Add a message to the **Body** text field and click the **Make Request** button.
 5. After receiving the message on your Mac, drag and drop an image into the iMessage window
 
 ## Logging
@@ -224,7 +224,7 @@ To demo monitoring of the cluster, got to your cluster dashboard and click on **
 Learn more: [Analyze logs and monitor the health of Kubernetes applications](https://console.bluemix.net/docs/tutorials/kubernetes-log-analysis-kibana.html)
 ### Load Generation for demo purposes
 
-In a demo situation you might want to generate load for your application (it will help illustrate the various features in the dashboard). This can be done through the loadtest package:
+In a demo situation, you might want to generate load for your application (it will help illustrate the various features in the dashboard). This can be done through the loadtest package:
 
 ```shell
 # Use npm to install loadtest
@@ -243,7 +243,7 @@ loadtest http://jpetstore.<yourclustername>.us-south.containers.mybluemix.net/
 helm delete jpetstore --purge
 helm delete mmssearch --purge
 
-# Delete the scecrets stored in our cluster
+# Delete the secrets stored in our cluster
 kubectl delete secret mms-secret
 
 # Remove the container images from the registry
