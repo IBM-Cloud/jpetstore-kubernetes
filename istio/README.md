@@ -151,7 +151,7 @@ kubectl port-forward -n istio-system $(kubectl get pod -n istio-system -l app=zi
 
 Then open your browser at [http://localhost:9411](http://localhost:9411/)
 
-![](images/Zipkin.png)
+![](images/zipkin.png)
 
 ### Logs & Metrics collection and monitoring with Promethus
 
@@ -175,7 +175,7 @@ kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=pr
 
 Visit <http://localhost:9090/graph> in your web browser and look for metrics starting with `istio`
 
-![](images/Promethus.png)
+![](images/promethus.png)
 
 ### Visualizing Metrics with Grafana
 
@@ -221,8 +221,6 @@ Remember to install **Promethus** addon before following the steps below
 
 
    ![Mixer Dashboard](images/grafana_istio_mixer.png)
-
-
 
 
 
