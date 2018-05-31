@@ -1,10 +1,10 @@
 # Modernize and Extend: JPetStore on IBM Cloud Kubernetes Service
 
-This demo allows you to take an existing Java web application (JPetStore) that runs on WebSphere Application Server and
+This demo modernizes an existing Java web application (JPetStore) by:
 
-1. containerize it
-1. move it to [Kubernetes on the IBM Cloud](https://www.ibm.com/cloud/container-service)
-1. then extend it with  [Watson Visual Recognition](https://www.ibm.com/watson/services/visual-recognition/) and SMS text messaging (using [Twilio](https://www.twilio.com/)) capabilities.
+1. building Docker containers from the legacy stack
+2. moving the app to [IBM Cloud Kubernetes Service](https://www.ibm.com/cloud/container-service)
+3. and extending with [Watson Visual Recognition](https://www.ibm.com/watson/services/visual-recognition/) and [Twilio](https://www.twilio.com/) text messaging.
 
 IBMers can access the demo script and additional collateral from [here](https://github.ibm.com/Bluemix/cloud-portfolio-solutions/tree/master/demos/modernize-jpetstore).
 
@@ -14,11 +14,13 @@ IBMers can access the demo script and additional collateral from [here](https://
 
 Follow these steps to set up the environment you need for this demo. You will create a Kubernetes cluster, an instance of the Watson Visual Recognition service and an optional [Twilio](https://www.twilio.com/) account (if you want to shop for pets using text messaging).
 
-1. Set up a cluster by going to the [Kubernetes Service on IBM Cloud](http://www.ibm.com/cloud/container-service) and [provision a Standard **Paid** cluster](https://console.bluemix.net/docs/containers/container_index.html#clusters) (it might take up to 15 minutes to provision, so be patient). A Free cluster will *not* work because this demo uses Ingress resources.
+1. If you do not have Docker or Kubernetes tooling installed, see [Setting up the IBM Cloud Developer Tools CLI](https://console.bluemix.net/docs/cli/idt/setting_up_idt.html).
 
-2. Follow the instructions in the **Access** tab of your cluster to gain access to your cluster using [**kubectl**](https://kubernetes.io/docs/reference/kubectl/overview/).
+2. Set up a cluster by going to the [Kubernetes Service on IBM Cloud](http://www.ibm.com/cloud/container-service) and [provision a Standard **Paid** cluster](https://console.bluemix.net/docs/containers/container_index.html#clusters) (it might take up to 15 minutes to provision, so be patient). A Free cluster will *not* work because this demo uses Ingress resources.
 
-3. Clone this repository:
+3. Follow the instructions in the **Access** tab of your cluster to gain access to your cluster using [**kubectl**](https://kubernetes.io/docs/reference/kubectl/overview/).
+
+4. Clone this repository:
 
    ```
    git clone https://github.com/ibm-cloud/ModernizeDemo
@@ -55,9 +57,9 @@ Follow these steps to set up the environment you need for this demo. You will cr
 
    ![](readme_images/watson_credentials.png)
 
-### Setup Twilio 
+### Setup Twilio (Optional)
 
-Optional. This step is only required if you want to add text messaging capabilities. Skip this section if you only want to interact using the web chat.
+This step is only required if you want to add text messaging capabilities. Skip this section if you only want to interact using the web chat.
 
 1. Visit [Twilio](http://twilio.com), sign up for a free account and **buy a number** with MMS capabilities by creating a project/feature on the Dashboard.
 2. Open the **mms-secrets.json** file and replace:
