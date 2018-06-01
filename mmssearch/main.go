@@ -163,15 +163,19 @@ func receiveSimulatorHandler(w http.ResponseWriter, r *http.Request) {
 	msgQ.Add("api_key", mmsSecrets.WatsonSecret.APIKey)
 	msgQ.Add("version", watsonVersion)
 	req.URL.RawQuery = msgQ.Encode()
-	// If running with Istio, communication with Envoy sidecar is http. Envoy will use HTTPS.
-	if os.Getenv("WITH_ISTIO") == "true" {
-		req.URL.Scheme = "http"
-		req.URL.Host = req.URL.Host + ":443"
-	}
 	client := &http.Client{}
 	watsonResp, err := client.Do(req)
 	if err != nil {
 		fmt.Println("Error calling Watson:", err)
+		fmt.Println("Trying again with http instead (Istio)")
+		// TODO: Need a better way of determining if running with ISTIO. env var?
+		// If running with Istio, communication with Envoy sidecar is http. Envoy will use HTTPS.
+		req.URL.Scheme = "http"
+		req.URL.Host = req.URL.Host + ":443"
+		watsonResp, err = client.Do(req)
+		if err != nil {
+			fmt.Println("Error calling Watson (Istio):", err)
+		}
 	}
 	// parse data from Watson
 	textResponse, dbMediaURL := parseWatsonResponse(watsonResp)
