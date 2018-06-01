@@ -32,7 +32,7 @@ spec:
           value: "tcp(db)/jpetstore"
         volumeMounts:
          - name: service-secrets
-           mountPath: "/run/secrets"
+           mountPath: "/etc/secrets"
            readOnly: true
       volumes:
       - name: service-secrets
