@@ -1,13 +1,13 @@
-# In-Depth telemetry using Istio
+# Obtain and visualise uniform metrics, logs, traces across different services using Istio.
 
-## Before you continue:
-Follow the steps till [Build and Push the container images](https://github.com/IBM-Cloud/ModernizeDemo#build-and-push-the-container-images) on the main README.md file.
+*Work in Progress*
 
-Once the container images are pushed, continue with the below steps for In-Depth Telemetry - obtain uniform metrics, logs, traces across different services using Istio.
+You will be using add-ons like Zipkin, Promethus, Grafana, Servicegraph & Weavescope to play and visualize the metrics, logs & traces.
 
-You will be using add-ons like Zipkin, Promethus, Grafana, Servicegraph & Weavescope.
-
-*Note: Some configurations and features of the Istio platform are still under development and are subject to change based on user feedback. Allow a few months for stabilization before you use Istio in production.*
+```
+helm delete jpetstore --purge 
+helm delete mmssearch --purge
+```
 
 
 ## Setup istio
@@ -22,87 +22,102 @@ Install Istio in your cluster.
    curl -L https://git.io/getLatestIstio | sh -
    ```
 
-2. Add the `istioctl` client to your PATH. For example, run the following command on a MacOS or Linux system:
+2. Change the directory to the Istio file location.
 
    ```
-   export PATH=$PWD/istio-0.7.1/bin:$PATH
+   cd istio-0.8.0
    ```
 
-3. Change the directory to the Istio file location.
+3. Add the `istioctl` client to your PATH. For example, run the following command on a MacOS or Linux system:
 
    ```
-   cd <FILEPATH>/istio-0.7.1
+   export PATH=$PWD/bin:$PATH
    ```
+   Good work! You successfully installed Istio into your cluster. Next, deploy the JPetStore sample app into your cluster.
 
-4. Install Istio on the Kubernetes cluster. Istio is deployed in the Kubernetes namespace `istio-system`.
-
-   ```
-   kubectl apply -f install/kubernetes/istio.yaml
-   ```
-
-   **Note**: If you need to enable mutual TLS authentication between sidecars, you can install the `istio-auth` file instead: `kubectl apply -f install/kubernetes/istio-auth.yaml`
-
-5. Ensure that the Kubernetes services `istio-pilot`, `istio-mixer`, and `istio-ingress` are fully deployed before you continue.
-
-   ```
-   kubectl get svc -n istio-system
-   ```
-
-   ```
-   NAME            TYPE           CLUSTER-IP       EXTERNAL-IP      PORT(S)                                                            AGE
-   istio-ingress   LoadBalancer   172.21.xxx.xxx   169.xx.xxx.xxx   80:31176/TCP,443:30288/TCP                                         2m
-   istio-mixer     ClusterIP      172.21.xxx.xxx     <none>           9091/TCP,15004/TCP,9093/TCP,9094/TCP,9102/TCP,9125/UDP,42422/TCP   2m
-   istio-pilot     ClusterIP      172.21.xxx.xxx    <none>           15003/TCP,443/TCP                                                  2m
-   ```
-
-6. Ensure the corresponding pods `istio-pilot-*`, `istio-mixer-*`, `istio-ingress-*`, and `istio-ca-*`are also fully deployed before you continue.
-
-   ```
-   kubectl get pods -n istio-system
-   ```
-
-   ```
-   istio-ca-3657790228-j21b9           1/1       Running   0          5m
-   istio-ingress-1842462111-j3vcs      1/1       Running   0          5m
-   istio-pilot-2275554717-93c43        1/1       Running   0          5m
-   istio-mixer-2104784889-20rm8        2/2       Running   0          5m
-   ```
-
-Good work! You successfully installed Istio into your cluster. Next, deploy the JPetStore sample app into your cluster.
 
 ## Deploy
 
 There are two different ways to deploy the three micro-services to a Kubernetes cluster:
 
-- Updating yaml files with the right values and then running  `kubectl create` and `kubectl inject` (recommended with istio 0.7.1)
-- Using [Helm](https://helm.sh/) to provide values for templated charts (Coming soon)
+### Option 1: Deploy with Helm 
 
-### Option 1: Deploy using YAML files(recommended)
+1. If a service account has not already been installed for Tiller, install one by pointing to the istio's`PATH` 
+
+   ```
+   $ kubectl create -f install/kubernetes/helm/helm-service-account.yaml
+   ```
+
+2. Install Tiller on your cluster with the service account:
+
+   ```
+   $ helm init --service-account tiller
+   ```
+
+3. Install Istio with [automatic sidecar injection](https://istio.io/docs/setup/kubernetes/sidecar-injection/#automatic-sidecar-injection) (requires Kubernetes >=1.9.0):
+
+   ```
+   $ helm install install/kubernetes/helm/istio --name istio --namespace istio-system
+   ```
+
+4. The Istio-Sidecar-injector will automatically inject Envoy containers into your application pods assuming running in namespaces labeled with `istio-injection=enabled`
+
+   ```
+   kubectl label namespace <namespace> istio-injection=enabled
+   ```
+
+   If you are not sure, use `default` namespace in place of `<namespace>`.
+
+5. Install JPetStore and Visual Search using the helm yaml files
+
+    ```
+    # Change into the helm directory of JPetstore app
+    cd ../helm
+
+    # Create the JPetstore app
+    helm install --name jpetstore ./modernpets
+
+    # Create the MMSSearch microservice
+    helm install --name mmssearch ./mmssearch
+    ```
+
+### Option 2: Deploy using YAML files
 
 When you deploy JPetStore, Envoy sidecar proxies are injected as containers into your app microservices' pods before the microservice pods are deployed. Istio uses an extended version of the Envoy proxy to mediate all inbound and outbound traffic for all microservices in the service mesh. For more about Envoy, see the [Istio documentation ![External link icon](https://console.bluemix.net/docs/api/content/icons/launch-glyph.svg?lang=en)](https://istio.io/docs/concepts/what-is-istio/overview.html#envoy).
 
 For this option, you need to update the YAML files to point to your registry namespace and Kubernetes cluster Ingress subdomain:
 
-1. Edit **jpetstore/jpetstore.yaml** and **jpetstore/jpetstore-watson.yaml** and replace all instances of:
+1. a) Install Istio without enabling [mutual TLS authentication](https://istio.io/docs/concepts/security/mutual-tls/) between sidecars. Choose this option for clusters with existing applications, applications where services with an Istio sidecar need to be able to communicate with other non-Istio Kubernetes services, and applications that use [liveness and readiness probes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/), headless services, or StatefulSets.
 
-  - `<CLUSTER DOMAIN>` with your Ingress Subdomain (`ibmcloud cs cluster-get CLUSTER_NAME`)
-  - `<REGISTRY NAMESPACE>` with your Image registry URL. For example:`registry.ng.bluemix.net/mynamespace`
+  ```
+  $ kubectl apply -f install/kubernetes/istio-demo.yaml
+  ```
 
-  When you deploy JPetStore, Envoy sidecar proxies are injected as containers into your app microservices' pods before the microservice pods are deployed. Istio uses an extended version of the Envoy proxy to mediate all inbound and outbound traffic for all microservices in the service mesh. For more about Envoy, see the [Istio documentation ![External link icon](https://console.bluemix.net/docs/api/content/icons/launch-glyph.svg?lang=en)](https://istio.io/docs/concepts/what-is-istio/overview.html#envoy).
+  OR
 
-2. Deploy the JPetstore app and database. The `kube-inject` command adds Envoy to the `jpetstore.yaml` file and uses this updated file to deploy the app. When the JPetstore app and database microservices deploy, the Envoy sidecar is also deployed in each microservice pod.
+  b) Install Istio and enforce mutual TLS authentication between sidecars by default. Use this option **only on a fresh kubernetes cluster** where newly deployed workloads are guaranteed to have Istio sidecars installed.
 
-   ````
-   kubectl create -f <(istioctl kube-inject --debug -f jpetstore/jpetstore.yaml)
-   ````
+  ```
+  $ kubectl apply -f install/kubernetes/istio-demo-auth.yaml
+  ```
 
-3. This creates the MMSSearch microservice with Envoy sidecar
+2. The Istio-Sidecar-injector will automatically inject Envoy containers into your application pods assuming running in namespaces labeled with `istio-injection=enabled`
 
    ```
-   kubectl create -f <(istioctl kube-inject --debug -f jpetstore/jpetstore-watson.yaml)
+   kubectl label namespace <namespace> istio-injection=enabled
    ```
 
-### Option 2: Deploy with Helm (coming soon)
+3. Deploy the JPetstore app and database. When the JPetstore app and database microservices deploy, the Envoy sidecar is also deployed in each microservice pod.
+
+   ````
+   kubectl create -f jpetstore/jpetstore.yaml
+   ````
+
+4. This creates the MMSSearch microservice with Envoy sidecar
+
+   ```
+   kubectl create -f jpetstore/jpetstore-watson.yaml
+   ```
 
 ## You're Done!
 
@@ -110,11 +125,11 @@ You are now ready to use the UI to shop for a pet or query the store by texting 
 
 1. Access the java jpetstore application web UI for JPetstore at `http://jpetstore.<Ingress Subdomain>/`
 
-   ![](/readme_images/petstore.png)
+   ![](../readme_images/petstore.png)
 
 2. Access the mmssearch app and start uploading images from `pet-images` directory.
 
-   ![](/readme_images/webchat.png)
+   ![](../readme_images/webchat.png)
 
 
 ### Load Generation for demo purposes
@@ -155,13 +170,7 @@ Then open your browser at [http://localhost:9411](http://localhost:9411/)
 
 ### Logs & Metrics collection and monitoring with Promethus
 
-Navigate to the folder where you have initially installed **Istio** and run the below command to install **Promethus** addon
-
-```
-kubectl apply -f install/kubernetes/addons/prometheus.yaml
-```
-
-Under `istio` folder, a YAML file is provided to hold configuration for the new metric and log stream that Istio will generate and collect automatically. Navigate to `istio` folder and push the new configuration by running the below command
+Under `istio` folder of JPetstore app, a YAML file is provided to hold configuration for the new metric and log stream that Istio will generate and collect automatically. On your terminal or command prompt, navigate to `istio` folder and push the new configuration by running the below command
 
 ```
 istioctl create -f istio-monitoring.yaml
@@ -214,11 +223,7 @@ Remember to install **Promethus** addon before following the steps below
 
    Visit <http://localhost:3000/dashboard/db/istio-dashboard> in your web browser.
 
-
-
    ![Istio Dashboard](images/grafana_istio.png)
-
-
 
    ![Mixer Dashboard](images/grafana_istio_mixer.png)
 
@@ -253,10 +258,16 @@ The URL is: http://localhost:4040.
 
 ## Clean up
 
-Pointing to the folder where you have install istio.
+Uninstall using Helm:
+
+```
+$ helm delete --purge istio
+```
+
+If you installed Istio with `istio-demo.yaml`. Point to the folder where you have installed istio:
 
 ```shell
-kubectl delete -f install/kubernetes/istio.yaml
+kubectl delete -f install/kubernetes/istio-demo.yaml
 ```
 
 ## Related Content
