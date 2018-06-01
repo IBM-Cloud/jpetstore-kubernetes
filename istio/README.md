@@ -4,6 +4,10 @@
 
 You will be using add-ons like Zipkin, Promethus, Grafana, Servicegraph & Weavescope to play and visualize the metrics, logs & traces.
 
+## Pre-req
+
+Start by following the instructions in the parent [README](../README.md) to deploy the secrets and applications using helm. In this guide you will *uninstall* the applications,  install Istio into the cluster and then redeploy the applications.
+
 ```
 helm delete jpetstore --purge 
 helm delete mmssearch --purge
@@ -16,9 +20,10 @@ helm delete mmssearch --purge
 
 Install Istio in your cluster.
 
-1. Get the latest version by using curl:
+1. From your home directory, run this command to download the latest version by using curl:
 
    ```
+   # from ~
    curl -L https://git.io/getLatestIstio | sh -
    ```
 
@@ -33,31 +38,32 @@ Install Istio in your cluster.
    ```
    export PATH=$PWD/bin:$PATH
    ```
-   Good work! You successfully installed Istio into your cluster. Next, deploy the JPetStore sample app into your cluster.
+   Run `istiocl version` to confirm successful setup. Next, deploy the JPetStore sample app into your cluster.
 
 
 ## Deploy
 
-There are two different ways to deploy the three micro-services to a Kubernetes cluster:
+There are two different ways to deploy the two micro-services to your Kubernetes cluster:
 
 ### Option 1: Deploy with Helm 
 
 1. If a service account has not already been installed for Tiller, install one by pointing to the istio's`PATH` 
 
-   ```
-   $ kubectl create -f install/kubernetes/helm/helm-service-account.yaml
+   ```bash
+   # from ~/istio-0.8.0
+   kubectl create -f install/kubernetes/helm/helm-service-account.yaml
    ```
 
 2. Install Tiller on your cluster with the service account:
 
-   ```
-   $ helm init --service-account tiller
+   ```bash
+   helm init --service-account tiller
    ```
 
 3. Install Istio with [automatic sidecar injection](https://istio.io/docs/setup/kubernetes/sidecar-injection/#automatic-sidecar-injection) (requires Kubernetes >=1.9.0):
 
-   ```
-   $ helm install install/kubernetes/helm/istio --name istio --namespace istio-system
+   ```bash
+   helm install install/kubernetes/helm/istio --name istio --namespace istio-system
    ```
 
 4. The Istio-Sidecar-injector will automatically inject Envoy containers into your application pods assuming running in namespaces labeled with `istio-injection=enabled`
