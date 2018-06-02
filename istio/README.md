@@ -9,10 +9,9 @@ You will be using add-ons like Zipkin, Promethus, Grafana, Servicegraph & Weaves
 Start by following the instructions in the parent [README](../README.md) to deploy the secrets and applications using helm. In this guide you will *uninstall* the applications,  install Istio into the cluster and then redeploy the applications.
 
 ```
-helm delete jpetstore --purge 
+helm delete jpetstore --purge
 helm delete mmssearch --purge
 ```
-
 
 ## Setup istio
 
@@ -38,16 +37,16 @@ Install Istio in your cluster.
    ```
    export PATH=$PWD/bin:$PATH
    ```
-   Run `istiocl version` to confirm successful setup. Next, deploy the JPetStore sample app into your cluster.
+   Run `istioctl version` to confirm successful setup. Next, deploy the JPetStore sample app into your cluster.
 
 
 ## Deploy
 
 There are two different ways to deploy the two micro-services to your Kubernetes cluster:
 
-### Option 1: Deploy with Helm 
+### Option 1: Deploy with Helm
 
-1. If a service account has not already been installed for Tiller, install one by pointing to the istio's`PATH` 
+1. If a service account has not already been installed for Tiller, install one by pointing to the istio's`PATH`
 
    ```bash
    # from ~/istio-0.8.0
@@ -68,11 +67,10 @@ There are two different ways to deploy the two micro-services to your Kubernetes
 
 4. The Istio-Sidecar-injector will automatically inject Envoy containers into your application pods assuming running in namespaces labeled with `istio-injection=enabled`
 
-   ```
+   ```bash
    kubectl label namespace <namespace> istio-injection=enabled
    ```
-
-   If you are not sure, use `default` namespace in place of `<namespace>`.
+   If you are not sure, use `default` as your `<namespace>`. To check the label, run this command `kubectl get namespaces -L istio-injection`
 
 5. Install JPetStore and Visual Search using the helm yaml files
 
