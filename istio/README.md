@@ -2,7 +2,7 @@
 
 *Work in Progress*
 
-You will be using add-ons like Zipkin, Promethus, Grafana, Servicegraph & Weavescope to play and visualize the metrics, logs & traces.
+You will be using add-ons like Jaeger, Promethus, Grafana, Servicegraph & Weavescope to collect, query and visualize metrics, logs & traces.
 
 ## Pre-req
 
@@ -44,7 +44,7 @@ Install Istio in your cluster.
 
 There are two different ways to deploy the two micro-services to your Kubernetes cluster:
 
-### Option 1: Deploy with Helm
+### Option 1: Deploy with Helm (recommended)
 
 1. If a service account has not already been installed for Tiller, install one by pointing to the istio's`PATH`
 
@@ -64,6 +64,7 @@ There are two different ways to deploy the two micro-services to your Kubernetes
    ```bash
    helm install install/kubernetes/helm/istio --name istio --namespace istio-system
    ```
+   To enable **servicegraph**, add `--set servicegraph.enabled=true` to the command.
 
 4. The Istio-Sidecar-injector will automatically inject Envoy containers into your application pods assuming running in namespaces labeled with `istio-injection=enabled`
 
@@ -74,13 +75,13 @@ There are two different ways to deploy the two micro-services to your Kubernetes
 
 5. Install JPetStore and Visual Search using the helm yaml files
 
-    ```
+    ```sh
     # Change into the helm directory of JPetstore app
     cd ../helm
-
+    
     # Create the JPetstore app
     helm install --name jpetstore ./modernpets
-
+    
     # Create the MMSSearch microservice
     helm install --name mmssearch ./mmssearch
     ```
@@ -93,7 +94,7 @@ For this option, you need to update the YAML files to point to your registry nam
 
 1. a) Install Istio without enabling [mutual TLS authentication](https://istio.io/docs/concepts/security/mutual-tls/) between sidecars. Choose this option for clusters with existing applications, applications where services with an Istio sidecar need to be able to communicate with other non-Istio Kubernetes services, and applications that use [liveness and readiness probes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/), headless services, or StatefulSets.
 
-  ```
+  ```sh
   $ kubectl apply -f install/kubernetes/istio-demo.yaml
   ```
 
@@ -101,25 +102,25 @@ For this option, you need to update the YAML files to point to your registry nam
 
   b) Install Istio and enforce mutual TLS authentication between sidecars by default. Use this option **only on a fresh kubernetes cluster** where newly deployed workloads are guaranteed to have Istio sidecars installed.
 
-  ```
+  ```sh
   $ kubectl apply -f install/kubernetes/istio-demo-auth.yaml
   ```
 
 2. The Istio-Sidecar-injector will automatically inject Envoy containers into your application pods assuming running in namespaces labeled with `istio-injection=enabled`
 
-   ```
+   ```sh
    kubectl label namespace <namespace> istio-injection=enabled
    ```
 
 3. Deploy the JPetstore app and database. When the JPetstore app and database microservices deploy, the Envoy sidecar is also deployed in each microservice pod.
 
-   ````
+   ````sh
    kubectl create -f jpetstore/jpetstore.yaml
    ````
 
 4. This creates the MMSSearch microservice with Envoy sidecar
 
-   ```
+   ```sh
    kubectl create -f jpetstore/jpetstore-watson.yaml
    ```
 
@@ -152,37 +153,37 @@ loadtest http://jpetstore.<yourclustername>.us-south.containers.mybluemix.net/
 
 ## In-depth telemetry from the service mesh through dashboards
 
-With the application responding to traffic the graphs will start highlighting what's happening under the covers.
+With the application responding to traffic, the graphs will start highlighting what's happening under the covers.
 
-### Distributed tracing with Zipkin
+### Distributed tracing with Jaeger
 
-Navigate to the folder where you have initially installed **Istio** and run the below command to install **Zipkin** addon
+Navigate to the folder where you have initially installed **Istio** and run the below command to install **Jaeger**.
 
-```
-kubectl apply -f install/kubernetes/addons/zipkin.yaml
-```
-
-Setup access to the Zipkin dashboard URL using port-forwarding:
-
-```
-kubectl port-forward -n istio-system $(kubectl get pod -n istio-system -l app=zipkin -o jsonpath='{.items[0].metadata.name}') 9411:9411 &
+```sh
+kubectl apply -n istio-system -f https://raw.githubusercontent.com/jaegertracing/jaeger-kubernetes/master/all-in-one/jaeger-all-in-one-template.yml
 ```
 
-Then open your browser at [http://localhost:9411](http://localhost:9411/)
+Setup access to the Jaeger dashboard URL using port-forwarding:
 
-![](images/zipkin.png)
+```sh
+kubectl port-forward -n istio-system $(kubectl get pod -n istio-system -l app=jaeger -o jsonpath='{.items[0].metadata.name}') 16686:16686 &
+```
+
+Then open your browser at [http://localhost:16686](http://localhost:16686/) -> Select a trace and click **Find Traces**.
+
+![](images/jaeger.png)
 
 ### Logs & Metrics collection and monitoring with Promethus
 
 Under `istio` folder of JPetstore app, a YAML file is provided to hold configuration for the new metric and log stream that Istio will generate and collect automatically. On your terminal or command prompt, navigate to `istio` folder and push the new configuration by running the below command
 
-```
+```sh
 istioctl create -f istio-monitoring.yaml
 ```
 
 In Kubernetes environments, execute the following command:
 
-```
+```sh
 kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=prometheus -o jsonpath='{.items[0].metadata.name}') 9090:9090 &   
 ```
 
@@ -235,7 +236,13 @@ Remember to install **Promethus** addon before following the steps below
 
 ### Generating a service graph
 
-Follow the steps mentioned in the [link on istio documentation](https://istio.io/docs/tasks/telemetry/servicegraph.html) to generate a servicegraph. Your servicegraph should look similar to the image below
+If you have enabled servicegraph while deploying the microservices with helm, run the below command 
+
+```
+kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=servicegraph -o jsonpath='{.items[0].metadata.name}') 8088:8088 & 
+```
+
+Visit <http://localhost:8088/force/forcegraph.html> in your web browser. Try clicking on a service to see details on the service. Real time traffic data is shown in a panel below. The results will look similar to:
 
 ![](images/servicegraph.png)
 
