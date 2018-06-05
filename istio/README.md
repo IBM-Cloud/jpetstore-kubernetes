@@ -8,9 +8,16 @@ You will be using add-ons like Jaeger, Promethus, Grafana, Servicegraph & Weaves
 
 Start by following the instructions in the parent [README](../README.md) to deploy the secrets and applications using helm. In this guide you will *uninstall* the applications,  install Istio into the cluster and then redeploy the applications.
 
-```
+```sh
 helm delete jpetstore --purge
 helm delete mmssearch --purge
+```
+
+If you have deployed the applications usin YAML files, run the below commands
+
+```sh
+kubectl delete -f jpetstore.yaml
+kubectl delete -f jpetstore-watson.yaml
 ```
 
 ## Setup istio
@@ -44,7 +51,7 @@ Install Istio in your cluster.
 
 There are two different ways to deploy the two micro-services to your Kubernetes cluster:
 
-### Option 1: Deploy with Helm (recommended)
+### Option 1: Deploy with Helm
 
 1. If a service account has not already been installed for Tiller, install one by pointing to the istio's`PATH`
 
@@ -78,13 +85,14 @@ There are two different ways to deploy the two micro-services to your Kubernetes
     ```sh
     # Change into the helm directory of JPetstore app
     cd ../helm
-    
+
     # Create the JPetstore app
     helm install --name jpetstore ./modernpets
-    
+
     # Create the MMSSearch microservice
-    helm install --name mmssearch ./mmssearch
+    helm install --name mmssearch ./mmssearch --set serviceentry.enabled=true,destinationrule.enabled=true
     ```
+    A `ServiceEntry` is created to allow access to an external HTTPS service. In this case, **Watson visual recognition service**. Notice that we also create a corresponding `DestinationRule` to initiate TLS for connections to the HTTPS service. Callers must access this service using HTTP on port 443 and Istio will upgrade the connection to HTTPS.
 
 ### Option 2: Deploy using YAML files
 
@@ -124,6 +132,15 @@ For this option, you need to update the YAML files to point to your registry nam
    kubectl create -f jpetstore/jpetstore-watson.yaml
    ```
 
+5. By default, Istio-enabled services are unable to access URLs outside of the cluster because iptables is used in the pod to transparently redirect all outbound traffic to the sidecar proxy, which only handles intra-cluster destinations.
+
+   Create an `ServiceEntry` to allow access to an external HTTPS service:
+
+   ```sh
+   kubectl create -f istio/egressgateway.yaml
+   ```
+   Notice that we also create a corresponding `DestinationRule` to initiate TLS for connections to the HTTPS service. Callers must access this service using HTTP on port 443 and Istio will upgrade the connection to HTTPS.
+
 ## You're Done!
 
 You are now ready to use the UI to shop for a pet or query the store by texting a picture of what you're looking at:
@@ -131,7 +148,6 @@ You are now ready to use the UI to shop for a pet or query the store by texting 
 1. Access the java jpetstore application web UI for JPetstore at `http://jpetstore.<Ingress Subdomain>/`
 
    ![](../readme_images/petstore.png)
-
 2. Access the mmssearch app and start uploading images from `pet-images` directory.
 
    ![](../readme_images/webchat.png)
@@ -145,8 +161,8 @@ In a demo situation you might want to generate load for your application (it wil
 # Use npm to install loadtest
 npm install -g loadtest
 
-# Generate increasing load (make sure to replace <myclustername> with the name of your cluster)
-loadtest http://jpetstore.<yourclustername>.us-south.containers.mybluemix.net/
+# Generate increasing load (make sure to replace <Ingress Subdomain> with the name of your ingress subdomain)
+loadtest http://jpetstore.<Ingress Subdomain>/
 ```
 
 **Note:** Rerun the loadtest before every step to see the metrics and logging in realtime.
@@ -236,10 +252,10 @@ Remember to install **Promethus** addon before following the steps below
 
 ### Generating a service graph
 
-If you have enabled servicegraph while deploying the microservices with helm, run the below command 
+If you have enabled servicegraph while deploying the microservices with helm, run the below command
 
 ```
-kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=servicegraph -o jsonpath='{.items[0].metadata.name}') 8088:8088 & 
+kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=servicegraph -o jsonpath='{.items[0].metadata.name}') 8088:8088 &
 ```
 
 Visit <http://localhost:8088/force/forcegraph.html> in your web browser. Try clicking on a service to see details on the service. Real time traffic data is shown in a panel below. The results will look similar to:
@@ -269,13 +285,13 @@ The URL is: http://localhost:4040.
 
 ## Clean up
 
-Uninstall using Helm:
+Uninstall istio using Helm:
 
 ```
 $ helm delete --purge istio
 ```
 
-If you installed Istio with `istio-demo.yaml`. Point to the folder where you have installed istio:
+If you installed Istio with `istio-demo.yaml`. Point to the folder where you have installed istio and run the below command:
 
 ```shell
 kubectl delete -f install/kubernetes/istio-demo.yaml

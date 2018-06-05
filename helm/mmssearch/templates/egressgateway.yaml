@@ -1,0 +1,21 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: watson-ext
+spec:
+  hosts:
+  - "*.watsonplatform.net"
+  ports:
+  - number: 443
+    name: https
+    protocol: http
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: watson-ext
+spec:
+  host: "*.watsonplatform.net"
+  trafficPolicy:
+    tls:
+      mode: SIMPLE # initiates HTTPS when talking Watson Visual Recognition
