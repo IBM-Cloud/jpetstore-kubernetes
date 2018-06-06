@@ -233,7 +233,7 @@ In a demo situation, you might want to generate load for your application (it wi
 npm install -g loadtest
 
 # Geneate increasing load (make sure to replace <Ingress Subdomain> with the ingress subdomain)
-loadtest http://jpetstore..<Ingress Subdomain>/
+loadtest http://jpetstore.<Ingress Subdomain>/
 ```
 
 
