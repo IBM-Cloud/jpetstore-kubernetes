@@ -232,8 +232,8 @@ In a demo situation, you might want to generate load for your application (it wi
 # Use npm to install loadtest
 npm install -g loadtest
 
-# Geneate increasing load (make sure to replace <myclustername> with the name of your cluster)
-loadtest http://jpetstore.<yourclustername>.us-south.containers.mybluemix.net/
+# Geneate increasing load (make sure to replace <Ingress Subdomain> with the ingress subdomain)
+loadtest http://jpetstore..<Ingress Subdomain>/
 ```
 
 
