@@ -10,6 +10,8 @@ IBMers can access the demo script and additional collateral from [here](https://
 
 ![](readme_images/architecture.png)
 
+[![Containerized Applications with IBM Cloud Kubernetes Service](readme_images/youtube_play.png)](https://youtu.be/26RjSa0UZp0 "Containerized Applications with IBM Cloud Kubernetes")
+
 ## Set-up
 
 Follow these steps to set up the environment you need for this demo. You will create a Kubernetes cluster, an instance of the Watson Visual Recognition service and an optional [Twilio](https://www.twilio.com/) account (if you want to shop for pets using text messaging).
@@ -48,7 +50,7 @@ Follow these steps to set up the environment you need for this demo. You will cr
 
 2. Run `ibmcloud cs cluster-get CLUSTER_NAME` to get your **Ingress Subdomain**
 
-3. Open **mms-secrets.json** file and update the **Ingress Subdomain** in the **jpetstoreurl** field. This allows the mmssearch microservice to find the images that are part of the message back to the user. 
+3. Open **mms-secrets.json** file and update the **Ingress Subdomain** in the **jpetstoreurl** field. This allows the mmssearch microservice to find the images that are part of the message back to the user.
    Example: `http://jpetstore.yourclustername.us-south.containers.mybluemix.net`
 
 4. Go to the [IBM Cloud catalog](https://console.bluemix.net/catalog/) and [create a **Watson Visual Recognition**](https://console.bluemix.net/catalog/services/visual-recognition) service.
@@ -157,13 +159,13 @@ There are two different ways to deploy the three micro-services to a Kubernetes 
     ```bash
     # Change into the helm directory
     cd ../helm
-    
+
     # Initialize helm
     helm init
-    
+
     # Create the JPetstore app
     helm install --name jpetstore ./modernpets
-    
+
     # Ceate the MMSSearch microservice
     helm install --name mmssearch ./mmssearch
     ```
@@ -194,7 +196,7 @@ You are now ready to use the UI to shop for a pet or query the store by texting 
 
 3. If you configured Twilio, send a picture of a pet to your Twilio number via your phone. The app should respond with an available pet from the store or or with a message that this type of pet is not available:
 
-    
+
 
    ![](readme_images/sms.png)
 
@@ -254,7 +256,7 @@ ibmcloud cr image-rm ${MYREGISTRY}/${MYNAMESPACE}/jpetstoreweb
 ibmcloud cr image-rm ${MYREGISTRY}/${MYNAMESPACE}/jpetstoredb
 
 # Delete your entire cluster!
-ibmcloud cs cluster-rm yourclustername 
+ibmcloud cs cluster-rm yourclustername
 ```
 
 ## Related Content

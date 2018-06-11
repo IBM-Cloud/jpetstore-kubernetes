@@ -2,15 +2,17 @@
 
 *Work in Progress*
 
-You will be using add-ons like Jaeger, Promethus, Grafana, Servicegraph & Weavescope to collect, query and visualize metrics, logs & traces.
+You will be using add-ons like Jaeger, Promethus, Grafana, & Weavescope to collect, query and visualize metrics, logs & traces.
 
 ## Pre-req
 
-Start by following the instructions in the parent [README](../README.md) to deploy the secrets and applications using helm. In this guide you will *uninstall* the applications,  install Istio into the cluster and then redeploy the applications.
+Start by following the instructions in the parent [README](../README.md) to deploy the secrets and applications using Kubernetes-YAML. In this guide you will *uninstall* the applications, install Istio into the cluster and then redeploy the applications.
+
+Run the below commands
 
 ```sh
-helm delete jpetstore --purge
-helm delete mmssearch --purge
+kubectl delete -f jpetstore.yaml
+kubectl delete -f jpetstore-watson.yaml
 ```
 
 ## Setup istio
@@ -40,48 +42,52 @@ Install Istio in your cluster.
    Run `istioctl version` to confirm successful setup. Next, deploy the JPetStore sample app into your cluster.
 
 
-## Deploy with Helm
+## Deploy
 
-1. If a service account has not already been installed for Tiller, install one by pointing to the istio's`PATH`
+When you deploy JPetStore, Envoy sidecar proxies are injected as containers into your app microservices' pods before the microservice pods are deployed. Istio uses an extended version of the Envoy proxy to mediate all inbound and outbound traffic for all microservices in the service mesh. For more about Envoy, see the [Istio documentation ![External link icon](https://console.bluemix.net/docs/api/content/icons/launch-glyph.svg?lang=en)](https://istio.io/docs/concepts/what-is-istio/overview.html#envoy).
 
-   ```bash
-   # from ~/istio-0.8.0
-   kubectl create -f install/kubernetes/helm/helm-service-account.yaml
-   ```
+For this option, you need to update the YAML files to point to your registry namespace and Kubernetes cluster Ingress subdomain:
 
-2. Install Tiller on your cluster with the service account:
+1. a) Install Istio without enabling [mutual TLS authentication](https://istio.io/docs/concepts/security/mutual-tls/) between sidecars. Choose this option for clusters with existing applications, applications where services with an Istio sidecar need to be able to communicate with other non-Istio Kubernetes services, and applications that use [liveness and readiness probes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/), headless services, or StatefulSets.
 
-   ```bash
-   helm init --service-account tiller
-   ```
+  ```sh
+  $ kubectl apply -f install/kubernetes/istio-demo.yaml
+  ```
 
-3. Install Istio with [automatic sidecar injection](https://istio.io/docs/setup/kubernetes/sidecar-injection/#automatic-sidecar-injection) (requires Kubernetes >=1.9.0):
+  OR
 
-   ```bash
-   helm install install/kubernetes/helm/istio --name istio --namespace istio-system --set tracing.enabled=true,servicegraph.enabled=true
-   ```
-   `tracing.enabled=true`enables to collect trace spans ; `servicegraph.enabled=true`enables and provides a web-based interface for viewing service graph of the service mesh. 
+  b) Install Istio and enforce mutual TLS authentication between sidecars by default. Use this option **only on a fresh kubernetes cluster** where newly deployed workloads are guaranteed to have Istio sidecars installed.
 
-4. The Istio-Sidecar-injector will automatically inject Envoy containers into your application pods assuming running in namespaces labeled with `istio-injection=enabled`
+  ```sh
+  $ kubectl apply -f install/kubernetes/istio-demo-auth.yaml
+  ```
 
-   ```bash
+2. The Istio-Sidecar-injector will automatically inject Envoy containers into your application pods assuming running in namespaces labeled with `istio-injection=enabled`
+
+   ```sh
    kubectl label namespace <namespace> istio-injection=enabled
    ```
-   If you are not sure, use `default` as your `<namespace>`. To check the label, run this command `kubectl get namespaces -L istio-injection`
 
-5. Install JPetStore and Visual Search using the helm yaml files
+3. Deploy the JPetstore app and database. When the JPetstore app and database microservices deploy, the Envoy sidecar is also deployed in each microservice pod.
 
-    ```sh
-    # Change into the helm directory of JPetstore app
-    cd ../helm
-    
-    # Create the JPetstore app
-    helm install --name jpetstore ./modernpets
-    
-    # Create the MMSSearch microservice
-    helm install --name mmssearch ./mmssearch --set serviceentry.enabled=true,destinationrule.enabled=true
-    ```
-    A `ServiceEntry` is created to allow access to an external HTTPS service. In this case, **Watson visual recognition service**. Notice that we also create a corresponding `DestinationRule` to initiate TLS for connections to the HTTPS service. Callers must access this service using HTTP on port 443 and Istio will upgrade the connection to HTTPS.
+   ````sh
+   kubectl create -f jpetstore/jpetstore.yaml
+   ````
+
+4. This creates the MMSSearch microservice with Envoy sidecar
+
+   ```sh
+   kubectl create -f jpetstore/jpetstore-watson.yaml
+   ```
+
+5. By default, Istio-enabled services are unable to access URLs outside of the cluster because iptables is used in the pod to transparently redirect all outbound traffic to the sidecar proxy, which only handles intra-cluster destinations.
+
+   Create an `ServiceEntry` to allow access to an external HTTPS service:
+
+   ```sh
+   kubectl create -f istio/kubernetes-yaml/egressgateway.yaml
+   ```
+   Notice that we also create a corresponding `DestinationRule` to initiate TLS for connections to the HTTPS service. Callers must access this service using HTTP on port 443 and Istio will upgrade the connection to HTTPS.
 
 ## You're Done!
 
@@ -89,10 +95,10 @@ You are now ready to use the UI to shop for a pet or query the store by texting 
 
 1. Access the java jpetstore application web UI for JPetstore at `http://jpetstore.<Ingress Subdomain>/`
 
-   ![](../readme_images/petstore.png)
+   ![](../../readme_images/petstore.png)
 2. Access the mmssearch app and start uploading images from `pet-images` directory.
 
-   ![](../readme_images/webchat.png)
+   ![](../../readme_images/webchat.png)
 
 
 ### Load Generation for demo purposes
@@ -129,7 +135,7 @@ kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=pr
 
 Visit <http://localhost:9090/graph> in your web browser and look for metrics starting with `istio`
 
-![](images/promethus.png)
+![](../images/promethus.png)
 
 ### Distributed tracing with Jaeger
 
@@ -141,7 +147,7 @@ kubectl port-forward -n istio-system $(kubectl get pod -n istio-system -l app=ja
 
 Then open your browser at [http://localhost:16686](http://localhost:16686/) -> Select a trace and click **Find Traces**.
 
-![](images/jaeger.png)
+![](../images/jaeger.png)
 
 ### Visualizing Metrics with Grafana
 
@@ -180,23 +186,10 @@ Remember to install **Promethus** addon before following the steps below
 
    Visit <http://localhost:3000/dashboard/db/istio-dashboard> in your web browser.
 
-   ![Istio Dashboard](images/grafana_istio.png)
+   ![Istio Dashboard](../images/grafana_istio.png)
 
-   ![Mixer Dashboard](images/grafana_istio_mixer.png)
+   ![Mixer Dashboard](../images/grafana_istio_mixer.png)
 
-
-
-### Generating a service graph
-
-If you have enabled servicegraph while deploying the microservices with helm, run the below command
-
-```
-kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=servicegraph -o jsonpath='{.items[0].metadata.name}') 8088:8088 &
-```
-
-Visit <http://localhost:8088/force/forcegraph.html> in your web browser. Try clicking on a service to see details on the service. Real time traffic data is shown in a panel below. The results will look similar to:
-
-![](images/servicegraph.png)
 
 ## Visualise Cluster using Weave Scope
 While Service Graph displays a high-level overview of how systems are connected, a tool called Weave Scope provides a powerful visualisation and debugging tool for the entire cluster.
@@ -217,14 +210,14 @@ kubectl port-forward -n weave "$(kubectl get -n weave pod --selector=weave-scope
 
 The URL is: http://localhost:4040.
 
-![](images/weavescope.png)
+![](../images/weavescope.png)
 
 ## Clean up
 
-Uninstall istio using Helm:
+If you installed Istio with `istio-demo.yaml`. Point to the folder where you have installed istio and run the below command:
 
-```
-$ helm delete --purge istio
+```shell
+kubectl delete -f install/kubernetes/istio-demo.yaml
 ```
 
 ## Related Content

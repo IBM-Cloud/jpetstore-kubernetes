@@ -12,3 +12,9 @@ ingress:
   enabled: true
   hosts:
     - mmssearch.<Ingress Subdomain> # Ex: mmssearch.myclustername.us-south.containers.mybluemix.net
+
+serviceentry:
+  enabled: false
+
+destinationrule:
+  enabled: false
