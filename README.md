@@ -58,6 +58,7 @@ Follow these steps to set up the environment you need for this demo. You will cr
 5. After creation, you will get a set of auto-generated credentials. Carefully copy these into the **watson** section of **mms-secrets.json** file.
 
    ![](readme_images/watson_credentials.png)
+   _NOTE: You may need to change `apikey` to `api_key` in the JSON configuration provided by the Watson Visual Recognition service._
 
 ### Setup Twilio (Optional)
 
@@ -67,7 +68,7 @@ This step is only required if you want to add text messaging capabilities. Skip 
 2. Open the **mms-secrets.json** file and replace:
 
    1.  **sid** and **token** values with your **AccountSID** and the **AuthToken** from the Twilio Account Dashboard.
-   2.  **number** with the number you just purchased in the format **+1XXXYYYZZZZ**.  
+   2.  **number** with the number you just purchased in the format **+1XXXYYYZZZZ**.
 
 3. Configure Twilio to send messages to the MMSSearch service
    1. Go to **Manage Numbers** on Twilio dashboard by clicking on **All Products & Services** on the left pane then click on your number.
