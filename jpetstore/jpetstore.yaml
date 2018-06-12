@@ -13,14 +13,14 @@ kind: Deployment
 apiVersion: extensions/v1beta1
 metadata:
   name: jpetstoreweb
-  annotations:
-    sidecar.istio.io/inject: "true"
 spec:
   replicas: 1
   template:
     metadata:
       labels:
         app: jpetstoreweb
+      annotations:
+        sidecar.istio.io/inject: "true"
     spec:
       containers:
       - name: jpetstoreweb
@@ -52,14 +52,14 @@ kind: Deployment
 apiVersion: extensions/v1beta1
 metadata:
   name: jpetstoredb
-  annotations:
-    sidecar.istio.io/inject: "true"
 spec:
   replicas: 1
   template:
     metadata:
       labels:
         app: jpetstoredb
+      annotations:
+        sidecar.istio.io/inject: "true"
     spec:
       containers:
       - name: jpetstoredb

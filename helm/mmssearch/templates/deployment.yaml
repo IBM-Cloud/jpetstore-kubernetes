@@ -7,8 +7,6 @@ metadata:
     chart: {{ template "mmssearch.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
-  annotations:
-    sidecar.istio.io/inject: "true"
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -20,6 +18,8 @@ spec:
       labels:
         app: {{ template "mmssearch.name" . }}-mmssearch
         release: {{ .Release.Name }}
+      annotations:
+        sidecar.istio.io/inject: "true"
     spec:
       containers:
       - name: {{ .Chart.Name }}-mmssearch

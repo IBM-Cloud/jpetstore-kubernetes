@@ -6,12 +6,14 @@ You will be using add-ons like Jaeger, Prometheus, Grafana, Servicegraph & Weave
 
 ## Pre-req
 
-Start by following the instructions in the parent [README](../README.md) to deploy the secrets and applications using helm. In this guide you will *uninstall* the applications,  install Istio into the cluster and then redeploy the applications.
+1. **Your cluster needs at least 4 CPUs to install Istio and the JPetStore application.** If you are using an existing cluster with less than 4 CPUs, add worker nodes to increase the cluster capacity.
+1. Follow the instructions in the parent [README](../README.md) to deploy the secrets and applications using helm.
+1. *Uninstall* the JPetStore applications with helm (you will reinstall them later once Istio is enabled):
 
-```sh
-helm delete jpetstore --purge
-helm delete mmssearch --purge
-```
+   ```sh
+   helm delete jpetstore --purge
+   helm delete mmssearch --purge
+   ```
 
 ## Setup istio
 
