@@ -2,7 +2,7 @@
 
 *Work in Progress*
 
-You will be using add-ons like Jaeger, Promethus, Grafana, Servicegraph & Weavescope to collect, query and visualize metrics, logs & traces.
+You will be using add-ons like Jaeger, Prometheus, Grafana, Servicegraph & Weavescope to collect, query and visualize metrics, logs & traces.
 
 ## Pre-req
 
@@ -122,7 +122,7 @@ loadtest http://jpetstore.<Ingress Subdomain>/
 
 With the application responding to traffic, the graphs will start highlighting what's happening under the covers.
 
-### Logs & Metrics collection and monitoring with Promethus
+### Logs & Metrics collection and monitoring with Prometheus
 
 Under `istio` folder of JPetstore app, a YAML file is provided to hold configuration for the new metric and log stream that Istio will generate and collect automatically. On your terminal or command prompt, navigate to `istio` folder and push the new configuration by running the below command
 
@@ -138,7 +138,7 @@ kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=pr
 
 Visit <http://localhost:9090/graph> in your web browser and look for metrics starting with `istio`
 
-![](images/promethus.png)
+![](images/prometheus.png)
 
 ### Distributed tracing with Jaeger
 
@@ -154,7 +154,7 @@ Then open your browser at [http://localhost:16686](http://localhost:16686/) -> S
 
 ### Visualizing Metrics with Grafana
 
-Remember to install **Promethus** addon before following the steps below
+Remember to install **Prometheus** addon before following the steps below
 
 1. To view Istio metrics in a graphical dashboard install the Grafana add-on.
 
