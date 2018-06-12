@@ -22,9 +22,10 @@ import (
 type MMSSecret struct {
 	JPetstoreURL string `json:"jpetstoreurl"`
 	WatsonSecret struct {
-		URL    string `json:"url"`
-		Note   string `json:"note"`
-		APIKey string `json:"api_key"`
+		URL     string `json:"url"`
+		Note    string `json:"note"`
+		APIKey  string `json:"api_key"`
+		APIKey2 string `json:"apikey"`
 	} `json:"watson"`
 	TwilioSecret struct {
 		AccountSID   string `json:"sid"`
@@ -111,6 +112,11 @@ func main() {
 		fmt.Println("Something is wrong with your JSON : ", err)
 	}
 	fmt.Println("(Updated2) Watson URL: ", mmsSecrets.WatsonSecret.URL)
+
+	// if api_key is empty, check apikey
+	if mmsSecrets.WatsonSecret.APIKey == "" {
+		mmsSecrets.WatsonSecret.APIKey = mmsSecrets.WatsonSecret.APIKey2
+	}
 	watsonVRURLStr = mmsSecrets.WatsonSecret.URL + "/v3/classify"
 
 	// fmt.Println("Twilio SID: ", mmsSecrets.TwilioSecret.AccountSID)
