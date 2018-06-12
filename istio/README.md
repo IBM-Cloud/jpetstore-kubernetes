@@ -79,9 +79,18 @@ Install Istio in your cluster.
     helm install --name jpetstore ./modernpets
     
     # Create the MMSSearch microservice
-    helm install --name mmssearch ./mmssearch --set serviceentry.enabled=true,destinationrule.enabled=true
+    helm install --name mmssearch ./mmssearch 
     ```
-    A `ServiceEntry` is created to allow access to an external HTTPS service. In this case, **Watson visual recognition service**. Notice that we also create a corresponding `DestinationRule` to initiate TLS for connections to the HTTPS service. Callers must access this service using HTTP on port 443 and Istio will upgrade the connection to HTTPS.
+
+6. By default, Istio-enabled services are unable to access URLs outside of the cluster because iptables is used in the pod to transparently redirect all outbound traffic to the sidecar proxy, which only handles intra-cluster destinations.
+
+    Create an `ServiceEntry` to allow access to an external HTTPS service:
+
+    ```sh
+    kubectl create -f ../istio/egressgateway.yaml
+    ```
+
+    Notice that we also create a corresponding `DestinationRule` to initiate TLS for connections to the HTTPS service. Callers must access this service using HTTP on port 443 and Istio will upgrade the connection to HTTPS.
 
 ## You're Done!
 

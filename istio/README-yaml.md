@@ -85,7 +85,7 @@ For this option, you need to update the YAML files to point to your registry nam
    Create an `ServiceEntry` to allow access to an external HTTPS service:
 
    ```sh
-   kubectl create -f istio/kubernetes-yaml/egressgateway.yaml
+   kubectl create -f istio/egressgateway.yaml
    ```
    Notice that we also create a corresponding `DestinationRule` to initiate TLS for connections to the HTTPS service. Callers must access this service using HTTP on port 443 and Istio will upgrade the connection to HTTPS.
 
@@ -95,10 +95,10 @@ You are now ready to use the UI to shop for a pet or query the store by texting 
 
 1. Access the java jpetstore application web UI for JPetstore at `http://jpetstore.<Ingress Subdomain>/`
 
-   ![](../../readme_images/petstore.png)
+   ![](../readme_images/petstore.png)
 2. Access the mmssearch app and start uploading images from `pet-images` directory.
 
-   ![](../../readme_images/webchat.png)
+   ![](../readme_images/webchat.png)
 
 
 ### Load Generation for demo purposes
@@ -135,7 +135,7 @@ kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=pr
 
 Visit <http://localhost:9090/graph> in your web browser and look for metrics starting with `istio`
 
-![](../images/promethus.png)
+![](images/promethus.png)
 
 ### Distributed tracing with Jaeger
 
@@ -147,7 +147,7 @@ kubectl port-forward -n istio-system $(kubectl get pod -n istio-system -l app=ja
 
 Then open your browser at [http://localhost:16686](http://localhost:16686/) -> Select a trace and click **Find Traces**.
 
-![](../images/jaeger.png)
+![](images/jaeger.png)
 
 ### Visualizing Metrics with Grafana
 
@@ -186,9 +186,9 @@ Remember to install **Promethus** addon before following the steps below
 
    Visit <http://localhost:3000/dashboard/db/istio-dashboard> in your web browser.
 
-   ![Istio Dashboard](../images/grafana_istio.png)
+   ![Istio Dashboard](images/grafana_istio.png)
 
-   ![Mixer Dashboard](../images/grafana_istio_mixer.png)
+   ![Mixer Dashboard](images/grafana_istio_mixer.png)
 
 
 ## Visualise Cluster using Weave Scope
@@ -210,7 +210,7 @@ kubectl port-forward -n weave "$(kubectl get -n weave pod --selector=weave-scope
 
 The URL is: http://localhost:4040.
 
-![](../images/weavescope.png)
+![](images/weavescope.png)
 
 ## Clean up
 
