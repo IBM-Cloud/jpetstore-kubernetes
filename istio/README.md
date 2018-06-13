@@ -236,7 +236,7 @@ kubectl port-forward -n istio-system $(kubectl get pod -n istio-system -l app=ja
 
 Then open your browser at [http://localhost:16686](http://localhost:16686/) -> Select a trace and click **Find Traces**. If you click on the top (most recent) trace, you should see the details corresponding to your latest refresh. 
 
-![](/Users/VMac/Documents/VMAC/Code/GIT/ModernizeDemo/istio/images/jaeger.png)
+![](images/jaeger.png)
 
 ## Clean up
 
