@@ -2,16 +2,18 @@
 
 *Work in Progress*
 
-You will be using add-ons like Jaeger, Promethus, Grafana, Servicegraph & Weavescope to collect, query and visualize metrics, logs & traces.
+You will be using add-ons like Jaeger, Prometheus, Grafana, Servicegraph & Weavescope to collect, query and visualize metrics, logs & traces.
 
 ## Pre-req
 
-Start by following the instructions in the parent [README](../README.md) to deploy the secrets and applications using helm. In this guide you will *uninstall* the applications,  install Istio into the cluster and then redeploy the applications.
+1. **Your cluster needs at least 4 CPUs to install Istio and the JPetStore application.** If you are using an existing cluster with less than 4 CPUs, add worker nodes to increase the cluster capacity.
+1. Follow the instructions in the parent [README](../README.md) to deploy the secrets and applications using helm.
+1. *Uninstall* the JPetStore applications with helm (you will reinstall them later once Istio is enabled):
 
-```sh
-helm delete jpetstore --purge
-helm delete mmssearch --purge
-```
+   ```sh
+   helm delete jpetstore --purge
+   helm delete mmssearch --purge
+   ```
 
 ## Setup istio
 
@@ -122,7 +124,7 @@ loadtest http://jpetstore.<Ingress Subdomain>/
 
 With the application responding to traffic, the graphs will start highlighting what's happening under the covers.
 
-### Logs & Metrics collection and monitoring with Promethus
+### Logs & Metrics collection and monitoring with Prometheus
 
 Prometheus scrapes metrics from instrumented jobs, either directly or via an intermediary push gateway for short-lived jobs. It stores all scraped samples locally and runs rules over this data to either aggregate and record new time series from existing data or generate alerts. [Grafana](https://grafana.com/) or other API consumers can be used to visualize the collected data.
 
@@ -140,11 +142,11 @@ kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=pr
 
 Visit <http://localhost:9090/graph> in your web browser and look for metrics starting with `istio`. Type `istio_request_count`in the **Expression** box and click **Execute**. Click on the **Graph** tab to see the istio_request_count metrics. You can add multiple graphs by clicking on **Add Graph**.
 
-![](images/promethus.png)
+![](images/prometheus.png)
 
 ### Visualizing Metrics with Grafana
 
-Remember to install **Promethus** addon before following the steps below
+Remember to install **Prometheus** addon before following the steps below
 
 1. To view Istio metrics in a graphical dashboard install the Grafana add-on.
 

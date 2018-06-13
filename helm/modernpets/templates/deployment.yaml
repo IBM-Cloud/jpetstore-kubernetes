@@ -7,8 +7,6 @@ metadata:
     chart: {{ template "modernpets.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
-  annotations:
-    sidecar.istio.io/inject: "true"
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -20,6 +18,8 @@ spec:
       labels:
         app: {{ template "modernpets.name" . }}-jpetstoreweb
         release: {{ .Release.Name }}
+      annotations:
+        sidecar.istio.io/inject: "true"
     spec:
       containers:
       - name: {{ .Chart.Name }}-jpetstoreweb
@@ -47,8 +47,6 @@ metadata:
     chart: {{ template "modernpets.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
-  annotations:
-    sidecar.istio.io/inject: "true"
 spec:
   replicas: 1
   selector:
@@ -60,6 +58,8 @@ spec:
       labels:
         app: {{ template "modernpets.name" . }}-jpetstoredb
         release: {{ .Release.Name }}
+      annotations:
+        sidecar.istio.io/inject: "true"
     spec:
       containers:
       - name: {{ .Chart.Name }}-jpetstoredb
