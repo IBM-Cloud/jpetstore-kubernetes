@@ -135,7 +135,7 @@ kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=pr
 
 Visit <http://localhost:9090/graph> in your web browser and look for metrics starting with `istio`
 
-![](images/promethus.png)
+![](images/prometheus.png)
 
 ### Visualizing Metrics with Grafana
 
