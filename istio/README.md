@@ -124,6 +124,8 @@ With the application responding to traffic, the graphs will start highlighting w
 
 ### Logs & Metrics collection and monitoring with Promethus
 
+Prometheus scrapes metrics from instrumented jobs, either directly or via an intermediary push gateway for short-lived jobs. It stores all scraped samples locally and runs rules over this data to either aggregate and record new time series from existing data or generate alerts. [Grafana](https://grafana.com/) or other API consumers can be used to visualize the collected data.
+
 Under `istio` folder of JPetstore app, a YAML file is provided to hold configuration for the new metric and log stream that Istio will generate and collect automatically. On your terminal or command prompt, navigate to `istio` folder and push the new configuration by running the below command
 
 ```sh
@@ -136,21 +138,9 @@ In Kubernetes environments, execute the following command:
 kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=prometheus -o jsonpath='{.items[0].metadata.name}') 9090:9090 &   
 ```
 
-Visit <http://localhost:9090/graph> in your web browser and look for metrics starting with `istio`
+Visit <http://localhost:9090/graph> in your web browser and look for metrics starting with `istio`. Type `istio_request_count`in the **Expression** box and click **Execute**. Click on the **Graph** tab to see the istio_request_count metrics. You can add multiple graphs by clicking on **Add Graph**.
 
 ![](images/promethus.png)
-
-### Distributed tracing with Jaeger
-
-Setup access to the Jaeger dashboard URL using port-forwarding:
-
-```sh
-kubectl port-forward -n istio-system $(kubectl get pod -n istio-system -l app=jaeger -o jsonpath='{.items[0].metadata.name}') 16686:16686 &
-```
-
-Then open your browser at [http://localhost:16686](http://localhost:16686/) -> Select a trace and click **Find Traces**.
-
-![](images/jaeger.png)
 
 ### Visualizing Metrics with Grafana
 
@@ -228,12 +218,33 @@ The URL is: http://localhost:4040.
 
 ![](images/weavescope.png)
 
+### [Optional] Distributed tracing with Jaeger
+
+In `istio/ingressgateway.yaml`,Replace the `<Ingress Subdomain>` with your subdomain and run the below 
+
+```sh
+kubectl create -f istio/ingressgateway.yaml
+```
+
+Setup access to the Jaeger dashboard URL using port-forwarding:
+
+```sh
+kubectl port-forward -n istio-system $(kubectl get pod -n istio-system -l app=jaeger -o jsonpath='{.items[0].metadata.name}') 16686:16686 &
+```
+
+Then open your browser at [http://localhost:16686](http://localhost:16686/) -> Select a trace and click **Find Traces**. If you click on the top (most recent) trace, you should see the details corresponding to your latest refresh. 
+
+![](/Users/VMac/Documents/VMAC/Code/GIT/ModernizeDemo/istio/images/jaeger.png)
+
 ## Clean up
 
 Uninstall istio using Helm:
 
 ```
-$ helm delete --purge istio
+helm delete --purge istio
+
+helm delete jpetstore --purge
+helm delete mmssearch --purge
 ```
 
 ## Related Content

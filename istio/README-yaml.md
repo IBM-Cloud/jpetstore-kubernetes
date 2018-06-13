@@ -137,18 +137,6 @@ Visit <http://localhost:9090/graph> in your web browser and look for metrics s
 
 ![](images/promethus.png)
 
-### Distributed tracing with Jaeger
-
-Setup access to the Jaeger dashboard URL using port-forwarding:
-
-```sh
-kubectl port-forward -n istio-system $(kubectl get pod -n istio-system -l app=jaeger -o jsonpath='{.items[0].metadata.name}') 16686:16686 &
-```
-
-Then open your browser at [http://localhost:16686](http://localhost:16686/) -> Select a trace and click **Find Traces**.
-
-![](images/jaeger.png)
-
 ### Visualizing Metrics with Grafana
 
 Remember to install **Promethus** addon before following the steps below
@@ -211,6 +199,24 @@ kubectl port-forward -n weave "$(kubectl get -n weave pod --selector=weave-scope
 The URL is: http://localhost:4040.
 
 ![](images/weavescope.png)
+
+### Distributed tracing with Jaeger
+
+In `istio/ingressgateway.yaml`,Replace the `<Ingress Subdomain>` with your subdomain and run the below 
+
+```sh
+kubectl create -f istio/ingressgateway.yaml
+```
+
+Setup access to the Jaeger dashboard URL using port-forwarding:
+
+```sh
+kubectl port-forward -n istio-system $(kubectl get pod -n istio-system -l app=jaeger -o jsonpath='{.items[0].metadata.name}') 16686:16686 &
+```
+
+Then open your browser at [http://localhost:16686](http://localhost:16686/) -> Select a trace and click **Find Traces**. If you click on the top (most recent) trace, you should see the details corresponding to your latest refresh. 
+
+![](/Users/VMac/Documents/VMAC/Code/GIT/ModernizeDemo/istio/images/jaeger.png)
 
 ## Clean up
 
