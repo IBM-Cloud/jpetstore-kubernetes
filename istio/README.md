@@ -2,16 +2,18 @@
 
 *Work in Progress*
 
-You will be using add-ons like Jaeger, Promethus, Grafana, Servicegraph & Weavescope to collect, query and visualize metrics, logs & traces.
+You will be using add-ons like Jaeger, Prometheus, Grafana, Servicegraph & Weavescope to collect, query and visualize metrics, logs & traces.
 
 ## Pre-req
 
-Start by following the instructions in the parent [README](../README.md) to deploy the secrets and applications using helm. In this guide you will *uninstall* the applications,  install Istio into the cluster and then redeploy the applications.
+1. **Your cluster needs at least 4 CPUs to install Istio and the JPetStore application.** If you are using an existing cluster with less than 4 CPUs, add worker nodes to increase the cluster capacity.
+1. Follow the instructions in the parent [README](../README.md) to deploy the secrets and applications using helm.
+1. *Uninstall* the JPetStore applications with helm (you will reinstall them later once Istio is enabled):
 
-```sh
-helm delete jpetstore --purge
-helm delete mmssearch --purge
-```
+   ```sh
+   helm delete jpetstore --purge
+   helm delete mmssearch --purge
+   ```
 
 ## Setup istio
 
@@ -79,9 +81,18 @@ Install Istio in your cluster.
     helm install --name jpetstore ./modernpets
     
     # Create the MMSSearch microservice
-    helm install --name mmssearch ./mmssearch --set serviceentry.enabled=true,destinationrule.enabled=true
+    helm install --name mmssearch ./mmssearch 
     ```
-    A `ServiceEntry` is created to allow access to an external HTTPS service. In this case, **Watson visual recognition service**. Notice that we also create a corresponding `DestinationRule` to initiate TLS for connections to the HTTPS service. Callers must access this service using HTTP on port 443 and Istio will upgrade the connection to HTTPS.
+
+6. By default, Istio-enabled services are unable to access URLs outside of the cluster because iptables is used in the pod to transparently redirect all outbound traffic to the sidecar proxy, which only handles intra-cluster destinations.
+
+    Create an `ServiceEntry` to allow access to an external HTTPS service:
+
+    ```sh
+    kubectl create -f ../istio/egressgateway.yaml
+    ```
+
+    Notice that we also create a corresponding `DestinationRule` to initiate TLS for connections to the HTTPS service. Callers must access this service using HTTP on port 443 and Istio will upgrade the connection to HTTPS.
 
 ## You're Done!
 
@@ -113,7 +124,9 @@ loadtest http://jpetstore.<Ingress Subdomain>/
 
 With the application responding to traffic, the graphs will start highlighting what's happening under the covers.
 
-### Logs & Metrics collection and monitoring with Promethus
+### Logs & Metrics collection and monitoring with Prometheus
+
+Prometheus scrapes metrics from instrumented jobs, either directly or via an intermediary push gateway for short-lived jobs. It stores all scraped samples locally and runs rules over this data to either aggregate and record new time series from existing data or generate alerts. [Grafana](https://grafana.com/) or other API consumers can be used to visualize the collected data.
 
 Under `istio` folder of JPetstore app, a YAML file is provided to hold configuration for the new metric and log stream that Istio will generate and collect automatically. On your terminal or command prompt, navigate to `istio` folder and push the new configuration by running the below command
 
@@ -127,25 +140,13 @@ In Kubernetes environments, execute the following command:
 kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=prometheus -o jsonpath='{.items[0].metadata.name}') 9090:9090 &   
 ```
 
-Visit <http://localhost:9090/graph> in your web browser and look for metrics starting with `istio`
+Visit <http://localhost:9090/graph> in your web browser and look for metrics starting with `istio`. Type `istio_request_count`in the **Expression** box and click **Execute**. Click on the **Graph** tab to see the istio_request_count metrics. You can add multiple graphs by clicking on **Add Graph**.
 
-![](images/promethus.png)
-
-### Distributed tracing with Jaeger
-
-Setup access to the Jaeger dashboard URL using port-forwarding:
-
-```sh
-kubectl port-forward -n istio-system $(kubectl get pod -n istio-system -l app=jaeger -o jsonpath='{.items[0].metadata.name}') 16686:16686 &
-```
-
-Then open your browser at [http://localhost:16686](http://localhost:16686/) -> Select a trace and click **Find Traces**.
-
-![](images/jaeger.png)
+![](images/prometheus.png)
 
 ### Visualizing Metrics with Grafana
 
-Remember to install **Promethus** addon before following the steps below
+Remember to install **Prometheus** addon before following the steps below
 
 1. To view Istio metrics in a graphical dashboard install the Grafana add-on.
 
@@ -219,12 +220,33 @@ The URL is: http://localhost:4040.
 
 ![](images/weavescope.png)
 
+### [Optional] Distributed tracing with Jaeger
+
+In `istio/ingressgateway.yaml`,Replace the `<Ingress Subdomain>` with your subdomain and run the below 
+
+```sh
+kubectl create -f istio/ingressgateway.yaml
+```
+
+Setup access to the Jaeger dashboard URL using port-forwarding:
+
+```sh
+kubectl port-forward -n istio-system $(kubectl get pod -n istio-system -l app=jaeger -o jsonpath='{.items[0].metadata.name}') 16686:16686 &
+```
+
+Then open your browser at [http://localhost:16686](http://localhost:16686/) -> Select a trace and click **Find Traces**. If you click on the top (most recent) trace, you should see the details corresponding to your latest refresh. 
+
+![](images/jaeger.png)
+
 ## Clean up
 
 Uninstall istio using Helm:
 
 ```
-$ helm delete --purge istio
+helm delete --purge istio
+
+helm delete jpetstore --purge
+helm delete mmssearch --purge
 ```
 
 ## Related Content
