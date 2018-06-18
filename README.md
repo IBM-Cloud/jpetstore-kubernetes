@@ -4,7 +4,7 @@ This demo modernizes an existing Java web application (JPetStore) by:
 
 1. building Docker containers from the legacy stack
 2. moving the app to [IBM Cloud Kubernetes Service](https://www.ibm.com/cloud/container-service)
-3. and extending it with [Watson Visual Recognition](https://www.ibm.com/watson/services/visual-recognition/) and [Twilio](https://www.twilio.com/) text messaging (or a web chat interface).
+3. and extending with [Watson Visual Recognition](https://www.ibm.com/watson/services/visual-recognition/) and [Twilio](https://www.twilio.com/) text messaging.
 
 IBMers can access the demo script and additional collateral from [here](https://github.ibm.com/Bluemix/cloud-portfolio-solutions/tree/master/demos/modernize-jpetstore).
 
@@ -12,11 +12,9 @@ IBMers can access the demo script and additional collateral from [here](https://
 
 [![Containerized Applications with IBM Cloud Kubernetes Service](readme_images/youtube_play.png)](https://youtu.be/26RjSa0UZp0 "Containerized Applications with IBM Cloud Kubernetes")
 
-## Set up
+## Set-up
 
-### Create a Kubernetes Cluster and gain Access to it
-
-1. Follow these steps to set up the environment you need for this demo. You will create a Kubernetes cluster, an instance of the Watson Visual Recognition service and an optional [Twilio](https://www.twilio.com/) account (if you want to shop for pets using text messaging).
+Follow these steps to set up the environment you need for this demo. You will create a Kubernetes cluster, an instance of the Watson Visual Recognition service and an optional [Twilio](https://www.twilio.com/) account (if you want to shop for pets using text messaging).
 
 1. If you do not have Docker or Kubernetes tooling installed, see [Setting up the IBM Cloud Developer Tools CLI](https://console.bluemix.net/docs/cli/idt/setting_up_idt.html).
 
@@ -24,15 +22,14 @@ IBMers can access the demo script and additional collateral from [here](https://
 
 3. Follow the instructions in the **Access** tab of your cluster to gain access to your cluster using [**kubectl**](https://kubernetes.io/docs/reference/kubectl/overview/).
 
-### Clone the Demo Code to your Laptop
+4. Clone this repository:
 
-Clone the demo repository:
+   ```
+   git clone https://github.com/ibm-cloud/ModernizeDemo
+   cd ModernizeDemo
+   ```
 
-```bash
-git clone https://github.com/ibm-cloud/ModernizeDemo
-cd ModernizeDemo
-```
-#### Code Structure
+### Code Structure
 
 | Folder | Description |
 | ---- | ----------- |
@@ -41,7 +38,7 @@ cd ModernizeDemo
 |[**helm**](/helm)| Helm charts for templated Kubernetes deployments |
 |[**pet-images**](/pet-images)| Pet images (which can be used for the demo) |
 
-### Set up the Watson Visual Recognition Service
+### Setup the Watson Visual Recognition Service
 
 1. Create a file with the name **mms-secrets.json** by using the existing template:
 
@@ -51,22 +48,20 @@ cd ModernizeDemo
    cp mms-secrets.json.template mms-secrets.json
    ```
 
-2. Run `ibmcloud cs cluster-get CLUSTER_NAME` to get your **Ingress Subdomain** (make sure to replace CLUSTER_NAME with the name of the cluster you created above).
+2. Run `ibmcloud cs cluster-get CLUSTER_NAME` to get your **Ingress Subdomain**
 
 3. Open **mms-secrets.json** file and update the **Ingress Subdomain** in the **jpetstoreurl** field. This allows the mmssearch microservice to find the images that are part of the message back to the user.
    Example: `http://jpetstore.yourclustername.us-south.containers.mybluemix.net`
 
-4. Go to the [IBM Cloud catalog](https://console.bluemix.net/catalog/) and [create a **Watson Visual Recognition**](https://console.bluemix.net/catalog/services/visual-recognition) service (choose the Lite plan).
+4. Go to the [IBM Cloud catalog](https://console.bluemix.net/catalog/) and [create a **Watson Visual Recognition**](https://console.bluemix.net/catalog/services/visual-recognition) service.
 
-5. After creation, you will get a set of auto-generated service credentials. Carefully copy these into the **watson** section of **mms-secrets.json** file.
+5. After creation, you will get a set of auto-generated credentials. Carefully copy these into the **watson** section of **mms-secrets.json** file.
 
    ![](readme_images/watson_credentials.png)
 
-### Set up Twilio (Optional)
+### Setup Twilio (Optional)
 
-This step is only required if you want to use MMS text messaging during the demo (which is not possible in many countries outside the U.S.). 
-
-Skip this section if you only want to interact using the web chat.
+This step is only required if you want to add text messaging capabilities. Skip this section if you only want to interact using the web chat.
 
 1. Visit [Twilio](http://twilio.com), sign up for a free account and **buy a number** with MMS capabilities by creating a project/feature on the Dashboard.
 2. Open the **mms-secrets.json** file and replace:
@@ -86,7 +81,7 @@ Skip this section if you only want to interact using the web chat.
 Next, use the `kubectl` command to allow your Kubernetes cluster access to the secrets you just created. This will allow it to access the visual recognition and Twilio services:
 
 ```bash
-# from the jpetstore-kubernetes directory
+# from ModernizeDemo directory
 cd mmssearch
 kubectl create secret generic mms-secret --from-file=mms-secrets=./mms-secrets.json
 ```
@@ -112,7 +107,7 @@ The docker images for each of the micro-services need to be built and then pushe
 6. Build and push the **jpetstoreweb** image. Run these commands as they are. You do not need to replace any of the values belwo:
 
    ```bash
-   # from the jpetstore-kubernetes directory
+   # from ModernizeDemo directory
    cd jpetstore
    docker build . -t ${MYREGISTRY}/${MYNAMESPACE}/jpetstoreweb
    docker push ${MYREGISTRY}/${MYNAMESPACE}/jpetstoreweb
@@ -122,7 +117,6 @@ The docker images for each of the micro-services need to be built and then pushe
 7. Next, build and push the **jpetstoredb** image:
 
    ```bash
-   # from the jpetstore directory
    cd db
    docker build . -t ${MYREGISTRY}/${MYNAMESPACE}/jpetstoredb
    docker push ${MYREGISTRY}/${MYNAMESPACE}/jpetstoredb
@@ -131,7 +125,6 @@ The docker images for each of the micro-services need to be built and then pushe
 8. Build and push the **mmssearch** image:
 
    ```bash
-   # from the db directory
    cd ../../mmssearch
    docker build . -t ${MYREGISTRY}/${MYNAMESPACE}/mmssearch
    docker push ${MYREGISTRY}/${MYNAMESPACE}/mmssearch
@@ -139,7 +132,9 @@ The docker images for each of the micro-services need to be built and then pushe
 
 9. Finally make sure that all three images have been successfully pushed to the IBM Cloud container registry by running `ibmcloud cr images --restrict $MYNAMESPACE` .
 
-## Deploy the Application
+
+
+## Deploy
 
 There are two different ways to deploy the three micro-services to a Kubernetes cluster:
 
@@ -249,7 +244,7 @@ loadtest http://jpetstore.<Ingress Subdomain>/
 
 ```shell
 # Use "helm delete" to delete the two apps
-helm delete jpetstore --purge
+helm delete jpstore --purge
 helm delete mmssearch --purge
 
 # Delete the secrets stored in our cluster
