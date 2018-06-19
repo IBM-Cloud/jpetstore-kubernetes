@@ -189,7 +189,7 @@ If you did not deploy using Helm, you can deploy using the yaml files and kubect
 
 ## You're Done!
 
-You are now ready to use the UI to shop for a pet or query the store by texting a picture of what you're looking at:
+You are now ready to use the UI to shop for a pet or query the store by sending it a picture of what you're looking at:
 
 1. Access the java jpetstore application web UI for JPetstore at `http://jpetstore.<Ingress Subdomain>/`
 
@@ -219,7 +219,9 @@ If you'd like to send and receive texts from the pet store on your Mac, do the f
 
 ## Logging
 
-To illustrate logging, go to your cluster dashboard on IBM Cloud, choose **Enable Logging** and then click on **View**.
+To illustrate logging, go to your cluster dashboard (the Overview tab) on IBM Cloud,and choose **Enable Logging**.  Next, select the appropriate Cloud Foundry **Org** and **Space**, enable the **container** and **ingress** log sources and click the click on **Create**.
+
+You can now click on **view** (next to Logs) in your cluster dashboard to launch Kibana and see your logs:
 
 ![](readme_images/logging.png)
 
@@ -235,11 +237,11 @@ Learn more: [Analyze logs and monitor the health of Kubernetes applications](htt
 
 In a demo situation, you might want to generate load for your application (it will help illustrate the various features in the dashboard). This can be done through the loadtest package:
 
-```shell
+```bash
 # Use npm to install loadtest
 npm install -g loadtest
 
-# Geneate increasing load (make sure to replace <Ingress Subdomain> with the ingress subdomain)
+# Geneate increasing load (make sure to replace <Ingress Subdomain> with your ingress subdomain)
 loadtest http://jpetstore.<Ingress Subdomain>/
 ```
 
@@ -247,7 +249,7 @@ loadtest http://jpetstore.<Ingress Subdomain>/
 
 ## Clean up
 
-```shell
+```bash
 # Use "helm delete" to delete the two apps
 helm delete jpetstore --purge
 helm delete mmssearch --purge
@@ -266,4 +268,4 @@ ibmcloud cs cluster-rm yourclustername
 
 ## Related Content
 
-[Migrate web applications from Virtual Machines to Kubernetes](https://console.bluemix.net/docs/tutorials/vm-to-containers-and-kubernetes.html)
+IBM Cloud solution tutorial: [Migrate web applications from Virtual Machines to Kubernetes](https://console.bluemix.net/docs/tutorials/vm-to-containers-and-kubernetes.html)
