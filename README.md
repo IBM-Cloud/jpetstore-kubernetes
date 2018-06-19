@@ -29,8 +29,8 @@ IBMers can access the demo script and additional collateral from [here](https://
 Clone the demo repository:
 
 ```bash
-git clone https://github.com/ibm-cloud/ModernizeDemo
-cd ModernizeDemo
+git clone https://github.com/ibm-cloud/jpetstore-kubernetes
+cd jpetstore-kubernetes
 ```
 #### Code Structure
 
@@ -46,7 +46,7 @@ cd ModernizeDemo
 1. Create a file with the name **mms-secrets.json** by using the existing template:
 
    ```bash
-   # from ModernizeDemo directory
+   # from jpetstore-kubernetes directory
    cd mmssearch
    cp mms-secrets.json.template mms-secrets.json
    ```
