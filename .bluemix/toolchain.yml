@@ -51,7 +51,7 @@ services:
           PROD_REGION_ID: '{{form.pipeline.parameters.prod-region}}'
           PROD_CLUSTER_NAME: '{{form.pipeline.parameters.prod-cluster-name}}'
           PROD_CLUSTER_NAMESPACE: '{{form.pipeline.parameters.prod-cluster-namespace}}'
-          WEB_DOCKERFILE: './jpetstore/Dockerfile'
+          DOCKERFILE: './jpetstore/Dockerfile'
           HELM_DIRECTORY: './helm/modernpets'
         execute: true
   build-jpetstoredb:
@@ -73,8 +73,8 @@ services:
           PROD_REGION_ID: '{{form.pipeline.parameters.prod-region}}'
           PROD_CLUSTER_NAME: '{{form.pipeline.parameters.prod-cluster-name}}'
           PROD_CLUSTER_NAMESPACE: '{{form.pipeline.parameters.prod-cluster-namespace}}'
-          DB_DOCKERFILE: './jpetstore/db/Dockerfile'
-          HELM_DIRECTORY: './helm/modernpets'
+          DOCKERFILE: './jpetstore/db/Dockerfile'
+          HELM_CHART: './helm/modernpets/Chart.yaml'
         execute: true
   build-mmssearch:
     service_id: pipeline
@@ -95,12 +95,14 @@ services:
           PROD_REGION_ID: '{{form.pipeline.parameters.prod-region}}'
           PROD_CLUSTER_NAME: '{{form.pipeline.parameters.prod-cluster-name}}'
           PROD_CLUSTER_NAMESPACE: '{{form.pipeline.parameters.prod-cluster-namespace}}'
-          MMSSEARCH_DOCKERFILE: './mmssearch/Dockerfile'
-          HELM_DIRECTORY: './helm/mmssearch'
+          DOCKERFILE: './mmssearch/Dockerfile'
+          HELM_CHART: './helm/mmssearch/Chart.yaml'
         execute: true
   webide:
     service_id: orion
 form:
   pipeline:
+    parameters:
+      registry-region: 'registry.ng.bluemix.net'
     schema:
       $ref: deploy.json
