@@ -1,0 +1,106 @@
+version: '2'
+messages:
+  $i18n: locales.yml
+template:
+  name:
+    $ref: "#/messages/template.name"
+  description:
+    $ref: "#/messages/template.description"
+  header: '![](toolchain.svg?localize)'
+  icon: secure-lock-helm.svg
+  required:
+    - repo
+    - build-jpetstoreweb
+    - build-jpetstoredb
+    - build-mmssearch
+  info:
+    git url: >-
+      [https://github.com/IBM-Cloud/jpetstore-kubernetes](https://github.com/IBM-Cloud/jpetstore-kubernetes)
+    git branch: >-
+      [master](https://github.com/IBM-Cloud/jpetstore-kubernetes/tree/master)
+toolchain:
+  name: 'jpetstore-toolchain-{{timestamp}}'
+  template:
+    getting_started:
+      $ref: "#/messages/template.gettingStarted" 
+services:
+  repo:
+    service_id: publicgit
+    parameters:
+      repo_name: 'jpetstore-kubernetes'
+      repo_url: 'https://github.com/IBM-Cloud/jpetstore-kubernetes'
+      type: clone
+      has_issues: true
+      enable_traceability: true
+  build-jpetstoreweb:
+    service_id: pipeline
+    parameters:
+      services:
+        - repo
+      name: 'jpetstore'
+      ui-pipeline: true
+      configuration:
+        content:
+          $text: pipeline.yml
+        env:
+          GIT_REPO: repo
+          CF_APP_NAME: 'jpetstoreweb'
+          REGISTRY_REGION_ID: '{{form.pipeline.parameters.registry-region}}'
+          REGISTRY_NAMESPACE: '{{form.pipeline.parameters.registry-namespace}}'
+          API_KEY: '{{form.pipeline.parameters.api-key}}'
+          PROD_REGION_ID: '{{form.pipeline.parameters.prod-region}}'
+          PROD_CLUSTER_NAME: '{{form.pipeline.parameters.prod-cluster-name}}'
+          PROD_CLUSTER_NAMESPACE: '{{form.pipeline.parameters.prod-cluster-namespace}}'
+          WEB_DOCKERFILE: './jpetstore/Dockerfile'
+          HELM_DIRECTORY: './helm/modernpets'
+        execute: true
+  build-jpetstoredb:
+    service_id: pipeline
+    parameters:
+      services:
+        - repo
+      name: 'jpetstore'
+      ui-pipeline: true
+      configuration:
+        content:
+          $text: pipeline.yml
+        env:
+          GIT_REPO: repo
+          CF_APP_NAME: 'jpetstoredb'
+          REGISTRY_REGION_ID: '{{form.pipeline.parameters.registry-region}}'
+          REGISTRY_NAMESPACE: '{{form.pipeline.parameters.registry-namespace}}'
+          API_KEY: '{{form.pipeline.parameters.api-key}}'
+          PROD_REGION_ID: '{{form.pipeline.parameters.prod-region}}'
+          PROD_CLUSTER_NAME: '{{form.pipeline.parameters.prod-cluster-name}}'
+          PROD_CLUSTER_NAMESPACE: '{{form.pipeline.parameters.prod-cluster-namespace}}'
+          DB_DOCKERFILE: './jpetstore/db/Dockerfile'
+          HELM_DIRECTORY: './helm/modernpets'
+        execute: true
+  build-mmssearch:
+    service_id: pipeline
+    parameters:
+      services:
+        - repo
+      name: 'mmssearch'
+      ui-pipeline: true
+      configuration:
+        content:
+          $text: pipeline.yml
+        env:
+          GIT_REPO: repo
+          CF_APP_NAME: 'mmssearch'
+          REGISTRY_REGION_ID: '{{form.pipeline.parameters.registry-region}}'
+          REGISTRY_NAMESPACE: '{{form.pipeline.parameters.registry-namespace}}'
+          API_KEY: '{{form.pipeline.parameters.api-key}}'
+          PROD_REGION_ID: '{{form.pipeline.parameters.prod-region}}'
+          PROD_CLUSTER_NAME: '{{form.pipeline.parameters.prod-cluster-name}}'
+          PROD_CLUSTER_NAMESPACE: '{{form.pipeline.parameters.prod-cluster-namespace}}'
+          MMSSEARCH_DOCKERFILE: './mmssearch/Dockerfile'
+          HELM_DIRECTORY: './helm/mmssearch'
+        execute: true
+  webide:
+    service_id: orion
+form:
+  pipeline:
+    schema:
+      $ref: deploy.json
