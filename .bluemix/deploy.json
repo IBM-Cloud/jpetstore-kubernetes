@@ -28,7 +28,7 @@
       "type": "string",
       "disabled": false
     },
-    "cloud-registry-namespace": {
+    "registry-namespace": {
       "description": {
         "$ref": "#/messages/deploy.registrynsDescription"
       },
@@ -42,7 +42,7 @@
       "type": "string",
       "disabled": false
     },
-    "cluster-name": {
+    "prod-cluster-name": {
       "description": {
         "$ref": "#/messages/deploy.clusterNameDescription"
       },
@@ -68,15 +68,22 @@
     "app-name",
     "api-key",
     "registry-region",
-    "cloud-registry-namespace",
+    "registry-namespace",
     "prod-region",
-    "cluster-name",
     "prod-cluster-namespace"
   ],
   "form": [
     {
       "type": "validator",
       "url": "/devops/setup/bm-helper/custom_helper.html"
+    },
+    {
+      "type": "text",
+      "readonly": false,
+      "title": {
+        "$ref": "#/messages/deploy.appName"
+      },
+      "key": "app-name"
     },
     {
       "type": "password",
@@ -123,12 +130,12 @@
           "title": ""
         },
         {
-          "type": "string",
+          "type": "select",
           "readonly": false,
           "title": {
             "$ref": "#/messages/deploy.imgregNs"
           },
-          "key": "cloud-registry-namespace"
+          "key": "registry-namespace"
         }
       ]
     },
@@ -178,8 +185,8 @@
           "title": ""
         },
         {
-          "type": "string",
-          "key": "cluster-name",
+          "type": "select",
+          "key": "prod-cluster-name",
           "readonly": false
         },
         {
