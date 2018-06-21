@@ -1,9 +1,9 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "messages": {
-     "$i18n": "locales.yml"
+    "$i18n": "locales.yml"
   },
-   "title": {
+  "title": {
     "$ref": "#/messages/deploy.title"
   },
   "description": {
@@ -14,168 +14,222 @@
   },
   "type": "object",
   "properties": {
-     "api-key": {
-          "description": {
-            "$ref": "#/messages/deploy.apikeyDescription"
-          },
-          "type": "string",
-          "pattern": "\\S"
+    "api-key": {
+      "description": {
+        "$ref": "#/messages/deploy.apikeyDescription"
       },
-     "registry-region": {
-        "description": {
-          "$ref" : "#/messages/deploy.registryRegionDescription"
-        },
-        "type": "string",
-        "disabled": false
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "registry-region": {
+      "description": {
+        "$ref": "#/messages/deploy.registryRegionDescription"
       },
-     "registry-namespace": {
-        "description": {
-          "$ref" : "#/messages/deploy.registrynsDescription"
-        },
-        "type": "string",
-        "pattern": "^[a-z0-9][a-z0-9_]{3,29}$"
+      "type": "string",
+      "disabled": false
+    },
+    "cloud-registry-namespace": {
+      "description": {
+        "$ref": "#/messages/deploy.registrynsDescription"
       },
-      "prod-region": {
-          "description": {
-            "$ref" : "#/messages/deploy.regionDescription"
-          },
-          "type": "string",
-          "disabled": false
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_]{3,29}$"
+    },
+    "prod-region": {
+      "description": {
+        "$ref": "#/messages/deploy.regionDescription"
       },
-     "prod-cluster-name": {
-          "description": {
-            "$ref" : "#/messages/deploy.clusterNameDescription"
-          },
-          "type": "string",
-          "pattern": "\\S"
+      "type": "string",
+      "disabled": false
+    },
+    "cluster-name": {
+      "description": {
+        "$ref": "#/messages/deploy.clusterNameDescription"
       },
-      "prod-cluster-namespace": {
-        "description": {
-          "$ref" : "#/messages/deploy.namespaceDescription"
-        },
-        "type": "string",
-        "pattern": "\\S"
-      }
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "prod-cluster-namespace": {
+      "description": {
+        "$ref": "#/messages/deploy.namespaceDescription"
+      },
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "app-name": {
+      "description": {
+        "$ref": "#/messages/deploy.appDescription"
+      },
+      "type": "string",
+      "pattern": "\\S"
+    }
   },
-  "required": ["app-name", "api-key", "registry-region", "registry-namespace", "prod-region", "prod-cluster-name", "prod-cluster-namespace"],
+  "required": [
+    "app-name",
+    "api-key",
+    "registry-region",
+    "cloud-registry-namespace",
+    "prod-region",
+    "cluster-name",
+    "prod-cluster-namespace"
+  ],
   "form": [
-     {
-          "type": "password",
+    {
+      "type": "validator",
+      "url": "/devops/setup/bm-helper/custom_helper.html"
+    },
+    {
+      "type": "text",
+      "readonly": false,
+      "title": {
+        "$ref": "#/messages/deploy.appName"
+      },
+      "key": "app-name"
+    },
+    {
+      "type": "password",
+      "readonly": false,
+      "title": {
+        "$ref": "#/messages/deploy.apikey"
+      },
+      "key": "api-key"
+    },
+    {
+      "type": "table",
+      "columnCount": 3,
+      "widths": [
+        "50%",
+        "3%",
+        "47%"
+      ],
+      "items": [
+        {
+          "type": "label",
+          "title": {
+            "$ref": "#/messages/deploy.containerregRegion"
+          }
+        },
+        {
+          "type": "label",
+          "title": ""
+        },
+        {
+          "type": "label",
+          "title": {
+            "$ref": "#/messages/deploy.containerregns"
+          }
+        },
+        {
+          "type": "select",
+          "title": {
+            "$ref": "#/messages/deploy.imgregRegion"
+          },
+          "key": "registry-region"
+        },
+        {
+          "type": "label",
+          "title": ""
+        },
+        {
+          "type": "select",
           "readonly": false,
           "title": {
-            "$ref": "#/messages/deploy.apikey"
+            "$ref": "#/messages/deploy.imgregNs"
           },
-          "key": "api-key"
+          "key": "cloud-registry-namespace"
+        }
+      ]
+    },
+    {
+      "type": "table",
+      "columnCount": 5,
+      "widths": [
+        "32%",
+        "2%",
+        "32%",
+        "2%",
+        "32%"
+      ],
+      "items": [
+        {
+          "type": "label",
+          "title": {
+            "$ref": "#/messages/region"
+          }
         },
-      {
-        "type": "table",
-        "columnCount": 3,
-          "widths": ["50%", "3%", "47%"],
-          "items": [
-              {
-                "type": "label",
-                "title": {
-                  "$ref": "#/messages/deploy.containerregRegion"
-                }
-              },{
-                "type": "label",
-                "title": ""
-              },{                    
-                "type": "label",
-                "title": {
-                  "$ref": "#/messages/deploy.containerregns"
-                }
-              },{
-                "type": "select",
-                "title": {
-                  "$ref": "#/messages/deploy.imgregRegion"
-                },
-                "key": "registry-region"
-              },{
-                "type": "label",
-                "title": ""
-              },{
-                "type": "select",
-                "readonly": false,
-                "title": {
-                  "$ref": "#/messages/deploy.imgregNs"
-                },
-                "key": "registry-namespace"
-              }
-          ]
-      },{
-          "type": "table",
-          "columnCount": 5,
-          "widths": ["32%","2%","32%", "2%", "32%"],
-          "items": [
-              {
-                "type": "label",
-                "title": {
-                  "$ref": "#/messages/region"
-                }
-              },{
-                "type": "label",
-                "title": ""
-              },
-              {
-                "type": "label",
-                "title": {
-                  "$ref": "#/messages/deploy.cluster"
-                }
-              },{
-                "type": "label",
-                "title": ""
-              },
-              {
-                "type": "label",
-                "title": {
-                  "$ref": "#/messages/deploy.clusterNs"
-                }
-              },{
-                "type": "select",
-                "key": "prod-region"
-              },{
-                "type": "label",
-                "title": ""
-              },
-              {
-                "type": "select",
-                "key": "prod-cluster-name",
-                "readonly": false
-              },{
-                "type": "label",
-                "title": ""
-              },
-              {
-                "type": "text",
-                "key": "prod-cluster-namespace",
-                "readonly": false
-              }
-          ]
-      },{
-        "type": "table",
-        "columnCount": 1,
-          "widths": ["100%"],
-          "items": [
-              {
-                "type": "label",
-                "title": {
-                  "$ref": "#/messages/deploy.clusterDescription"
-                }
-              }
-          ]
-      },{
-        "type": "table",
-        "columnCount": 1,
-          "widths": ["100%"],
-          "items": [
-             {
-                "type": "label",
-                "title": {
-                  "$ref": "#/messages/deploy.clusternsDescription"
-                }
-              }
-          ]
-      }
+        {
+          "type": "label",
+          "title": ""
+        },
+        {
+          "type": "label",
+          "title": {
+            "$ref": "#/messages/deploy.cluster"
+          }
+        },
+        {
+          "type": "label",
+          "title": ""
+        },
+        {
+          "type": "label",
+          "title": {
+            "$ref": "#/messages/deploy.clusterNs"
+          }
+        },
+        {
+          "type": "select",
+          "key": "prod-region"
+        },
+        {
+          "type": "label",
+          "title": ""
+        },
+        {
+          "type": "select",
+          "key": "prod-cluster-name",
+          "readonly": false
+        },
+        {
+          "type": "label",
+          "title": ""
+        },
+        {
+          "type": "text",
+          "key": "prod-cluster-namespace",
+          "readonly": false
+        }
+      ]
+    },
+    {
+      "type": "table",
+      "columnCount": 1,
+      "widths": [
+        "100%"
+      ],
+      "items": [
+        {
+          "type": "label",
+          "title": {
+            "$ref": "#/messages/deploy.clusterDescription"
+          }
+        }
+      ]
+    },
+    {
+      "type": "table",
+      "columnCount": 1,
+      "widths": [
+        "100%"
+      ],
+      "items": [
+        {
+          "type": "label",
+          "title": {
+            "$ref": "#/messages/deploy.clusternsDescription"
+          }
+        }
+      ]
+    }
   ]
 }
