@@ -42,7 +42,7 @@
       "type": "string",
       "disabled": false
     },
-    "prod-cluster-name": {
+    "cluster-name": {
       "description": {
         "$ref": "#/messages/deploy.clusterNameDescription"
       },
@@ -76,14 +76,6 @@
     {
       "type": "validator",
       "url": "/devops/setup/bm-helper/custom_helper.html"
-    },
-    {
-      "type": "text",
-      "readonly": false,
-      "title": {
-        "$ref": "#/messages/deploy.appName"
-      },
-      "key": "app-name"
     },
     {
       "type": "password",
@@ -185,8 +177,8 @@
           "title": ""
         },
         {
-          "type": "select",
-          "key": "prod-cluster-name",
+          "type": "string",
+          "key": "cluster-name",
           "readonly": false
         },
         {
