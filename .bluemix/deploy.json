@@ -79,14 +79,6 @@
       "url": "/devops/setup/bm-helper/custom_helper.html"
     },
     {
-      "type": "text",
-      "readonly": false,
-      "title": {
-        "$ref": "#/messages/deploy.appName"
-      },
-      "key": "app-name"
-    },
-    {
       "type": "password",
       "readonly": false,
       "title": {
@@ -131,7 +123,7 @@
           "title": ""
         },
         {
-          "type": "select",
+          "type": "string",
           "readonly": false,
           "title": {
             "$ref": "#/messages/deploy.imgregNs"
@@ -186,8 +178,8 @@
           "title": ""
         },
         {
-          "type": "select",
-          "key": "prod-cluster-name",
+          "type": "string",
+          "key": "cluster-name",
           "readonly": false
         },
         {
