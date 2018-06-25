@@ -10,6 +10,10 @@
 	<property name="build.dir" value=".classes"/>
 	<property name="weblib.dir" value="${war.dir}/WEB-INF/lib"/>
 	<property name="dist.dir" value="dist"/>
+	<property name="test.build.dir" value="build/test"/>
+	<property name="test.src.dir" value="test"/>
+	<property name="test.reports" value="build/reports"/>
+	<property name="cobertura.dir" value="build/cobertura" />
 
 	<property name="spring.root" value="springroot"/>
 
@@ -40,6 +44,23 @@
 		</fileset>
 
 	</path>
+	
+	<path id="build-classpath">
+		<fileset dir="${spring.root}/lib/junit">
+			<include name="junit-4.4.jar"/>
+		</fileset>
+		<fileset dir="${spring.root}/dist">
+			<include name="spring.jar"/>
+		</fileset>
+	</path>
+	
+	<path id="cobertura-classpath">
+	    <fileset dir="${spring.root}/lib/cobertura">
+	        <include name="*.jar" />
+	    </fileset>
+	</path>
+
+	<taskdef classpathref="cobertura-classpath" resource="tasks.properties" />
 
 
 	<target name="usage">
@@ -65,6 +86,9 @@
 		<delete dir="${weblib.dir}"/>
 		<delete dir="${dist.dir}"/>
 		<delete file="client/${name}.jar"/>
+		<delete dir="${test.reports}"/>
+		<delete dir="${test.build.dir}"/>
+		<delete dir="${test.reports}"/>
 
 	</target>
 
@@ -167,8 +191,53 @@
 			<exclude name="**/.*"/>
 		</war>
 	</target>
+	
+	<target name="instrument" depends="build">
+		<mkdir dir="${cobertura.dir}"/>
+		<cobertura-instrument todir="${cobertura.dir}" >
+			<ignore regex="org.slf4j.LoggerFactory" />
+			<fileset dir="${build.dir}">
+			    <include name="**/*.class" />
+			    <exclude name="**/*Test.class" />
+			</fileset>
+		</cobertura-instrument>
+	</target>
+	
+	<target name="test-compile" depends="instrument">
+	    <mkdir dir="${test.build.dir}"/>
+	    <javac srcdir="${test.src.dir}" destdir="${test.build.dir}" includeantruntime="false">
+	        <classpath>
+	        	<path refid="build-classpath"/>
+	        	<pathelement location="${build.dir}"/>
+	        </classpath>
+	    </javac>
+	</target>
+
+	  <target name="test" depends="test-compile">
+	  	<mkdir dir="${test.reports}"/>
+	    <junit printsummary="on" haltonfailure="yes" fork="true">
+	    	<sysproperty key="net.sourceforge.cobertura.datafile"
+	    			file="${basedir}/cobertura.ser" />
+	    	<classpath location="${cobertura.dir}" />
+	        <classpath>
+	          <path refid="build-classpath"/>
+	          <pathelement location="${build.dir}"/>
+	          <pathelement location="${test.build.dir}"/>
+	        </classpath>
+	    	<classpath refid="cobertura-classpath" />
+	        <formatter type="xml" />
+	        <batchtest todir="${test.reports}">
+	            <fileset dir="${test.src.dir}" includes="**/*Test.java" />
+	        </batchtest>
+	    </junit>
+	  </target>
+	
+	<target name="coveragereport" depends="test">
+		<cobertura-report format="xml" destdir="${test.reports}" srcdir="${src.dir}" />
+	</target>
 
 
 	<target name="all" depends="clean,build,warfile" description="Clean,build,warfile"/>
+	<target name="runtest" depends="clean,coveragereport" description="runs test"/>
 
 </project>
