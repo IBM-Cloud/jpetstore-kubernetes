@@ -191,7 +191,7 @@ If you did not deploy using Helm, you can deploy using the yaml files and kubect
 
 You are now ready to use the UI to shop for a pet or query the store by sending it a picture of what you're looking at:
 
-1. Access the java jpetstore application web UI for JPetstore at `http://jpetstore.<Ingress Subdomain>/`
+1. Access the java jpetstore application web UI for JPetstore at `http://jpetstore.<Ingress Subdomain>/shop/index.do`
 
    ![](readme_images/petstore.png)
 
