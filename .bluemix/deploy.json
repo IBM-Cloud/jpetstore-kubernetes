@@ -16,61 +16,57 @@
   "properties": {
     "api-key": {
       "description": {
-        "$ref": "#/messages/deploy.apikeyDescription"
+        "$ref": "#/messages/deploy.apiKeyDescription"
       },
       "type": "string",
       "pattern": "\\S"
     },
-    "registry-region": {
-      "description": {
-        "$ref": "#/messages/deploy.registryRegionDescription"
-      },
-      "type": "string",
-      "disabled": false
-    },
-    "registry-namespace": {
-      "description": {
-        "$ref": "#/messages/deploy.registrynsDescription"
-      },
-      "type": "string",
-      "pattern": "^[a-z0-9][a-z0-9_]{3,29}$"
-    },
-    "prod-region": {
+    "target-region": {
       "description": {
         "$ref": "#/messages/deploy.regionDescription"
       },
       "type": "string",
       "disabled": false
     },
-    "cluster-name": {
+    "image-name": {
       "description": {
-        "$ref": "#/messages/deploy.clusterNameDescription"
+        "$ref": "#/messages/deploy.imageDescription"
       },
       "type": "string",
       "pattern": "\\S"
     },
-    "prod-cluster-namespace": {
+    "registry-namespace": {
+      "description": {
+        "$ref": "#/messages/deploy.registryDescription"
+      },
+      "type": "string",
+      "enum": [],
+      "pattern": "^[a-z0-9][a-z0-9_-]{3,29}$"
+    },
+    "target-cluster-name": {
+      "description": {
+        "$ref": "#/messages/deploy.clusterDescription"
+      },
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "target-cluster-namespace": {
       "description": {
         "$ref": "#/messages/deploy.namespaceDescription"
-      },
-      "type": "string",
-      "pattern": "\\S"
-    },
-    "app-name": {
-      "description": {
-        "$ref": "#/messages/deploy.appDescription"
       },
       "type": "string",
       "pattern": "\\S"
     }
   },
   "required": [
-    "app-name",
     "api-key",
-    "registry-region",
+    "target-region",
+    "db-image-name",
+    "mms-image-name",
+    "web-image-name",
     "registry-namespace",
-    "prod-region",
-    "prod-cluster-namespace"
+    "target-cluster-name",
+    "target-cluster-namespace"
   ],
   "form": [
     {
@@ -81,146 +77,72 @@
       "type": "password",
       "readonly": false,
       "title": {
-        "$ref": "#/messages/deploy.apikey"
+        "$ref": "#/messages/deploy.apiKey"
       },
       "key": "api-key"
     },
     {
+      "type": "select",
+      "key": "target-region",
+      "readonly": true,
+      "title": {
+        "$ref": "#/messages/region"
+      }
+    },
+    {
+      "type": "select",
+      "readonly": false,
+      "title": {
+        "$ref": "#/messages/deploy.imageRegistryNamespace"
+      },
+      "key": "registry-namespace"
+    },
+    {
       "type": "table",
       "columnCount": 3,
-      "widths": [
-        "50%",
-        "3%",
-        "47%"
-      ],
-      "items": [
-        {
-          "type": "label",
-          "title": {
-            "$ref": "#/messages/deploy.containerregRegion"
-          }
-        },
-        {
-          "type": "label",
-          "title": ""
-        },
-        {
-          "type": "label",
-          "title": {
-            "$ref": "#/messages/deploy.containerregns"
-          }
-        },
-        {
-          "type": "select",
-          "title": {
-            "$ref": "#/messages/deploy.imgregRegion"
+        "widths": ["33%", "33%", "33%"],
+        "items": [
+          {
+            "key": "web-image-name",
+            "type": "text",
+            "readonly": false,
+            "title": {
+              "$ref": "#/messages/deploy.imageName"
+            }
           },
-          "key": "registry-region"
-        },
-        {
-          "type": "label",
-          "title": ""
-        },
-        {
-          "type": "select",
-          "readonly": false,
-          "title": {
-            "$ref": "#/messages/deploy.imgregNs"
+          {
+            "key": "db-image-name",
+            "type": "text",
+            "readonly": false,
+            "title": {
+              "$ref": "#/messages/deploy.imageName"
+            }
           },
-          "key": "registry-namespace"
-        }
-      ]
+          {
+            "key": "mms-image-name",
+            "type": "text",
+            "readonly": false,
+            "title": {
+              "$ref": "#/messages/deploy.imageName"
+            }
+          }
+        ]
     },
     {
-      "type": "table",
-      "columnCount": 5,
-      "widths": [
-        "32%",
-        "2%",
-        "32%",
-        "2%",
-        "32%"
-      ],
-      "items": [
-        {
-          "type": "label",
-          "title": {
-            "$ref": "#/messages/region"
-          }
-        },
-        {
-          "type": "label",
-          "title": ""
-        },
-        {
-          "type": "label",
-          "title": {
-            "$ref": "#/messages/deploy.cluster"
-          }
-        },
-        {
-          "type": "label",
-          "title": ""
-        },
-        {
-          "type": "label",
-          "title": {
-            "$ref": "#/messages/deploy.clusterNs"
-          }
-        },
-        {
-          "type": "select",
-          "key": "prod-region"
-        },
-        {
-          "type": "label",
-          "title": ""
-        },
-        {
-          "type": "string",
-          "key": "cluster-name",
-          "readonly": false
-        },
-        {
-          "type": "label",
-          "title": ""
-        },
-        {
-          "type": "text",
-          "key": "prod-cluster-namespace",
-          "readonly": false
-        }
-      ]
+      "key": "target-cluster-name",
+      "readonly": false,
+      "type": "select",
+      "title": {
+        "$ref": "#/messages/deploy.clusterName"
+      }
     },
     {
-      "type": "table",
-      "columnCount": 1,
-      "widths": [
-        "100%"
-      ],
-      "items": [
-        {
-          "type": "label",
-          "title": {
-            "$ref": "#/messages/deploy.clusterDescription"
-          }
-        }
-      ]
-    },
-    {
-      "type": "table",
-      "columnCount": 1,
-      "widths": [
-        "100%"
-      ],
-      "items": [
-        {
-          "type": "label",
-          "title": {
-            "$ref": "#/messages/deploy.clusternsDescription"
-          }
-        }
-      ]
+      "key": "target-cluster-namespace",
+      "type": "text",
+      "readonly": false,
+      "title": {
+        "$ref": "#/messages/deploy.namespaceName"
+      }
     }
   ]
 }
