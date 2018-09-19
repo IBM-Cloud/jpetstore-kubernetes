@@ -103,7 +103,7 @@
         "widths": ["33%", "33%", "33%"],
         "items": [
           {
-            "label": {
+            "webImageName": {
               "title": {
                 "$ref": "#/messages/deploy.webImageName"
               },
@@ -111,7 +111,7 @@
             }
           },
           {
-            "label": {
+            "dbImageName": {
               "title": {
                 "$ref": "#/messages/deploy.dbImageName"
               },
@@ -119,7 +119,7 @@
             }
           },
           {
-            "label": {
+            "mmsImageName": {
               "title": {
                 "$ref": "#/messages/deploy.mmsImageName"
               },
