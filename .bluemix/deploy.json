@@ -29,22 +29,31 @@
       "disabled": false
     },
     "db-image-name": {
+      "title": {
+        "$ref": "#/messages/deploy.dbImageName"
+      },
       "description": {
-        "$ref": "#/messages/deploy.dbImageDescription"
+        "$ref": "#/messages/deploy.imageDescription"
       },
       "type": "string",
       "pattern": "\\S"
     },
     "mms-image-name": {
+      "title": {
+        "$ref": "#/messages/deploy.mmsImageName"
+      },
       "description": {
-        "$ref": "#/messages/deploy.mmsImageDescription"
+        "$ref": "#/messages/deploy.imageDescription"
       },
       "type": "string",
       "pattern": "\\S"
     },
     "web-image-name": {
+      "title": {
+        "$ref": "#/messages/deploy.webImageName"
+      },
       "description": {
-        "$ref": "#/messages/deploy.webImageDescription"
+        "$ref": "#/messages/deploy.imageDescription"
       },
       "type": "string",
       "pattern": "\\S"
