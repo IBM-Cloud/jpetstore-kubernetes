@@ -3,15 +3,9 @@
   "messages": {
     "$i18n": "locales.yml"
   },
-  "title": {
-    "$ref": "#/messages/deploy.title"
-  },
-  "description": {
-    "$ref": "#/messages/deploy.description"
-  },
-  "longDescription": {
-    "$ref": "#/messages/deploy.longDescription"
-  },
+  "title": { "$ref": "#/messages/deploy.title" },
+  "description": { "$ref": "#/messages/deploy.description" },
+  "longDescription": { "$ref": "#/messages/deploy.longDescription" },
   "type": "object",
   "properties": {
     "api-key": {
@@ -82,26 +76,17 @@
     "target-region",
     {
       "type": "section",
-      "title": {
-        "$ref": "#/messages/deploy.crSection"
-      },
+      "title": { "$ref": "#/messages/deploy.crSection" },
       "items": [
         "registry-namespace",
         {
           "type": "section",
-          "title": {
-            "$ref": "#/messages/deploy.crSection"
-          },
+          "title": { "$ref": "#/messages/deploy.crSection" },
           "items": [
             {
               "type": "table",
               "columnCount": 3,
-              "widths": [
-                "33%",
-                "33%",
-                "33%",
-                "33%"
-              ],
+              "widths": ["33%", "33%", "33%", "33%"],
               "items": [
                 "web-image-name",
                 "db-image-name",
@@ -114,9 +99,7 @@
     },
     {
       "type": "section",
-      "title": {
-        "$ref": "#/messages/deploy.kubeSection"
-      },
+      "title": { "$ref": "#/messages/deploy.kubeSection" },
       "items": [
         "target-cluster-name",
         "target-cluster-namespace"
