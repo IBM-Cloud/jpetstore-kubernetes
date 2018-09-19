@@ -15,69 +15,50 @@
   "type": "object",
   "properties": {
     "api-key": {
-      "description": {
-        "$ref": "#/messages/deploy.apiKeyDescription"
-      },
+      "title": { "$ref": "#/messages/deploy.apiKey" },
+      "description": { "$ref": "#/messages/deploy.apiKeyDescription" },
       "type": "string",
       "pattern": "\\S"
     },
     "target-region": {
-      "description": {
-        "$ref": "#/messages/deploy.regionDescription"
-      },
-      "type": "string",
-      "disabled": false
+      "title": { "$ref": "#/messages/region" },
+      "description": { "$ref": "#/messages/deploy.regionDescription" },
+      "type": "select",
+      "disabled": false,
+      "readonly": true
     },
     "db-image-name": {
-      "title": {
-        "$ref": "#/messages/deploy.dbImageName"
-      },
+      "title": { "$ref": "#/messages/deploy.dbImageName" },
       "type": "string",
       "pattern": "\\S"
     },
     "mms-image-name": {
-      "title": {
-        "$ref": "#/messages/deploy.mmsImageName"
-      },
+      "title": { "$ref": "#/messages/deploy.mmsImageName" },
       "type": "string",
       "pattern": "\\S"
     },
     "web-image-name": {
-      "title": {
-        "$ref": "#/messages/deploy.webImageName"
-      },
+      "title": { "$ref": "#/messages/deploy.webImageName" },
       "type": "string",
       "pattern": "\\S"
     },
     "registry-namespace": {
-      "title": {
-        "$ref": "#/messages/deploy.crNamespace"
-      },
-      "description": {
-        "$ref": "#/messages/deploy.crNamespaceDescription"
-      },
+      "title": { "$ref": "#/messages/deploy.crNamespace" },
+      "description": { "$ref": "#/messages/deploy.crNamespaceDescription" },
       "type": "select",
       "enum": [],
       "pattern": "^[a-z0-9][a-z0-9_-]{3,29}$"
     },
     "target-cluster-name": {
-      "title": {
-        "$ref": "#/messages/deploy.clusterName"
-      },
-      "description": {
-        "$ref": "#/messages/deploy.clusterDescription"
-      },
+      "title": { "$ref": "#/messages/deploy.clusterName" },
+      "description": { "$ref": "#/messages/deploy.clusterDescription" },
       "pattern": "\\S",
       "readonly": false,
       "type": "select"
     },
     "target-cluster-namespace": {
-      "title": {
-        "$ref": "#/messages/deploy.namespaceName"
-      },
-      "description": {
-        "$ref": "#/messages/deploy.namespaceDescription"
-      },
+      "title": { "$ref": "#/messages/deploy.kubeNamespace" },
+      "description": { "$ref": "#/messages/deploy.kubeNamespaceDescription" },
       "type": "string",
       "pattern": "\\S"
     }
@@ -97,22 +78,8 @@
       "type": "validator",
       "url": "/devops/setup/bm-helper/custom_helper.html"
     },
-    {
-      "type": "password",
-      "readonly": false,
-      "title": {
-        "$ref": "#/messages/deploy.apiKey"
-      },
-      "key": "api-key"
-    },
-    {
-      "type": "select",
-      "key": "target-region",
-      "readonly": true,
-      "title": {
-        "$ref": "#/messages/region"
-      }
-    },
+    "api-key",
+    "target-region",
     {
       "type": "section",
       "title": {
