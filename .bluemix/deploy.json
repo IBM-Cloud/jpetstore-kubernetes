@@ -24,17 +24,20 @@
     "db-image-name": {
       "title": { "$ref": "#/messages/deploy.dbImageName" },
       "type": "string",
-      "pattern": "\\S"
+      "pattern": "\\S",
+      "readonly": true
     },
     "mms-image-name": {
       "title": { "$ref": "#/messages/deploy.mmsImageName" },
       "type": "string",
-      "pattern": "\\S"
+      "pattern": "\\S",
+      "readonly": true
     },
     "web-image-name": {
       "title": { "$ref": "#/messages/deploy.webImageName" },
       "type": "string",
-      "pattern": "\\S"
+      "pattern": "\\S",
+      "readonly": true
     },
     "registry-namespace": {
       "title": { "$ref": "#/messages/deploy.crNamespace" },

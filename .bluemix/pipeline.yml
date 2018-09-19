@@ -43,7 +43,6 @@ stages:
       kubernetes_cluster: ${TARGET_CLUSTER_NAME}
     script: |
       #!/bin/bash
-      ./.bluemix/pipeline-SETUP.sh
       ./.bluemix/pipeline-DEPLOY.sh
 - name: UNINSTALL (manual)
   inputs:
