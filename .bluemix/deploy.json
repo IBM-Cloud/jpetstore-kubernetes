@@ -28,9 +28,23 @@
       "type": "string",
       "disabled": false
     },
-    "image-name": {
+    "db-image-name": {
       "description": {
-        "$ref": "#/messages/deploy.imageDescription"
+        "$ref": "#/messages/deploy.dbImageDescription"
+      },
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "mms-image-name": {
+      "description": {
+        "$ref": "#/messages/deploy.mmsImageDescription"
+      },
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "web-image-name": {
+      "description": {
+        "$ref": "#/messages/deploy.webImageDescription"
       },
       "type": "string",
       "pattern": "\\S"
@@ -96,6 +110,15 @@
       "title": {
         "$ref": "#/messages/deploy.imageRegistryNamespace"
       }
+    },
+    {
+      "type": "section",
+      "description": "Docker Image Names",
+      "items": [
+         "web-image-name",
+         "db-image-name",
+         "mms-image-name"
+      ]
     },
     {
       "type": "table",
