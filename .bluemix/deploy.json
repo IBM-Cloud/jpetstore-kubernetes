@@ -114,7 +114,7 @@
               {
                 "title": { "$ref": "#/messages/deploy.crNamespace" },
                 "description": { "$ref": "#/messages/deploy.crNamespaceDescription" },
-                "type": "text"
+                "type": "label"
               },
               "registry-namespace"
             ]
@@ -127,7 +127,7 @@
               {
                 "title": { "$ref": "#/messages/deploy.imageName" },
                 "description": { "$ref": "#/messages/deploy.imageDescription" },
-                "type": "text"
+                "type": "label"
               },
               "web-image-name",
               "db-image-name",
