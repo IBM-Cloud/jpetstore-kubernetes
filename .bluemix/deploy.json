@@ -40,8 +40,7 @@
       "title": { "$ref": "#/messages/deploy.crNamespace" },
       "description": { "$ref": "#/messages/deploy.crNamespaceDescription" },
       "type": "select",
-      "enum": [],
-      "pattern": "^[a-z0-9][a-z0-9_-]{3,29}$"
+      "pattern": "^[a-z0-9][a-z0-9_-]{2,28}[a-z0-9]$"
     },
     "target-cluster-name": {
       "title": { "$ref": "#/messages/deploy.clusterName" },
