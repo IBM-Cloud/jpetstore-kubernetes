@@ -127,54 +127,9 @@
       "columnCount": 3,
         "widths": ["33%", "33%", "33%"],
         "items": [
-          {
-            "webImageName": {
-              "title": {
-                "$ref": "#/messages/deploy.webImageName"
-              },
-              "type": "string"
-            }
-          },
-          {
-            "dbImageName": {
-              "title": {
-                "$ref": "#/messages/deploy.dbImageName"
-              },
-              "type": "string"
-            }
-          },
-          {
-            "mmsImageName": {
-              "title": {
-                "$ref": "#/messages/deploy.mmsImageName"
-              },
-              "type": "string"
-            }
-          },
-          {
-            "key": "web-image-name",
-            "type": "text",
-            "readonly": false,
-            "title": {
-              "$ref": "#/messages/deploy.webImageName"
-            }
-          },
-          {
-            "key": "db-image-name",
-            "type": "text",
-            "readonly": false,
-            "title": {
-              "$ref": "#/messages/deploy.dbImageName"
-            }
-          },
-          {
-            "key": "mms-image-name",
-            "type": "text",
-            "readonly": false,
-            "title": {
-              "$ref": "#/messages/deploy.mmsImageName"
-            }
-          }
+          "web-image-name",
+          "db-image-name",
+          "mms-image-name"
         ]
     },
     {
