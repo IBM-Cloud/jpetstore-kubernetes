@@ -18,6 +18,9 @@ kubectl --namespace $TARGET_NAMESPACE create secret docker-registry petstore-doc
   --docker-username=iamapikey \
   --docker-email=devops@build.com
 
+## install helm tiller into cluster
+helm init
+
 # install jpetstore
 helm upgrade --install --namespace $TARGET_NAMESPACE --debug ./helm/modernpets \
   --set image.tag=latest \
