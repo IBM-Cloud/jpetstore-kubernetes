@@ -109,55 +109,82 @@
         {
           "type": "table",
           "columnCount": 2,
-            "widths": ["25%", "75%"],
-            "items": [
-              {
-                "title": { "$ref": "#/messages/deploy.crNamespace" },
-                "description": { "$ref": "#/messages/deploy.crNamespaceDescription" },
-                "type": "label"
+          "widths": [
+            "25%",
+            "75%"
+          ],
+          "items": [
+            {
+              "title": {
+                "$ref": "#/messages/deploy.crNamespace"
               },
-              "registry-namespace"
-            ]
+              "description": {
+                "$ref": "#/messages/deploy.crNamespaceDescription"
+              },
+              "type": "label"
+            },
+            "registry-namespace"
+          ]
         },
         {
           "type": "table",
           "columnCount": 4,
-            "widths": ["25%", "25%", "25%", "25%"],
-            "items": [
-              {
-                "title": { "$ref": "#/messages/deploy.imageName" },
-                "description": { "$ref": "#/messages/deploy.imageDescription" },
-                "type": "label"
+          "widths": [
+            "25%",
+            "25%",
+            "25%",
+            "25%"
+          ],
+          "items": [
+            {
+              "title": {
+                "$ref": "#/messages/deploy.imageName"
               },
-              "web-image-name",
-              "db-image-name",
-              "mms-image-name"
-            ]
+              "description": {
+                "$ref": "#/messages/deploy.imageDescription"
+              },
+              "type": "label"
+            },
+            "web-image-name",
+            "db-image-name",
+            "mms-image-name"
+          ]
         }
       ]
     },
     {
-      "type": "table",
-      "columnCount": 2,
-        "widths": ["50%", "50%"],
-        "items": [
-          {
-            "key": "target-cluster-name",
-            "readonly": false,
-            "type": "select",
-            "title": {
-              "$ref": "#/messages/deploy.clusterName"
+      "type": "section",
+      "title": {
+        "$ref": "#/messages/deploy.kubeSection"
+      },
+      "items": [
+        {
+          "type": "table",
+          "columnCount": 2,
+          "widths": [
+            "50%",
+            "50%"
+          ],
+          "items": [
+            {
+              "key": "target-cluster-name",
+              "readonly": false,
+              "type": "select",
+              "title": {
+                "$ref": "#/messages/deploy.clusterName"
+              }
+            },
+            {
+              "key": "target-cluster-namespace",
+              "type": "text",
+              "readonly": false,
+              "title": {
+                "$ref": "#/messages/deploy.namespaceName"
+              }
             }
-          },
-          {
-            "key": "target-cluster-namespace",
-            "type": "text",
-            "readonly": false,
-            "title": {
-              "$ref": "#/messages/deploy.namespaceName"
-            }
-          }
-        ]
-    }    
+          ]
+        }
+      ]
+    }
   ]
 }
