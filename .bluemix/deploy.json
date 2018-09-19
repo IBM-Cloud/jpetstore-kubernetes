@@ -81,7 +81,7 @@
         "registry-namespace",
         {
           "type": "section",
-          "title": { "$ref": "#/messages/deploy.crSection" },
+          "title": { "$ref": "#/messages/deploy.imageName" },
           "items": [
             {
               "type": "table",
