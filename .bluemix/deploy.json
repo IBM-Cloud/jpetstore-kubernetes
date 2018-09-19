@@ -50,8 +50,11 @@
       "pattern": "\\S"
     },
     "registry-namespace": {
+      "title": {
+        "$ref": "#/messages/deploy.crNamespace"
+      },
       "description": {
-        "$ref": "#/messages/deploy.registryDescription"
+        "$ref": "#/messages/deploy.crDescription"
       },
       "type": "string",
       "enum": [],
@@ -113,24 +116,22 @@
     },
     {
       "type": "section",
-      "description": {
-        "$ref": "#/messages/deploy.imageDescription"
+      "title": {
+        "$ref": "#/messages/deploy.crTitle"
       },
       "items": [
-         "web-image-name",
-         "db-image-name",
-         "mms-image-name"
+        "registry-namespace",
+        {
+          "type": "table",
+          "columnCount": 3,
+            "widths": ["33%", "33%", "33%"],
+            "items": [
+              "web-image-name",
+              "db-image-name",
+              "mms-image-name"
+            ]
+        }
       ]
-    },
-    {
-      "type": "table",
-      "columnCount": 3,
-        "widths": ["33%", "33%", "33%"],
-        "items": [
-          "web-image-name",
-          "db-image-name",
-          "mms-image-name"
-        ]
     },
     {
       "type": "table",
