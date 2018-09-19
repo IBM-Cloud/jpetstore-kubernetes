@@ -7,6 +7,13 @@ stages:
     service: ${GIT_REPO}
   triggers:
   - type: commit
+  properties:
+    - name: DB_IMAGE_URL
+      value: ${DB_IMAGE_URL}
+    - name: MMS_IMAGE_URL
+      value: ${MMS_IMAGE_URL}
+    - name: WEB_IMAGE_URL
+      value: ${WEB_IMAGE_URL}
   jobs:
   - name: Build Docker images
     type: builder
@@ -17,13 +24,6 @@ stages:
       api_key: ${API_KEY}
     namespace: ${REGISTRY_NAMESPACE}
     image_name: <not applicable>
-    properties:
-    - name: DB_IMAGE_URL
-      value: ${DB_IMAGE_URL}
-    - name: MMS_IMAGE_URL
-      value: ${MMS_IMAGE_URL}
-    - name: WEB_IMAGE_URL
-      value: ${WEB_IMAGE_URL}
     script: |
       #!/bin/bash
       ./.bluemix/pipeline-BUILD.sh
