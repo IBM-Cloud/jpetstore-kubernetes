@@ -16,7 +16,7 @@ services:
     service_id: githubpublic
     parameters:
       repo_name: 'jpetstore-kubernetes'
-      repo_url: 'https://github.ibm.com/IBM-Cloud/jpetstore-kubernetes'
+      repo_url: 'https://github.com/IBM-Cloud/jpetstore-kubernetes'
       type: clone
       has_issues: false
       enable_traceability: false
@@ -25,14 +25,12 @@ services:
     parameters:
       services:
         - repo
-      name: 'jpetstore-kubernetes (master)'
+      name: 'jpetstore-kubernetes'
       ui-pipeline: true
       configuration:
         content:
           $text: pipeline.yml
         env:
-          GIT_REPO: repo
-          GIT_BRANCH: 'master'
           API_KEY: '{{form.pipeline.parameters.api-key}}'
           REGISTRY_REGION_ID: '{{form.pipeline.parameters.target-region}}'
           REGISTRY_NAMESPACE: '{{form.pipeline.parameters.registry-namespace}}'
