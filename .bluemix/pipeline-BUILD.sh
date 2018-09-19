@@ -14,7 +14,7 @@ bx cr build . -t $WEB_IMAGE_URL
 cd db
 bx cr build . -t $DB_IMAGE_URL
 cd ../../mmssearch
-bx cr build . -t $WEB_IMAGE_URL
+bx cr build . -t $MMS_IMAGE_URL
 
 mkdir -p $ARCHIVE_DIR
 echo "REGISTRY_URL=${REGISTRY_URL}" >> $ARCHIVE_DIR/build.properties
