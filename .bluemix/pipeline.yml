@@ -8,7 +8,7 @@ stages:
   triggers:
   - type: commit
   jobs:
-  - name: Build Docker image
+  - name: Build Docker images
     type: builder
     build_type: cr
     # artifact_dir: output
@@ -16,7 +16,14 @@ stages:
       region_id: ${REGISTRY_REGION_ID}
       api_key: ${API_KEY}
     namespace: ${REGISTRY_NAMESPACE}
-    image_name: ${IMAGE_NAME}
+    image_name: <not applicable>
+    properties:
+    - name: DB_IMAGE_URL
+      value: ${DB_IMAGE_URL}
+    - name: MMS_IMAGE_URL
+      value: ${MMS_IMAGE_URL}
+    - name: WEB_IMAGE_URL
+      value: ${WEB_IMAGE_URL}
     script: |
       #!/bin/bash
       ./.bluemix/pipeline-BUILD.sh
