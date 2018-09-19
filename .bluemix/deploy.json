@@ -55,13 +55,20 @@
       "pattern": "^[a-z0-9][a-z0-9_-]{3,29}$"
     },
     "target-cluster-name": {
+      "title": {
+        "$ref": "#/messages/deploy.clusterName"
+      },
       "description": {
         "$ref": "#/messages/deploy.clusterDescription"
       },
-      "type": "string",
-      "pattern": "\\S"
+      "pattern": "\\S",
+      "readonly": false,
+      "type": "select"
     },
     "target-cluster-namespace": {
+      "title": {
+        "$ref": "#/messages/deploy.namespaceName"
+      },
       "description": {
         "$ref": "#/messages/deploy.namespaceDescription"
       },
@@ -158,32 +165,8 @@
         "$ref": "#/messages/deploy.kubeSection"
       },
       "items": [
-        {
-          "type": "table",
-          "columnCount": 2,
-          "widths": [
-            "50%",
-            "50%"
-          ],
-          "items": [
-            {
-              "key": "target-cluster-name",
-              "readonly": false,
-              "type": "select",
-              "title": {
-                "$ref": "#/messages/deploy.clusterName"
-              }
-            },
-            {
-              "key": "target-cluster-namespace",
-              "type": "text",
-              "readonly": false,
-              "title": {
-                "$ref": "#/messages/deploy.namespaceName"
-              }
-            }
-          ]
-        }
+        "target-cluster-name",
+        "target-cluster-namespace"
       ]
     }
   ]
