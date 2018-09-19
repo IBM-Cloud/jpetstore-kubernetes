@@ -50,12 +50,6 @@
       "pattern": "\\S"
     },
     "registry-namespace": {
-      "title": {
-        "$ref": "#/messages/deploy.crNamespace"
-      },
-      "description": {
-        "$ref": "#/messages/deploy.crDescription"
-      },
       "type": "select",
       "enum": [],
       "pattern": "^[a-z0-9][a-z0-9_-]{3,29}$"
@@ -112,15 +106,17 @@
         "$ref": "#/messages/deploy.crSection"
       },
       "items": [
-        "registry-namespace",
         {
           "type": "table",
-          "columnCount": 3,
-            "widths": ["33%", "33%", "33%"],
+          "columnCount": 2,
+            "widths": ["25%", "75%"],
             "items": [
-              "web-image-name",
-              "db-image-name",
-              "mms-image-name"
+              {
+                "title": { "$ref": "#/messages/deploy.crNamespace" },
+                "description": { "$ref": "#/messages/deploy.crNamespaceDescription" },
+                "type": "text"
+              },
+              "registry-namespace"
             ]
         },
         {
