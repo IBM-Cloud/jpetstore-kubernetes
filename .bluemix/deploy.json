@@ -90,12 +90,12 @@
       }
     },
     {
+      "key": "registry-namespace",
       "type": "select",
       "readonly": false,
       "title": {
         "$ref": "#/messages/deploy.imageRegistryNamespace"
-      },
-      "key": "registry-namespace"
+      }
     },
     {
       "type": "table",
@@ -107,7 +107,7 @@
             "type": "text",
             "readonly": false,
             "title": {
-              "$ref": "#/messages/deploy.imageName"
+              "$ref": "#/messages/deploy.webImageName"
             }
           },
           {
@@ -115,7 +115,7 @@
             "type": "text",
             "readonly": false,
             "title": {
-              "$ref": "#/messages/deploy.imageName"
+              "$ref": "#/messages/deploy.dbImageName"
             }
           },
           {
@@ -123,26 +123,33 @@
             "type": "text",
             "readonly": false,
             "title": {
-              "$ref": "#/messages/deploy.imageName"
+              "$ref": "#/messages/deploy.mmsImageName"
             }
           }
         ]
     },
     {
-      "key": "target-cluster-name",
-      "readonly": false,
-      "type": "select",
-      "title": {
-        "$ref": "#/messages/deploy.clusterName"
-      }
-    },
-    {
-      "key": "target-cluster-namespace",
-      "type": "text",
-      "readonly": false,
-      "title": {
-        "$ref": "#/messages/deploy.namespaceName"
-      }
-    }
+      "type": "table",
+      "columnCount": 2,
+        "widths": ["50%", "50%"],
+        "items": [
+          {
+            "key": "target-cluster-name",
+            "readonly": false,
+            "type": "select",
+            "title": {
+              "$ref": "#/messages/deploy.clusterName"
+            }
+          },
+          {
+            "key": "target-cluster-namespace",
+            "type": "text",
+            "readonly": false,
+            "title": {
+              "$ref": "#/messages/deploy.namespaceName"
+            }
+          }
+        ]
+    }    
   ]
 }
