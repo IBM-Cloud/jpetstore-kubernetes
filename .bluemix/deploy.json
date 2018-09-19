@@ -56,7 +56,7 @@
       "description": {
         "$ref": "#/messages/deploy.crDescription"
       },
-      "type": "string",
+      "type": "select",
       "enum": [],
       "pattern": "^[a-z0-9][a-z0-9_-]{3,29}$"
     },
@@ -107,17 +107,9 @@
       }
     },
     {
-      "key": "registry-namespace",
-      "type": "select",
-      "readonly": false,
-      "title": {
-        "$ref": "#/messages/deploy.imageRegistryNamespace"
-      }
-    },
-    {
       "type": "section",
       "title": {
-        "$ref": "#/messages/deploy.crTitle"
+        "$ref": "#/messages/deploy.crSection"
       },
       "items": [
         "registry-namespace",
@@ -126,6 +118,21 @@
           "columnCount": 3,
             "widths": ["33%", "33%", "33%"],
             "items": [
+              "web-image-name",
+              "db-image-name",
+              "mms-image-name"
+            ]
+        },
+        {
+          "type": "table",
+          "columnCount": 4,
+            "widths": ["25%", "25%", "25%", "25%"],
+            "items": [
+              {
+                "title": { "$ref": "#/messages/deploy.imageName" },
+                "description": { "$ref": "#/messages/deploy.imageDescription" },
+                "type": "text"
+              },
               "web-image-name",
               "db-image-name",
               "mms-image-name"
