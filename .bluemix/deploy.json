@@ -50,6 +50,12 @@
       "pattern": "\\S"
     },
     "registry-namespace": {
+      "title": {
+        "$ref": "#/messages/deploy.crNamespace"
+      },
+      "description": {
+        "$ref": "#/messages/deploy.crNamespaceDescription"
+      },
       "type": "select",
       "enum": [],
       "pattern": "^[a-z0-9][a-z0-9_-]{3,29}$"
@@ -113,48 +119,28 @@
         "$ref": "#/messages/deploy.crSection"
       },
       "items": [
+        "registry-namespace",
         {
-          "type": "table",
-          "columnCount": 2,
-          "widths": [
-            "25%",
-            "75%"
-          ],
+          "type": "section",
+          "title": {
+            "$ref": "#/messages/deploy.crSection"
+          },
           "items": [
             {
-              "title": {
-                "$ref": "#/messages/deploy.crNamespace"
-              },
-              "description": {
-                "$ref": "#/messages/deploy.crNamespaceDescription"
-              },
-              "type": "label"
-            },
-            "registry-namespace"
-          ]
-        },
-        {
-          "type": "table",
-          "columnCount": 4,
-          "widths": [
-            "25%",
-            "25%",
-            "25%",
-            "25%"
-          ],
-          "items": [
-            {
-              "title": {
-                "$ref": "#/messages/deploy.imageName"
-              },
-              "description": {
-                "$ref": "#/messages/deploy.imageDescription"
-              },
-              "type": "label"
-            },
-            "web-image-name",
-            "db-image-name",
-            "mms-image-name"
+              "type": "table",
+              "columnCount": 3,
+              "widths": [
+                "33%",
+                "33%",
+                "33%",
+                "33%"
+              ],
+              "items": [
+                "web-image-name",
+                "db-image-name",
+                "mms-image-name"
+              ]
+            }
           ]
         }
       ]
