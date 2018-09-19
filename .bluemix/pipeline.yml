@@ -8,12 +8,12 @@ stages:
   triggers:
   - type: commit
   properties:
-    - name: DB_IMAGE_URL
-      value: ${DB_IMAGE_URL}
-    - name: MMS_IMAGE_URL
-      value: ${MMS_IMAGE_URL}
-    - name: WEB_IMAGE_URL
-      value: ${WEB_IMAGE_URL}
+  - name: DB_IMAGE_URL
+    value: ${DB_IMAGE_URL}
+  - name: MMS_IMAGE_URL
+    value: ${MMS_IMAGE_URL}
+  - name: WEB_IMAGE_URL
+    value: ${WEB_IMAGE_URL}
   jobs:
   - name: Build Docker images
     type: builder
