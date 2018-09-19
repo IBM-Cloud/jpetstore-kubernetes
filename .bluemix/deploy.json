@@ -32,9 +32,6 @@
       "title": {
         "$ref": "#/messages/deploy.dbImageName"
       },
-      "description": {
-        "$ref": "#/messages/deploy.imageDescription"
-      },
       "type": "string",
       "pattern": "\\S"
     },
@@ -42,18 +39,12 @@
       "title": {
         "$ref": "#/messages/deploy.mmsImageName"
       },
-      "description": {
-        "$ref": "#/messages/deploy.imageDescription"
-      },
       "type": "string",
       "pattern": "\\S"
     },
     "web-image-name": {
       "title": {
         "$ref": "#/messages/deploy.webImageName"
-      },
-      "description": {
-        "$ref": "#/messages/deploy.imageDescription"
       },
       "type": "string",
       "pattern": "\\S"
@@ -122,7 +113,9 @@
     },
     {
       "type": "section",
-      "description": "Docker Image Names",
+      "description": {
+        "$ref": "#/messages/deploy.imageDescription"
+      },
       "items": [
          "web-image-name",
          "db-image-name",
