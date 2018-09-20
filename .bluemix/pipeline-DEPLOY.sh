@@ -1,6 +1,4 @@
 #!/bin/bash
-source $ARCHIVE_DIR/build.properties
-
 INGRESS_HOSTNAME=$(bx cs cluster-get $PIPELINE_KUBERNETES_CLUSTER_NAME --json | grep ingressHostname | tr -d '":,' | awk '{print $2}')
 echo "INGRESS_HOSTNAME=${INGRESS_HOSTNAME}"
 
