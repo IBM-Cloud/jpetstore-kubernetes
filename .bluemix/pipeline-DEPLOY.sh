@@ -1,6 +1,6 @@
-pwd
-
 #!/bin/bash
+source $ARCHIVE_DIR/build.properties
+
 INGRESS_HOSTNAME=$(bx cs cluster-get $PIPELINE_KUBERNETES_CLUSTER_NAME --json | grep ingressHostname | tr -d '":,' | awk '{print $2}')
 echo "INGRESS_HOSTNAME=${INGRESS_HOSTNAME}"
 
@@ -23,22 +23,22 @@ kubectl --namespace $TARGET_NAMESPACE create secret docker-registry petstore-doc
 ## install helm tiller into cluster
 helm init
 
-# install jpetstore
-helm upgrade jpetstore ../helm/modernpets --install --namespace $TARGET_NAMESPACE --debug \
+# install release named jpetstore
+helm upgrade --install --namespace $TARGET_NAMESPACE --debug \
+  --set image.repository=$REGISTRY_URL/$REGISTRY_NAMESPACE \
   --set image.tag=latest \
   --set image.pullPolicy=Always \
-  --set ingress.host=$TARGET_NAMESPACE.$INGRESS_HOSTNAME \
+  --set ingress.hosts={jpetstore.$INGRESS_HOSTNAME} \
   --set ingress.secretName=$INGRESS_SECRETNAME \
   --recreate-pods \
-  --wait \
-  helm/
+  --wait jpetstore ../helm/modernpets
 
-# install mmssearch
-helm upgrade mmssearch ../helm/mmssearch --install --namespace $TARGET_NAMESPACE --debug \
+# install release named mmssearch
+helm upgrade --install --namespace $TARGET_NAMESPACE --debug \
+  --set image.repository=$REGISTRY_URL/$REGISTRY_NAMESPACE \
   --set image.tag=latest \
   --set image.pullPolicy=Always \
-  --set ingress.host=$TARGET_NAMESPACE.$INGRESS_HOSTNAME \
+  --set ingress.hosts={mmssearch.$INGRESS_HOSTNAME} \
   --set ingress.secretName=$INGRESS_SECRETNAME \
   --recreate-pods \
-  --wait \
-  helm/
+  --wait mmssearch ../helm/mmssearch
