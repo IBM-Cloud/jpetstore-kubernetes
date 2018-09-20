@@ -21,8 +21,10 @@ kubectl --namespace $TARGET_NAMESPACE create secret docker-registry petstore-doc
 ## install helm tiller into cluster
 helm init
 
+cd helm
+
 # install jpetstore
-helm upgrade ./helm/modernpets --install --namespace $TARGET_NAMESPACE --debug \
+helm upgrade ./modernpets --install --namespace $TARGET_NAMESPACE --debug \
   --set image.tag=latest \
   --set image.pullPolicy=Always \
   --set ingress.host=$TARGET_NAMESPACE.$INGRESS_HOSTNAME \
@@ -32,7 +34,7 @@ helm upgrade ./helm/modernpets --install --namespace $TARGET_NAMESPACE --debug \
   helm/
 
 # install mmssearch
-helm upgrade ./helm/mmssearch --install --namespace $TARGET_NAMESPACE --debug \
+helm upgrade ./mmssearch --install --namespace $TARGET_NAMESPACE --debug \
   --set image.tag=latest \
   --set image.pullPolicy=Always \
   --set ingress.host=$TARGET_NAMESPACE.$INGRESS_HOSTNAME \
