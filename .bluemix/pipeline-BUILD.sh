@@ -9,12 +9,9 @@ DB_IMAGE_URL=$REGISTRY_URL/$REGISTRY_NAMESPACE/$DB_IMAGE_NAME
 MMS_IMAGE_URL=$REGISTRY_URL/$REGISTRY_NAMESPACE/$MMS_IMAGE_NAME
 WEB_IMAGE_URL=$REGISTRY_URL/$REGISTRY_NAMESPACE/$WEB_IMAGE_NAME
 
-pwd
-ls
-
-bx cr build ../jpetstore -t $WEB_IMAGE_URL
-bx cr build ../jpetstore/db -t $DB_IMAGE_URL
-bx cr build ../mmssearch -t $MMS_IMAGE_URL
+bx cr build ./jpetstore -t $WEB_IMAGE_URL
+bx cr build ./jpetstore/db -t $DB_IMAGE_URL
+bx cr build ./mmssearch -t $MMS_IMAGE_URL
 
 mkdir -p $ARCHIVE_DIR
 echo "REGISTRY_URL=${REGISTRY_URL}" >> $ARCHIVE_DIR/build.properties
