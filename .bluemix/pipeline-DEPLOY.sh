@@ -1,3 +1,5 @@
+pwd
+
 #!/bin/bash
 INGRESS_HOSTNAME=$(bx cs cluster-get $PIPELINE_KUBERNETES_CLUSTER_NAME --json | grep ingressHostname | tr -d '":,' | awk '{print $2}')
 echo "INGRESS_HOSTNAME=${INGRESS_HOSTNAME}"
@@ -21,10 +23,8 @@ kubectl --namespace $TARGET_NAMESPACE create secret docker-registry petstore-doc
 ## install helm tiller into cluster
 helm init
 
-cd helm
-
 # install jpetstore
-helm upgrade ./modernpets --install --namespace $TARGET_NAMESPACE --debug \
+helm upgrade ../helm/modernpets --install --namespace $TARGET_NAMESPACE --debug \
   --set image.tag=latest \
   --set image.pullPolicy=Always \
   --set ingress.host=$TARGET_NAMESPACE.$INGRESS_HOSTNAME \
@@ -34,7 +34,7 @@ helm upgrade ./modernpets --install --namespace $TARGET_NAMESPACE --debug \
   helm/
 
 # install mmssearch
-helm upgrade ./mmssearch --install --namespace $TARGET_NAMESPACE --debug \
+helm upgrade ../helm/mmssearch --install --namespace $TARGET_NAMESPACE --debug \
   --set image.tag=latest \
   --set image.pullPolicy=Always \
   --set ingress.host=$TARGET_NAMESPACE.$INGRESS_HOSTNAME \
