@@ -32,7 +32,7 @@ else
 fi
 
 # create the imagePullSecret https://console.bluemix.net/docs/containers/cs_images.html#store_imagePullSecret
-kubectl patch -n $TARGET_NAMESPACE serviceaccount/default -p '{"imagePullSecrets":[{"name": "bluemix-${TARGET_NAMESPACE}-secret-regional"}]}'
+kubectl patch -n $TARGET_NAMESPACE serviceaccount/default -p '{"imagePullSecrets":[{"name": "petstore-docker-registry"}]}'
 
 # create mmssearch secret file
 cat > "mms-secrets.json" << EOF
