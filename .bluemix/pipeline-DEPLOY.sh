@@ -40,7 +40,7 @@ cat > "mms-secrets.json" << EOF
   "jpetstoreurl": "http://jpetstore.$INGRESS_HOSTNAME",
   "watson": 
   {
-    "url": "https://gateway-a.watsonplatform.net/visual-recognition/api",
+    "url": "https://gateway.watsonplatform.net/visual-recognition/api",
     "note": "It may take up to 5 minutes for this key to become active",
     "api_key": "$WATSON_VR_API_KEY"
   },
