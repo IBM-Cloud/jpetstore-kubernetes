@@ -41,6 +41,14 @@ stages:
   - name: TARGET_NAMESPACE
     value: ${TARGET_NAMESPACE}
     type: text
+  - name: WATSON_VR_API_KEY
+    value: ${WATSON_VR_API_KEY}
+  - name: TWILIO_SID
+    value: ${TWILIO_SID}
+  - name: TWILIO_TOKEN
+    value: ${TWILIO_TOKEN}
+  - name: TWILIO_NUMBER
+    value: ${TWILIO_NUMBER}
   jobs:
   - name: Deploy
     type: deployer
