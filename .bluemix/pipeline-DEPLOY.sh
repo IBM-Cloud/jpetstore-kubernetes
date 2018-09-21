@@ -17,7 +17,7 @@ else
 fi
 
 # copy the tls cert over
-kubectl get secret $INGRESS_SECRETNAME -o yaml | sed 's/namespace: default/namespace: '$TARGET_NAMESPACE'/' | kubectl create -f -
+# kubectl get secret $INGRESS_SECRETNAME -o yaml | sed 's/namespace: default/namespace: '$TARGET_NAMESPACE'/' | kubectl create -f -
 
 # a secret to access the registry
 if kubectl get secret petstore-docker-registry --namespace $TARGET_NAMESPACE; then
@@ -30,6 +30,9 @@ else
     --docker-username=token \
     --docker-email="${TARGET_USER}" || exit 1
 fi
+
+# create the imagePullSecret https://console.bluemix.net/docs/containers/cs_images.html#store_imagePullSecret
+kubectl patch -n $TARGET_NAMESPACE serviceaccount/default -p '{"imagePullSecrets":[{"name": "bluemix-${TARGET_NAMESPACE}-secret-regional"}]}'
 
 # create mmssearch secret file
 cat > "mms-secrets.json" << EOF
@@ -50,6 +53,7 @@ cat > "mms-secrets.json" << EOF
 EOF
 
 # create mmssearch secret
+kubectl delete secret mms-secret --namespace $TARGET_NAMESPACE
 kubectl --namespace $TARGET_NAMESPACE create secret generic mms-secret --from-file=mms-secrets=./mms-secrets.json
 
 ## install helm tiller into cluster
