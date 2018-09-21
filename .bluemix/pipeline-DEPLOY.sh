@@ -1,12 +1,20 @@
 #!/bin/bash
+TARGET_USER=$(ibmcloud target | grep User | awk '{print $2}')
+check_value "$TARGET_USER"
+echo "TARGET_USER=$TARGET_USER"
+
 INGRESS_HOSTNAME=$(bx cs cluster-get $PIPELINE_KUBERNETES_CLUSTER_NAME --json | grep ingressHostname | tr -d '":,' | awk '{print $2}')
 echo "INGRESS_HOSTNAME=${INGRESS_HOSTNAME}"
 
 INGRESS_SECRETNAME=$(bx cs cluster-get $PIPELINE_KUBERNETES_CLUSTER_NAME --json | grep ingressSecretName | tr -d '":,' | awk '{print $2}')
 echo "INGRESS_SECRETNAME=${INGRESS_SECRETNAME}"
 
-# where to put our app
-kubectl create namespace $TARGET_NAMESPACE
+if kubectl get namespace $TARGET_NAMESPACE; then
+  echo "Namespace $TARGET_NAMESPACE already exists"
+else
+  echo "Creating namespace $TARGET_NAMESPACE..."
+  kubectl create namespace $TARGET_NAMESPACE || exit 1
+fi
 
 # copy the tls cert over
 kubectl get secret $INGRESS_SECRETNAME -o yaml | sed 's/namespace: default/namespace: '$TARGET_NAMESPACE'/' | kubectl create -f -
