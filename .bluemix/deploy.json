@@ -93,7 +93,7 @@
   "form": [
     {
       "type": "validator",
-      "url": "/devops/setup/bm-helper/helper.html"
+      "url": "/devops/setup/bm-helper/custom_helper.html"
     },
     "api-key",
     {

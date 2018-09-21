@@ -12,20 +12,16 @@ kubectl create namespace $TARGET_NAMESPACE
 kubectl get secret $INGRESS_SECRETNAME -o yaml | sed 's/namespace: default/namespace: '$TARGET_NAMESPACE'/' | kubectl create -f -
 
 # a secret to access the registry
-CR_TOKEN_ID=$(ibmcloud cr token-list | grep JPetStore | awk ' {print $1} ')
-
-if [ -z "$CR_TOKEN_ID" ]
-then
-  CR_TOKEN=$(ibmcloud cr token-add --description "JPetStore toolchain pull token" --non-expiring | sed -n '4,4p' | awk ' {print $2} ')
+if kubectl get secret petstore-docker-registry --namespace $TARGET_NAMESPACE; then
+  echo "Docker Registry secret already exists"
 else
-  CR_TOKEN=$(ibmcloud cr token-get $CR_TOKEN_ID | sed -n '4,4p' | awk ' {print $2} ')
+  REGISTRY_TOKEN=$(bx cr token-add --description "petstore-docker-registry for $TARGET_USER" --non-expiring --quiet)
+  kubectl --namespace $TARGET_NAMESPACE create secret docker-registry petstore-docker-registry \
+    --docker-server=${REGISTRY_URL} \
+    --docker-password="${REGISTRY_TOKEN}" \
+    --docker-username=token \
+    --docker-email="${TARGET_USER}" || exit 1
 fi
-
-kubectl --namespace $TARGET_NAMESPACE create secret docker-registry petstore-docker-registry \
-  --docker-server=registry.ng.bluemix.net \
-  --docker-password=${CR_TOKEN} \
-  --docker-username=token \
-  --docker-email=devops@build.com
 
 # create mmssearch secret file
 cat > "mms-secrets.json" << EOF
