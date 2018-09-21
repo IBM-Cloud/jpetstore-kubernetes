@@ -26,3 +26,13 @@ deploy.apiKey: "IBM Cloud API Key"
 deploy.regionDescription: "The IBM Cloud region"
 deploy.clusterNote: "Retrieve the Kubernetes cluster name with the CLI command 'bx cs clusters' or via the [console](https://console.bluemix.net/containers-kubernetes/home/clusters)."
 region: "Region"
+
+deploy.requiredServices: "Required Services"
+deploy.watsonApiKey: "Watson Visual Recognition API Key"
+
+deploy.optionalServices: "Optional Services"
+deploy.twilioSid: "Twilio Account SID"
+deploy.twilioToken: "Twilio Token"
+deploy.twiliNumber: "Twilio Phone Number"
+
+

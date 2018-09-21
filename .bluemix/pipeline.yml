@@ -31,7 +31,7 @@ stages:
   inputs:
   - type: job
     stage: BUILD
-    job: Build Docker image
+    job: Build Docker images
   triggers:
   - type: stage
   properties:

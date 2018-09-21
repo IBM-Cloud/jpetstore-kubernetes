@@ -18,6 +18,27 @@ kubectl --namespace $TARGET_NAMESPACE create secret docker-registry petstore-doc
   --docker-username=iamapikey \
   --docker-email=devops@build.com
 
+# create mmssearch secret file
+cat > "mms-secrets.json" << EOF
+{
+  "jpetstoreurl": "http://jpetstore.$INGRESS_HOSTNAME",
+  "watson": 
+  {
+    "url": "https://gateway-a.watsonplatform.net/visual-recognition/api",
+    "note": "It may take up to 5 minutes for this key to become active",
+    "api_key": "$WATSON_VR_API_KEY"
+  },
+  "twilio": {
+    "sid": "$TWILIO_SID",
+    "token": "$TWILIO_TOKEN",
+    "number": "$TWILIO_NUMBER"
+  }
+}
+EOF
+
+# create mmssearch secret
+kubectl create secret generic mms-secret --from-file=mms-secrets=./mms-secrets.json
+
 ## install helm tiller into cluster
 helm init
 

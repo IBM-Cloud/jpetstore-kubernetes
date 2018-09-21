@@ -57,6 +57,26 @@
       "description": { "$ref": "#/messages/deploy.kubeNamespaceDescription" },
       "type": "string",
       "pattern": "\\S"
+    },
+    "watson-api-key": {
+      "title": { "$ref": "#/messages/deploy.watsonApiKey" },
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "twilio-sid": {
+      "title": { "$ref": "#/messages/deploy.twilioSid" },
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "twilio-token": {
+      "title": { "$ref": "#/messages/deploy.twilioToken" },
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "twilio-number": {
+      "title": { "$ref": "#/messages/deploy.twilioNumber" },
+      "type": "string",
+      "pattern": "\\S"
     }
   },
   "required": [
@@ -67,7 +87,8 @@
     "web-image-name",
     "registry-namespace",
     "target-cluster-name",
-    "target-cluster-namespace"
+    "target-cluster-namespace",
+    "watson-api-key"
   ],
   "form": [
     {
@@ -105,6 +126,22 @@
       "items": [
         "target-cluster-name",
         "target-cluster-namespace"
+      ]
+    },
+    {
+      "type": "section",
+      "title": { "$ref": "#/messages/deploy.requiredServices" },
+      "items": [
+        "watson-api-key"
+      ]
+    },
+    {
+      "type": "section",
+      "title": { "$ref": "#/messages/deploy.optionalServices" },
+      "items": [
+        "twilio-sid",
+        "twilio-token",
+        "twilio-number"
       ]
     }
   ]
