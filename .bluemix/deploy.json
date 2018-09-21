@@ -96,11 +96,11 @@
       "url": "/devops/setup/bm-helper/helper.html"
     },
     "api-key",
-    "target-region",
     {
       "type": "section",
       "title": { "$ref": "#/messages/deploy.crSection" },
       "items": [
+        "target-region",
         "registry-namespace",
         {
           "type": "section",
