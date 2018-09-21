@@ -12,11 +12,9 @@ IBMers can access the demo script and additional collateral from [here](https://
 
 [![Containerized Applications with IBM Cloud Kubernetes Service](readme_images/youtube_play.png)](https://youtu.be/26RjSa0UZp0 "Containerized Applications with IBM Cloud Kubernetes")
 
-## Set up
+## Before you begin
 
-### Create a Kubernetes Cluster and gain Access to it
-
-1. Follow these steps to set up the environment you need for this demo. You will create a Kubernetes cluster, an instance of the Watson Visual Recognition service and an optional [Twilio](https://www.twilio.com/) account (if you want to shop for pets using text messaging).
+Follow the below steps to create IBM Cloud services and resources used in this demo. You will create a Kubernetes cluster, an instance of Watson Visual Recognition and an optional [Twilio](https://www.twilio.com/) account (if you want to shop for pets using text messaging).
 
 1. If you do not have Docker or Kubernetes tooling installed, see [Setting up the IBM Cloud Developer Tools CLI](https://console.bluemix.net/docs/cli/idt/setting_up_idt.html).
 
@@ -24,7 +22,25 @@ IBMers can access the demo script and additional collateral from [here](https://
 
 3. Follow the instructions in the **Access** tab of your cluster to gain access to your cluster using [**kubectl**](https://kubernetes.io/docs/reference/kubectl/overview/).
 
-### Clone the Demo Code to your Laptop
+4. Visit [IBM Cloud catalog](https://console.bluemix.net/catalog/) and [create a **Watson Visual Recognition**](https://console.bluemix.net/catalog/services/visual-recognition) service (choose the Lite plan). After creation, you will get a set of auto-generated service credentials. The **apikey** is required later.
+
+5. **Optionally** visit [Twilio](http://twilio.com), sign up for a free account and **buy a number** with MMS capabilities by creating a project/feature on the Dashboard. Locate the **Account SID** and **Auth Token** from the API Credentials in the [dashboard](https://www.twilio.com/console/sms/dashboard#). Locate you **Phone Number** on the respective [Twilo page](https://www.twilio.com/console/phone-numbers/incoming).
+
+## Automated deployment
+
+A toolchain has been created and automates deployment of the demo. You will still need to manually configure Twilio as described in the Manual deployment section.
+
+[![Create toolchain](https://console.bluemix.net/devops/graphics/create_toolchain_button.png)](https://console.bluemix.net/devops/setup/deploy/?repository=https%3A//github.com/IBM-Cloud/secure-file-storage)
+
+Once the toolchain has completed, the applications will be available at `https://jpetstore.<your-cluster-ingress-domain>` and `https://mmssearch.<your-cluster-ingress-domain>`.
+
+The toolchain includes a stage named **UNINSTALL (manual)**. This stage can only be triggered manually and will remove all resources created by the toolchain.
+
+## Manual deployment
+
+To manually deploy the demo, follow the below steps.
+
+### Clone the demo to your laptop
 
 Clone the demo repository:
 
@@ -32,7 +48,8 @@ Clone the demo repository:
 git clone https://github.com/ibm-cloud/jpetstore-kubernetes
 cd jpetstore-kubernetes
 ```
-#### Code Structure
+
+#### Code structure
 
 | Folder | Description |
 | ---- | ----------- |
@@ -41,7 +58,7 @@ cd jpetstore-kubernetes
 |[**helm**](/helm)| Helm charts for templated Kubernetes deployments |
 |[**pet-images**](/pet-images)| Pet images (which can be used for the demo) |
 
-### Set up the Watson Visual Recognition Service
+### Set up Watson Visual Recognition
 
 1. Create a file with the name **mms-secrets.json** by using the existing template:
 
@@ -62,7 +79,7 @@ cd jpetstore-kubernetes
 
    ![](readme_images/watson_credentials.png)
 
-### Set up Twilio (Optional)
+### Set up Twilio (optional)
 
 This step is only required if you want to use MMS text messaging during the demo (which is not possible in many countries outside the U.S.). 
 
@@ -139,7 +156,7 @@ The docker images for each of the micro-services need to be built and then pushe
 
 9. Finally make sure that all three images have been successfully pushed to the IBM Cloud container registry by running `ibmcloud cr images --restrict $MYNAMESPACE` .
 
-## Deploy the Application
+## Deploy the application
 
 There are two different ways to deploy the three micro-services to a Kubernetes cluster:
 
@@ -233,6 +250,7 @@ To demo monitoring of the cluster, got to your cluster dashboard and click on **
 
 ![](readme_images/monitoring.png)
 Learn more: [Analyze logs and monitor the health of Kubernetes applications](https://console.bluemix.net/docs/tutorials/kubernetes-log-analysis-kibana.html)
+
 ### Load Generation for demo purposes
 
 In a demo situation, you might want to generate load for your application (it will help illustrate the various features in the dashboard). This can be done through the loadtest package:
@@ -244,8 +262,6 @@ npm install -g loadtest
 # Geneate increasing load (make sure to replace <Ingress Subdomain> with your ingress subdomain)
 loadtest http://jpetstore.<Ingress Subdomain>/
 ```
-
-
 
 ## Clean up
 

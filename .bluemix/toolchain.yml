@@ -32,7 +32,7 @@ services:
           $text: pipeline.yml
         env:
           GIT_REPO: repo
-          GIT_BRANCH: feature-toolchain
+          GIT_BRANCH: master
           API_KEY: '{{form.pipeline.parameters.api-key}}'
           REGISTRY_REGION_ID: '{{form.pipeline.parameters.target-region}}'
           REGISTRY_NAMESPACE: '{{form.pipeline.parameters.registry-namespace}}'
