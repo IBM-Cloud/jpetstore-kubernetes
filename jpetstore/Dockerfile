@@ -5,7 +5,7 @@ WORKDIR /src
 RUN ./build.sh all
 
 # Use WebSphere Liberty base image from the Docker Store
-FROM websphere-liberty:latest
+FROM websphere-liberty:javaee7
 
 # Copy war from build stage and server.xml into image
 COPY --from=builder /src/dist/jpetstore.war /opt/ibm/wlp/usr/servers/defaultServer/apps/
