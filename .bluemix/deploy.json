@@ -86,13 +86,14 @@
     "mms-image-name",
     "web-image-name",
     "registry-namespace",
+    "target-cluster-name",
     "target-cluster-namespace",
     "watson-api-key"
   ],
   "form": [
     {
       "type": "validator",
-      "url": "/devops/setup/bm-helper/custom_helper.html"
+      "url": "/devops/setup/bm-helper/helper.html"
     },
     "api-key",
     {
