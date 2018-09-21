@@ -7,13 +7,14 @@ You will be using add-ons like Jaeger, Prometheus, Grafana, Servicegraph & Weave
 ## Pre-req
 
 1. **Your cluster needs at least 4 CPUs to install Istio and the JPetStore application.** If you are using an existing cluster with less than 4 CPUs, add worker nodes to increase the cluster capacity.
-1. Follow the instructions in the parent [README](../README.md) to deploy the secrets and applications using helm.
-1. *Uninstall* the JPetStore applications with helm (you will reinstall them later once Istio is enabled):
+2. Follow the instructions in the parent [README](../README.md) to deploy the secrets and applications using helm.
+3. *Uninstall* the JPetStore applications with helm (you will reinstall them later once Istio is enabled):
 
    ```sh
    helm delete jpetstore --purge
    helm delete mmssearch --purge
    ```
+4. Upgrade Helm to v2.10. Use `helm version` to check the client and server's versions.
 
 ## Setup istio
 
@@ -28,10 +29,10 @@ Install Istio in your cluster.
    curl -L https://git.io/getLatestIstio | sh -
    ```
 
-2. Change the directory to the Istio file location.
+2. Change the directory to the Istio file location. The location will vary depending on the latest Istio version.
 
    ```
-   cd istio-0.8.0
+   cd istio-1.0.x
    ```
 
 3. Add the `istioctl` client to your PATH. For example, run the following command on a MacOS or Linux system:
@@ -47,7 +48,7 @@ Install Istio in your cluster.
 1. If a service account has not already been installed for Tiller, install one by pointing to the istio's`PATH`
 
    ```bash
-   # from ~/istio-0.8.0
+   # from ~/istio-1.0.x
    kubectl create -f install/kubernetes/helm/helm-service-account.yaml
    ```
 
@@ -60,7 +61,7 @@ Install Istio in your cluster.
 3. Install Istio with [automatic sidecar injection](https://istio.io/docs/setup/kubernetes/sidecar-injection/#automatic-sidecar-injection) (requires Kubernetes >=1.9.0):
 
    ```bash
-   helm install install/kubernetes/helm/istio --name istio --namespace istio-system --set tracing.enabled=true,servicegraph.enabled=true
+   helm install install/kubernetes/helm/istio --name istio --namespace istio-system --set tracing.enabled=true,servicegraph.enabled=true,grafana.enabled=true
    ```
    `tracing.enabled=true`enables to collect trace spans ; `servicegraph.enabled=true`enables and provides a web-based interface for viewing service graph of the service mesh. 
 
@@ -69,19 +70,20 @@ Install Istio in your cluster.
    ```bash
    kubectl label namespace <namespace> istio-injection=enabled
    ```
-   If you are not sure, use `default` as your `<namespace>`. To check the label, run this command `kubectl get namespaces -L istio-injection`
 
-5. Install JPetStore and Visual Search using the helm yaml files
+   If you are followed the manual steps to deploy the demo, use `default` as your `<namespace>`. If you used the automated toolchain, use the namespace you configured in the toolchain. The default is `petstore`. To check the label, run this command `kubectl get namespaces -L istio-injection`
+
+5. Install JPetStore and Visual Search using the helm yaml files or by re-running the toolchain's `Deploy` stage.
 
     ```sh
     # Change into the helm directory of JPetstore app
     cd ../helm
-    
+
     # Create the JPetstore app
     helm install --name jpetstore ./modernpets
-    
+
     # Create the MMSSearch microservice
-    helm install --name mmssearch ./mmssearch 
+    helm install --name mmssearch ./mmssearch
     ```
 
 6. By default, Istio-enabled services are unable to access URLs outside of the cluster because iptables is used in the pod to transparently redirect all outbound traffic to the sidecar proxy, which only handles intra-cluster destinations.
@@ -89,7 +91,8 @@ Install Istio in your cluster.
     Create an `ServiceEntry` to allow access to an external HTTPS service:
 
     ```sh
-    kubectl create -f ../istio/egressgateway.yaml
+    # Change into the root directory of JPetstore app
+    kubectl create -f ./istio/egressgateway.yaml
     ```
 
     Notice that we also create a corresponding `DestinationRule` to initiate TLS for connections to the HTTPS service. Callers must access this service using HTTP on port 443 and Istio will upgrade the connection to HTTPS.
@@ -148,15 +151,7 @@ Visit <http://localhost:9090/graph> in your web browser and look for metrics s
 
 Remember to install **Prometheus** addon before following the steps below
 
-1. To view Istio metrics in a graphical dashboard install the Grafana add-on.
-
-   Point to the folder where you have install istio and In Kubernetes environments, execute the following command:
-
-   ```sh
-   kubectl apply -f install/kubernetes/addons/grafana.yaml
-   ```
-
-2. Verify that the service is running in your cluster.
+1. Verify that the Grafana service is running in your cluster.
 
    In Kubernetes environments, execute the following command:
 
@@ -171,7 +166,7 @@ Remember to install **Prometheus** addon before following the steps below
    grafana   10.59.247.103   <none>        3000/TCP   2m
    ```
 
-3. Open the Istio Dashboard via the Grafana UI.
+2. Open the Istio Dashboard via the Grafana UI.
 
    In Kubernetes environments, execute the following command:
 
@@ -179,7 +174,7 @@ Remember to install **Prometheus** addon before following the steps below
    kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=grafana -o jsonpath='{.items[0].metadata.name}') 3000:3000 &
    ```
 
-   Visit <http://localhost:3000/dashboard/db/istio-dashboard> in your web browser.
+   Visit <http://localhost:3000/dashboard/db/istio-mesh-dashboard> in your web browser.
 
    ![Istio Dashboard](images/grafana_istio.png)
 
