@@ -1,0 +1,148 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "messages": {
+    "$i18n": "locales.yml"
+  },
+  "title": { "$ref": "#/messages/deploy.title" },
+  "description": { "$ref": "#/messages/deploy.description" },
+  "longDescription": { "$ref": "#/messages/deploy.longDescription" },
+  "type": "object",
+  "properties": {
+    "api-key": {
+      "title": { "$ref": "#/messages/deploy.apiKey" },
+      "description": { "$ref": "#/messages/deploy.apiKeyDescription" },
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "target-region": {
+      "title": { "$ref": "#/messages/deploy.crRegion" },
+      "description": { "$ref": "#/messages/deploy.crRegionDescription" },
+      "type": "select",
+      "disabled": false,
+      "readonly": true
+    },
+    "db-image-name": {
+      "title": { "$ref": "#/messages/deploy.dbImageName" },
+      "type": "string",
+      "pattern": "\\S",
+      "readonly": true
+    },
+    "mms-image-name": {
+      "title": { "$ref": "#/messages/deploy.mmsImageName" },
+      "type": "string",
+      "pattern": "\\S",
+      "readonly": true
+    },
+    "web-image-name": {
+      "title": { "$ref": "#/messages/deploy.webImageName" },
+      "type": "string",
+      "pattern": "\\S",
+      "readonly": true
+    },
+    "registry-namespace": {
+      "title": { "$ref": "#/messages/deploy.crNamespace" },
+      "description": { "$ref": "#/messages/deploy.crNamespaceDescription" },
+      "type": "select",
+      "pattern": "^[a-z0-9][a-z0-9_-]{2,28}[a-z0-9]$"
+    },
+    "target-cluster-name": {
+      "title": { "$ref": "#/messages/deploy.clusterName" },
+      "description": { "$ref": "#/messages/deploy.clusterDescription" },
+      "pattern": "\\S",
+      "readonly": false,
+      "type": "select"
+    },
+    "target-cluster-namespace": {
+      "title": { "$ref": "#/messages/deploy.kubeNamespace" },
+      "description": { "$ref": "#/messages/deploy.kubeNamespaceDescription" },
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "watson-api-key": {
+      "title": { "$ref": "#/messages/deploy.watsonApiKey" },
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "twilio-sid": {
+      "title": { "$ref": "#/messages/deploy.twilioSid" },
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "twilio-token": {
+      "title": { "$ref": "#/messages/deploy.twilioToken" },
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "twilio-number": {
+      "title": { "$ref": "#/messages/deploy.twilioNumber" },
+      "type": "string",
+      "pattern": "\\S"
+    }
+  },
+  "required": [
+    "api-key",
+    "target-region",
+    "db-image-name",
+    "mms-image-name",
+    "web-image-name",
+    "registry-namespace",
+    "target-cluster-name",
+    "target-cluster-namespace",
+    "watson-api-key"
+  ],
+  "form": [
+    {
+      "type": "validator",
+      "url": "/devops/setup/bm-helper/custom_helper.html"
+    },
+    "api-key",
+    {
+      "type": "section",
+      "title": { "$ref": "#/messages/deploy.crSection" },
+      "items": [
+        "target-region",
+        "registry-namespace",
+        {
+          "type": "section",
+          "title": { "$ref": "#/messages/deploy.imageName" },
+          "items": [
+            {
+              "type": "table",
+              "columnCount": 3,
+              "widths": ["33%", "33%", "33%", "33%"],
+              "items": [
+                "web-image-name",
+                "db-image-name",
+                "mms-image-name"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": { "$ref": "#/messages/deploy.kubeSection" },
+      "items": [
+        "target-cluster-name",
+        "target-cluster-namespace"
+      ]
+    },
+    {
+      "type": "section",
+      "title": { "$ref": "#/messages/deploy.requiredServices" },
+      "items": [
+        "watson-api-key"
+      ]
+    },
+    {
+      "type": "section",
+      "title": { "$ref": "#/messages/deploy.optionalServices" },
+      "items": [
+        "twilio-sid",
+        "twilio-token",
+        "twilio-number"
+      ]
+    }
+  ]
+}

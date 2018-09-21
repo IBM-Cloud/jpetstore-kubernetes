@@ -1,0 +1,86 @@
+---
+stages:
+- name: BUILD
+  inputs:
+  - type: git
+    branch: ${GIT_BRANCH}
+    service: ${GIT_REPO}
+  triggers:
+  - type: commit
+  properties:
+  - name: DB_IMAGE_NAME
+    value: ${DB_IMAGE_NAME}
+  - name: MMS_IMAGE_NAME
+    value: ${MMS_IMAGE_NAME}
+  - name: WEB_IMAGE_NAME
+    value: ${WEB_IMAGE_NAME}
+  jobs:
+  - name: Build Docker images
+    type: builder
+    build_type: cr
+    # artifact_dir: output
+    target:
+      region_id: ${REGISTRY_REGION_ID}
+      api_key: ${API_KEY}
+    namespace: ${REGISTRY_NAMESPACE}
+    image_name: <not applicable>
+    script: |
+      #!/bin/bash
+      ./.bluemix/pipeline-BUILD.sh
+- name: DEPLOY
+  inputs:
+  - type: job
+    stage: BUILD
+    job: Build Docker images
+  triggers:
+  - type: stage
+  properties:
+  - name: buildprops
+    value: build.properties
+    type: file
+  - name: TARGET_NAMESPACE
+    value: ${TARGET_NAMESPACE}
+    type: text
+  - name: WATSON_VR_API_KEY
+    value: ${WATSON_VR_API_KEY}
+  - name: TWILIO_SID
+    value: ${TWILIO_SID}
+  - name: TWILIO_TOKEN
+    value: ${TWILIO_TOKEN}
+  - name: TWILIO_NUMBER
+    value: ${TWILIO_NUMBER}
+  jobs:
+  - name: Deploy
+    type: deployer
+    target:
+      region_id: ${TARGET_REGION_ID}
+      api_key: ${API_KEY}
+      kubernetes_cluster: ${TARGET_CLUSTER_NAME}
+    script: |
+      #!/bin/bash
+      ./.bluemix/pipeline-DEPLOY.sh
+- name: UNINSTALL (manual)
+  inputs:
+  - type: job
+    stage: BUILD
+    job: Build Docker images
+  properties:
+  - name: buildprops
+    value: build.properties
+    type: file
+  - name: TARGET_NAMESPACE
+    value: ${TARGET_NAMESPACE}
+    type: text
+  triggers:
+  - type: stage
+    enabled: false
+  jobs:
+  - name: Uninstall
+    type: deployer
+    target:
+      region_id: ${TARGET_REGION_ID}
+      api_key: ${API_KEY}
+      kubernetes_cluster: ${TARGET_CLUSTER_NAME}
+    script: |
+      #!/bin/bash
+      ./.bluemix/pipeline-UNINSTALL.sh

@@ -1,0 +1,58 @@
+version: '2'
+messages:
+  $i18n: locales.yml
+template:
+  name:
+    $ref: "#/messages/template.name"
+  description:
+    $ref: "#/messages/template.description"
+  required:
+    - build
+    - repo
+toolchain:
+  name: 'jpetstore-kubernetes-{{timestamp}}'
+services:
+  repo:
+    service_id: githubpublic
+    parameters:
+      repo_name: 'jpetstore-kubernetes'
+      repo_url: 'https://github.com/IBM-Cloud/jpetstore-kubernetes'
+      type: clone
+      has_issues: false
+      enable_traceability: false
+  build:
+    service_id: pipeline
+    parameters:
+      services:
+        - repo
+      name: 'jpetstore-kubernetes'
+      ui-pipeline: true
+      configuration:
+        content:
+          $text: pipeline.yml
+        env:
+          GIT_REPO: repo
+          GIT_BRANCH: master
+          API_KEY: '{{form.pipeline.parameters.api-key}}'
+          REGISTRY_REGION_ID: '{{form.pipeline.parameters.target-region}}'
+          REGISTRY_NAMESPACE: '{{form.pipeline.parameters.registry-namespace}}'
+          DB_IMAGE_NAME: '{{form.pipeline.parameters.db-image-name}}'
+          MMS_IMAGE_NAME: '{{form.pipeline.parameters.mms-image-name}}'
+          WEB_IMAGE_NAME: '{{form.pipeline.parameters.web-image-name}}'
+          TARGET_REGION_ID: '{{form.pipeline.parameters.target-region}}'
+          TARGET_CLUSTER_NAME: '{{form.pipeline.parameters.target-cluster-name}}'
+          TARGET_NAMESPACE: '{{form.pipeline.parameters.target-cluster-namespace}}'
+          WATSON_VR_API_KEY: '{{form.pipeline.parameters.watson-api-key}}'
+          TWILIO_SID: '{{form.pipeline.parameters.twilio-sid}}'
+          TWILIO_TOKEN: '{{form.pipeline.parameters.twilio-token}}'
+          TWILIO_NUMBER: '{{form.pipeline.parameters.twilio-number}}'
+        execute: true
+form:
+  pipeline:
+    parameters:
+      db-image-name: 'jpetstoredb'
+      mms-image-name: 'mmssearch'
+      web-image-name: 'jpetstoreweb'
+      target-cluster-namespace: petstore
+    schema:
+      $ref: deploy.json
