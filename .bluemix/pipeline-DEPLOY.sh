@@ -1,5 +1,5 @@
 #!/bin/bash
-TARGET_USER=$(ibmcloud target | grep User | awk '{print $2}')
+TARGET_USER=$(bx target | grep User | awk '{print $2}')
 check_value "$TARGET_USER"
 echo "TARGET_USER=$TARGET_USER"
 
