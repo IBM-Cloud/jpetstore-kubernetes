@@ -86,7 +86,6 @@
     "mms-image-name",
     "web-image-name",
     "registry-namespace",
-    "target-cluster-name",
     "target-cluster-namespace",
     "watson-api-key"
   ],
