@@ -9,6 +9,9 @@ deploy.longDescription: "The Delivery Pipeline automates continuous deployment."
 deploy.crSection: "Container Registry"
 deploy.crNamespace: "Namespace"
 deploy.crNamespaceDescription: "The container registry namespace (4 chars at least, letters/digits/underscores). New namespace will be automatically created, you can also create a new namespace with 'bx cr namespace-add'."
+deploy.crRegion: "Region"
+deploy.crRegionDescription: "The Container Registry region, for example UK-South's region is registry.eu-gb.bluemix.net."
+
 deploy.imageName: "Images"
 deploy.imageDescription: "The respective microservice's Docker image name"
 deploy.dbImageName: "Database Image"
@@ -23,9 +26,7 @@ deploy.kubeNamespaceDescription: "The Kubernetes namespace where to deploy the a
 
 deploy.apiKeyDescription: "The IBM Cloud API key is used to access the IBM Container Service API and interact with the cluster. You can obtain your API key with 'bx iam api-key-create' or via the console at https://console.ng.bluemix.net/iam/#/apikeys by clicking **Create API key** (Each API key only can be viewed once)."
 deploy.apiKey: "IBM Cloud API Key"
-deploy.regionDescription: "The IBM Cloud region"
 deploy.clusterNote: "Retrieve the Kubernetes cluster name with the CLI command 'bx cs clusters' or via the [console](https://console.bluemix.net/containers-kubernetes/home/clusters)."
-region: "Region"
 
 deploy.requiredServices: "Required Services"
 deploy.watsonApiKey: "Watson Visual Recognition API Key"
@@ -33,6 +34,6 @@ deploy.watsonApiKey: "Watson Visual Recognition API Key"
 deploy.optionalServices: "Optional Services"
 deploy.twilioSid: "Twilio Account SID"
 deploy.twilioToken: "Twilio Token"
-deploy.twiliNumber: "Twilio Phone Number"
+deploy.twilioNumber: "Twilio Phone Number"
 
 

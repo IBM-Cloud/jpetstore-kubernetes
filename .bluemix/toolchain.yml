@@ -46,7 +46,7 @@ services:
           TWILIO_SID: '{{form.pipeline.parameters.twilio-sid}}'
           TWILIO_TOKEN: '{{form.pipeline.parameters.twilio-token}}'
           TWILIO_NUMBER: '{{form.pipeline.parameters.twilio-number}}'
-        execute: false
+        execute: true
 form:
   pipeline:
     parameters:

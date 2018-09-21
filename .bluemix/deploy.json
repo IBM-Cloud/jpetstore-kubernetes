@@ -15,8 +15,8 @@
       "pattern": "\\S"
     },
     "target-region": {
-      "title": { "$ref": "#/messages/region" },
-      "description": { "$ref": "#/messages/deploy.regionDescription" },
+      "title": { "$ref": "#/messages/deploy.crRegion" },
+      "description": { "$ref": "#/messages/deploy.crRegionDescription" },
       "type": "select",
       "disabled": false,
       "readonly": true

@@ -12,10 +12,19 @@ kubectl create namespace $TARGET_NAMESPACE
 kubectl get secret $INGRESS_SECRETNAME -o yaml | sed 's/namespace: default/namespace: '$TARGET_NAMESPACE'/' | kubectl create -f -
 
 # a secret to access the registry
+CR_TOKEN_ID=$(ibmcloud cr token-list | grep JPetStore | awk ' {print $1} ')
+
+if [ -z "$CR_TOKEN_ID" ]
+then
+  CR_TOKEN=$(ibmcloud cr token-add --description "JPetStore toolchain pull token" --non-expiring | sed -n '4,4p' | awk ' {print $2} ')
+else
+  CR_TOKEN=$(ibmcloud cr token-get $CR_TOKEN_ID | sed -n '4,4p' | awk ' {print $2} ')
+fi
+
 kubectl --namespace $TARGET_NAMESPACE create secret docker-registry petstore-docker-registry \
   --docker-server=registry.ng.bluemix.net \
-  --docker-password=${PIPELINE_BLUEMIX_API_KEY} \
-  --docker-username=iamapikey \
+  --docker-password=${CR_TOKEN} \
+  --docker-username=token \
   --docker-email=devops@build.com
 
 # create mmssearch secret file
@@ -37,7 +46,7 @@ cat > "mms-secrets.json" << EOF
 EOF
 
 # create mmssearch secret
-kubectl create secret generic mms-secret --from-file=mms-secrets=./mms-secrets.json
+kubectl --namespace $TARGET_NAMESPACE create secret generic mms-secret --from-file=mms-secrets=./mms-secrets.json
 
 ## install helm tiller into cluster
 helm init
