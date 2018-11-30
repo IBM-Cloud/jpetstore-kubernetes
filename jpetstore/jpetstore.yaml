@@ -1,14 +1,3 @@
-kind: Service
-apiVersion: v1
-metadata:
-  name: web
-spec:
-  selector:
-    app: jpetstoreweb
-  ports:
-  - port: 80
-    targetPort: 9080
----
 kind: Deployment
 apiVersion: extensions/v1beta1
 metadata:
@@ -40,13 +29,13 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name: db
+  name: web
 spec:
   selector:
-    app: jpetstoredb
+    app: jpetstoreweb
   ports:
-  - port: 3306
-    targetPort: 3306
+  - port: 80
+    targetPort: 9080
 ---
 kind: Deployment
 apiVersion: extensions/v1beta1
@@ -75,6 +64,17 @@ spec:
             value: "jpetstore"
           - name: MYSQL_PASSWORD
             value: "foobar"
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: db
+spec:
+  selector:
+    app: jpetstoredb
+  ports:
+  - port: 3306
+    targetPort: 3306
 ---
 kind: Ingress
 apiVersion: extensions/v1beta1
