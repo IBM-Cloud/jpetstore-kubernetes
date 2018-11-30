@@ -282,6 +282,23 @@ ibmcloud cr image-rm ${MYREGISTRY}/${MYNAMESPACE}/jpetstoredb
 ibmcloud cs cluster-rm yourclustername
 ```
 
+## Troubleshooting
+
+### The toolchain complains about "incompatible versions" for helm
+
+The DEPLOY log shows:
+```
+Error: UPGRADE FAILED: incompatible versions client[v2.8.1] server[v2.4.2]
+```
+
+It means you have already `helm` installed in your cluster and this version is not compatible with the one from the toolchain.
+
+Two options:
+1. Before running the toolchain again, update `helm` to the version used by the toolchain on your local machine then issue a `helm init --upgrade` against the cluster.
+2. Edit `bluemix/pipeline-DEPLOY.sh` at line 60 in your repository and replace `helm init` with `helm init --upgrade`.
+
+Then re-run the DEPLOY job.
+
 ## Related Content
 
 IBM Cloud solution tutorial: [Migrate web applications from Virtual Machines to Kubernetes](https://console.bluemix.net/docs/tutorials/vm-to-containers-and-kubernetes.html)
