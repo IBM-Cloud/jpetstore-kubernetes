@@ -74,10 +74,23 @@
       "type": "string",
       "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
     },
-    "app-name": {
-      "description": {
-        "$ref": "#/messages/deploy.appDescription"
-      },
+    "watson-api-key": {
+      "title": { "$ref": "#/messages/deploy.watsonApiKey" },
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "twilio-sid": {
+      "title": { "$ref": "#/messages/deploy.twilioSid" },
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "twilio-token": {
+      "title": { "$ref": "#/messages/deploy.twilioToken" },
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "twilio-number": {
+      "title": { "$ref": "#/messages/deploy.twilioNumber" },
       "type": "string",
       "pattern": "\\S"
     }
@@ -91,7 +104,8 @@
     "web-image-name",
     "prod-region",
     "prod-cluster-name",
-    "prod-cluster-namespace"
+    "prod-cluster-namespace",
+    "watson-api-key"
   ],
   "form": [
     {
@@ -149,21 +163,21 @@
             "$ref": "#/messages/deploy.imgregNs"
           },
           "key": "registry-namespace"
-        },
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": { "$ref": "#/messages/deploy.imageName" },
+      "items": [
         {
-          "type": "section",
-          "title": { "$ref": "#/messages/deploy.imageName" },
+          "type": "table",
+          "columnCount": 3,
+          "widths": ["33%", "33%", "33%", "33%"],
           "items": [
-            {
-              "type": "table",
-              "columnCount": 3,
-              "widths": ["33%", "33%", "33%", "33%"],
-              "items": [
-                "web-image-name",
-                "db-image-name",
-                "mms-image-name"
-              ]
-            }
+            "web-image-name",
+            "db-image-name",
+            "mms-image-name"
           ]
         }
       ]
@@ -257,6 +271,22 @@
             "$ref": "#/messages/deploy.clusternsDescription"
           }
         }
+      ]
+    },
+    {
+      "type": "section",
+      "title": { "$ref": "#/messages/deploy.requiredServices" },
+      "items": [
+        "watson-api-key"
+      ]
+    },
+    {
+      "type": "section",
+      "title": { "$ref": "#/messages/deploy.optionalServices" },
+      "items": [
+        "twilio-sid",
+        "twilio-token",
+        "twilio-number"
       ]
     }
   ]
