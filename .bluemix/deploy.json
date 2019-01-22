@@ -121,48 +121,54 @@
       "key": "api-key"
     },
     {
-      "type": "table",
-      "columnCount": 3,
-      "widths": [
-        "50%",
-        "3%",
-        "47%"
-      ],
+      "type": "section",
+      "title": { "$ref": "#/messages/deploy.crSection" },
       "items": [
         {
-          "type": "label",
-          "title": {
-            "$ref": "#/messages/deploy.containerregRegion"
-          }
-        },
-        {
-          "type": "label",
-          "title": ""
-        },
-        {
-          "type": "label",
-          "title": {
-            "$ref": "#/messages/deploy.containerregns"
-          }
-        },
-        {
-          "type": "select",
-          "title": {
-            "$ref": "#/messages/deploy.imgregRegion"
-          },
-          "key": "registry-region"
-        },
-        {
-          "type": "label",
-          "title": ""
-        },
-        {
-          "type": "select",
-          "readonly": false,
-          "title": {
-            "$ref": "#/messages/deploy.imgregNs"
-          },
-          "key": "registry-namespace"
+          "type": "table",
+          "columnCount": 3,
+          "widths": [
+            "50%",
+            "3%",
+            "47%"
+          ],
+          "items": [
+            {
+              "type": "label",
+              "title": {
+                "$ref": "#/messages/deploy.containerregRegion"
+              }
+            },
+            {
+              "type": "label",
+              "title": ""
+            },
+            {
+              "type": "label",
+              "title": {
+                "$ref": "#/messages/deploy.containerregns"
+              }
+            },
+            {
+              "type": "select",
+              "title": {
+                "$ref": "#/messages/deploy.imgregRegion"
+              },
+              "key": "registry-region"
+            },
+            {
+              "type": "label",
+              "title": ""
+            },
+            {
+              "type": "select",
+              "readonly": false,
+              "title": {
+                "$ref": "#/messages/deploy.imgregNs"
+              },
+              "key": "registry-namespace"
+            }
+          ]
         }
       ]
     },
