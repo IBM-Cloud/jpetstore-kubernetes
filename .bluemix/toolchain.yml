@@ -34,12 +34,12 @@ services:
           GIT_REPO: repo
           GIT_BRANCH: master
           API_KEY: '{{form.pipeline.parameters.api-key}}'
-          REGISTRY_REGION_ID: '{{form.pipeline.parameters.target-region}}'
+          REGISTRY_REGION_ID: '{{form.pipeline.parameters.registry-region}}'
           REGISTRY_NAMESPACE: '{{form.pipeline.parameters.registry-namespace}}'
           DB_IMAGE_NAME: '{{form.pipeline.parameters.db-image-name}}'
           MMS_IMAGE_NAME: '{{form.pipeline.parameters.mms-image-name}}'
           WEB_IMAGE_NAME: '{{form.pipeline.parameters.web-image-name}}'
-          TARGET_REGION_ID: '{{form.pipeline.parameters.target-region}}'
+          TARGET_REGION_ID: '{{form.pipeline.parameters.registry-region}}'
           TARGET_CLUSTER_NAME: '{{form.pipeline.parameters.target-cluster-name}}'
           TARGET_NAMESPACE: '{{form.pipeline.parameters.target-cluster-namespace}}'
           WATSON_VR_API_KEY: '{{form.pipeline.parameters.watson-api-key}}'

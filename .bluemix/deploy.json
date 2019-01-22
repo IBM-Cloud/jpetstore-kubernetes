@@ -14,7 +14,7 @@
       "type": "string",
       "pattern": "\\S"
     },
-    "target-region": {
+    "registry-region": {
       "title": { "$ref": "#/messages/deploy.crRegion" },
       "description": { "$ref": "#/messages/deploy.crRegionDescription" },
       "type": "select",
@@ -81,7 +81,7 @@
   },
   "required": [
     "api-key",
-    "target-region",
+    "registry-region",
     "db-image-name",
     "mms-image-name",
     "web-image-name",
@@ -107,7 +107,7 @@
       "type": "section",
       "title": { "$ref": "#/messages/deploy.crSection" },
       "items": [
-        "target-region",
+        "registry-region",
         {
           "type": "select",
           "readonly": false,
