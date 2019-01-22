@@ -30,7 +30,7 @@ Follow the below steps to create IBM Cloud services and resources used in this d
 
 A toolchain has been created and automates deployment of the demo. You will still need to manually configure Twilio as described in the Manual deployment section.
 
-[![Create toolchain](https://cloud.ibm.com/devops/graphics/create_toolchain_button.png)](https://cloud.ibm.comdevops/setup/deploy/?repository=https%3A//github.com/IBM-Cloud/jpetstore-kubernetes)
+[![Create toolchain](https://cloud.ibm.com/devops/graphics/create_toolchain_button.png)](https://cloud.ibm.com/devops/setup/deploy/?repository=https%3A//github.com/IBM-Cloud/jpetstore-kubernetes)
 
 Once the toolchain has completed, the applications will be available at `https://jpetstore.<your-cluster-ingress-domain>` and `https://mmssearch.<your-cluster-ingress-domain>`.
 
