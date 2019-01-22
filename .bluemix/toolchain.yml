@@ -39,9 +39,9 @@ services:
           DB_IMAGE_NAME: '{{form.pipeline.parameters.db-image-name}}'
           MMS_IMAGE_NAME: '{{form.pipeline.parameters.mms-image-name}}'
           WEB_IMAGE_NAME: '{{form.pipeline.parameters.web-image-name}}'
-          TARGET_REGION_ID: '{{form.pipeline.parameters.registry-region}}'
-          TARGET_CLUSTER_NAME: '{{form.pipeline.parameters.target-cluster-name}}'
-          TARGET_NAMESPACE: '{{form.pipeline.parameters.target-cluster-namespace}}'
+          TARGET_REGION_ID: '{{form.pipeline.parameters.prod-region}}'
+          TARGET_CLUSTER_NAME: '{{form.pipeline.parameters.prod-cluster-name}}'
+          TARGET_NAMESPACE: '{{form.pipeline.parameters.prod-cluster-namespace}}'
           WATSON_VR_API_KEY: '{{form.pipeline.parameters.watson-api-key}}'
           TWILIO_SID: '{{form.pipeline.parameters.twilio-sid}}'
           TWILIO_TOKEN: '{{form.pipeline.parameters.twilio-token}}'
@@ -53,6 +53,6 @@ form:
       db-image-name: 'jpetstoredb'
       mms-image-name: 'mmssearch'
       web-image-name: 'jpetstoreweb'
-      target-cluster-namespace: petstore
+      prod-cluster-namespace: petstore
     schema:
       $ref: deploy.json
