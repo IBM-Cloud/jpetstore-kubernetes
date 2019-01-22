@@ -17,9 +17,8 @@
     "registry-region": {
       "title": { "$ref": "#/messages/deploy.crRegion" },
       "description": { "$ref": "#/messages/deploy.crRegionDescription" },
-      "type": "select",
-      "disabled": false,
-      "readonly": true
+      "type": "string",
+      "disabled": false
     },
     "db-image-name": {
       "title": { "$ref": "#/messages/deploy.dbImageName" },
@@ -42,7 +41,7 @@
     "registry-namespace": {
       "title": { "$ref": "#/messages/deploy.crNamespace" },
       "description": { "$ref": "#/messages/deploy.crNamespaceDescription" },
-      "type": "select",
+      "type": "string",
       "pattern": "^[a-z0-9][a-z0-9_-]{2,28}[a-z0-9]$"
     },
     "target-cluster-name": {
@@ -99,7 +98,7 @@
       "type": "password",
       "readonly": false,
       "title": {
-        "$ref": "#/messages/deploy.apikey"
+        "$ref": "#/messages/deploy.apiKey"
       },
       "key": "api-key"
     },
@@ -107,7 +106,13 @@
       "type": "section",
       "title": { "$ref": "#/messages/deploy.crSection" },
       "items": [
-        "registry-region",
+        {
+          "type": "select",
+          "title": {
+            "$ref": "#/messages/deploy.crRegion"
+          },
+          "key": "registry-region"
+        },
         {
           "type": "select",
           "readonly": false,
