@@ -44,7 +44,7 @@ Install Istio in your cluster.
 
 ## Deploy
 
-When you deploy JPetStore, Envoy sidecar proxies are injected as containers into your app microservices' pods before the microservice pods are deployed. Istio uses an extended version of the Envoy proxy to mediate all inbound and outbound traffic for all microservices in the service mesh. For more about Envoy, see the [Istio documentation ![External link icon](https://console.bluemix.net/docs/api/content/icons/launch-glyph.svg?lang=en)](https://istio.io/docs/concepts/what-is-istio/overview.html#envoy).
+When you deploy JPetStore, Envoy sidecar proxies are injected as containers into your app microservices' pods before the microservice pods are deployed. Istio uses an extended version of the Envoy proxy to mediate all inbound and outbound traffic for all microservices in the service mesh. For more about Envoy, see the [Istio documentation](https://istio.io/docs/concepts/what-is-istio/overview.html#envoy).
 
 For this option, you need to update the YAML files to point to your registry namespace and Kubernetes cluster Ingress subdomain:
 
