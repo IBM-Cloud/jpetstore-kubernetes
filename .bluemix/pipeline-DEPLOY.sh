@@ -31,7 +31,7 @@ else
     --docker-email="${TARGET_USER}" || exit 1
 fi
 
-# create the imagePullSecret https://console.bluemix.net/docs/containers/cs_images.html#store_imagePullSecret
+# create the imagePullSecret https://cloud.ibm.com/docs/containers/cs_images.html#store_imagePullSecret
 kubectl patch -n $TARGET_NAMESPACE serviceaccount/default -p '{"imagePullSecrets":[{"name": "petstore-docker-registry"}]}'
 
 # create mmssearch secret file
