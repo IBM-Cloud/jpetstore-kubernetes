@@ -16,13 +16,13 @@ IBMers can access the demo script and additional collateral from [here](https://
 
 Follow the below steps to create IBM Cloud services and resources used in this demo. You will create a Kubernetes cluster, an instance of Watson Visual Recognition and an optional [Twilio](https://www.twilio.com/) account (if you want to shop for pets using text messaging).
 
-1. If you do not have Docker or Kubernetes tooling installed, see [Setting up the IBM Cloud Developer Tools CLI](https://console.bluemix.net/docs/cli/idt/setting_up_idt.html).
+1. If you do not have Docker or Kubernetes tooling installed, see [Setting up the IBM Cloud Developer Tools CLI](https://cloud.ibm.com/docs/cli/idt/setting_up_idt.html).
 
-2. Set up a cluster by going to the [Kubernetes Service on IBM Cloud](http://www.ibm.com/cloud/container-service) and [provision a Standard **Paid** cluster](https://console.bluemix.net/docs/containers/container_index.html#clusters) (it might take up to 15 minutes to provision, so be patient). A Free cluster will *not* work because this demo uses Ingress resources.
+2. Set up a cluster by going to the [Kubernetes Service on IBM Cloud](http://www.ibm.com/cloud/container-service) and [provision a Standard **Paid** cluster](https://cloud.ibm.com/docs/containers/container_index.html#clusters) (it might take up to 15 minutes to provision, so be patient). A Free cluster will *not* work because this demo uses Ingress resources.
 
 3. Follow the instructions in the **Access** tab of your cluster to gain access to your cluster using [**kubectl**](https://kubernetes.io/docs/reference/kubectl/overview/).
 
-4. Visit [IBM Cloud catalog](https://console.bluemix.net/catalog/) and [create a **Watson Visual Recognition**](https://console.bluemix.net/catalog/services/visual-recognition) service (choose the Lite plan). After creation, you will get a set of auto-generated service credentials. The **apikey** is required later.
+4. Visit [IBM Cloud catalog](https://cloud.ibm.com/catalog/) and [create a **Watson Visual Recognition**](https://cloud.ibm.com/catalog/services/visual-recognition) service (choose the Lite plan). After creation, you will get a set of auto-generated service credentials. The **apikey** is required later.
 
 5. **Optionally** visit [Twilio](http://twilio.com), sign up for a free account and **buy a number** with MMS capabilities by creating a project/feature on the Dashboard. Locate the **Account SID** and **Auth Token** from the API Credentials in the [dashboard](https://www.twilio.com/console/sms/dashboard#). Locate you **Phone Number** on the respective [Twilo page](https://www.twilio.com/console/phone-numbers/incoming).
 
@@ -30,7 +30,7 @@ Follow the below steps to create IBM Cloud services and resources used in this d
 
 A toolchain has been created and automates deployment of the demo. You will still need to manually configure Twilio as described in the Manual deployment section.
 
-[![Create toolchain](https://console.bluemix.net/devops/graphics/create_toolchain_button.png)](https://console.bluemix.net/devops/setup/deploy/?repository=https%3A//github.com/IBM-Cloud/jpetstore-kubernetes)
+[![Create toolchain](https://cloud.ibm.com/devops/graphics/create_toolchain_button.png)](https://cloud.ibm.comdevops/setup/deploy/?repository=https%3A//github.com/IBM-Cloud/jpetstore-kubernetes)
 
 Once the toolchain has completed, the applications will be available at `https://jpetstore.<your-cluster-ingress-domain>` and `https://mmssearch.<your-cluster-ingress-domain>`.
 
@@ -73,7 +73,7 @@ cd jpetstore-kubernetes
 3. Open **mms-secrets.json** file and update the **Ingress Subdomain** in the **jpetstoreurl** field. This allows the mmssearch microservice to find the images that are part of the message back to the user.
    Example: `http://jpetstore.yourclustername.us-south.containers.mybluemix.net`
 
-4. Go to the [IBM Cloud catalog](https://console.bluemix.net/catalog/) and [create a **Watson Visual Recognition**](https://console.bluemix.net/catalog/services/visual-recognition) service (choose the Lite plan).
+4. Go to the [IBM Cloud catalog](https://cloud.ibm.com/catalog/) and [create a **Watson Visual Recognition**](https://cloud.ibm.com/catalog/services/visual-recognition) service (choose the Lite plan).
 
 5. After creation, you will get a set of auto-generated service credentials. Carefully copy these into the **watson** section of **mms-secrets.json** file.
 
@@ -242,14 +242,14 @@ You can now click on **view** (next to Logs) in your cluster dashboard to launch
 
 ![](readme_images/logging.png)
 
-Learn more: [Analyze logs and monitor the health of Kubernetes applications](https://console.bluemix.net/docs/tutorials/kubernetes-log-analysis-kibana.html)
+Learn more: [Analyze logs and monitor the health of Kubernetes applications](https://cloud.ibm.com/docs/tutorials/kubernetes-log-analysis-kibana.html)
 
 ## Monitoring
 
 To demo monitoring of the cluster, got to your cluster dashboard and click on **View** next to Metrics:
 
 ![](readme_images/monitoring.png)
-Learn more: [Analyze logs and monitor the health of Kubernetes applications](https://console.bluemix.net/docs/tutorials/kubernetes-log-analysis-kibana.html)
+Learn more: [Analyze logs and monitor the health of Kubernetes applications](https://cloud.ibm.com/docs/tutorials/kubernetes-log-analysis-kibana.html)
 
 ### Load Generation for demo purposes
 
@@ -301,4 +301,4 @@ Then re-run the DEPLOY job.
 
 ## Related Content
 
-IBM Cloud solution tutorial: [Migrate web applications from Virtual Machines to Kubernetes](https://console.bluemix.net/docs/tutorials/vm-to-containers-and-kubernetes.html)
+IBM Cloud solution tutorial: [Migrate web applications from Virtual Machines to Kubernetes](https://cloud.ibm.com/docs/tutorials/vm-to-containers-and-kubernetes.html)
