@@ -51,7 +51,7 @@ spec:
   - host: mmssearch.<CLUSTER DOMAIN>
     http:
       paths:
-      - path: /sms
+      - path: /
         backend:
           serviceName: mmssearch
           servicePort: 8080
