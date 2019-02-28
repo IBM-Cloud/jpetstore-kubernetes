@@ -299,6 +299,16 @@ Two options:
 
 Then re-run the DEPLOY job.
 
+### The toolchain DEPLOY fails with an UPGRADE FAILED error
+
+The DEPLOY log shows:
+```
+Error: UPGRADE FAILED: "mmssearch" has no deployed releases
+```
+
+There is a known helm issue. If an install of a given release fails the very first time it was attempted, all subsequent install (upgrade) attempts of that release will fail.  To fix, for example in the case of the exact error above related to mmssearch, you can issue a `helm delete mmssearch --purge` command. This command can be added in the deploy script right before issuing the `helm upgrade --install ....` command.
+
+
 ## Related Content
 
 IBM Cloud solution tutorial: [Migrate web applications from Virtual Machines to Kubernetes](https://cloud.ibm.com/docs/tutorials/vm-to-containers-and-kubernetes.html)
