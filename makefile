@@ -5,7 +5,7 @@ NAMESPACE=<YOUR_CONTAINER_REGISTRY>
 INGRESSSUBDOMAIN=jpetstore.<YOUR_INGRESS_SUBDOMAIN>
 
 # the IBM container registry
-REGISTRY=registry.ng.bluemix.net
+REGISTRY=us.icr.io
 
 TIMESTAMP="$(shell date)"
 

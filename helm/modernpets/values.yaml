@@ -5,8 +5,9 @@
 replicaCount: 2
 
 image:
-  repository: registry.ng.bluemix.net/<NAMESPACE> # Ex: registry.ng.bluemix.net/mynamespace
+  repository: us.icr.io/<NAMESPACE> # Ex: us.icr.io/mynamespace
   pullPolicy: Always
+  pullSecret: ""
 
 ingress:
   enabled: true

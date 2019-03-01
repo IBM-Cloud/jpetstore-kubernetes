@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: registry.ng.bluemix.net/modernpets
+  repository: us.icr.io/modernpets
   pullPolicy: Always
 
 ingress:

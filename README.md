@@ -118,13 +118,13 @@ The docker images for each of the micro-services need to be built and then pushe
 
    `export MYNAMESPACE=<NAMESPACE>`
 
-3. Identify your **Container Registry** (e.g. registry.ng.bluemix.net) by running `ibmcloud cr info`.
+3. Identify your **Container Registry** (e.g. us.icr.io) by running `ibmcloud cr info`.
 
 4. Set MYREGISTRY env var to your registry.
 
    `export MYREGISTRY=<REGISTRY>`
 
-5. Make sure that the steps above worked by running `echo ${MYREGISTRY}/${MYNAMESPACE}` . You should see output similar to `registry.ng.bluemix.net/mynamespace`
+5. Make sure that the steps above worked by running `echo ${MYREGISTRY}/${MYNAMESPACE}` . You should see output similar to `us.icr.io/mynamespace`
 
 6. Build and push the **jpetstoreweb** image. Run these commands as they are. You do not need to replace any of the values belwo:
 
@@ -199,7 +199,7 @@ If you did not deploy using Helm, you can deploy using the yaml files and kubect
 1. Edit **jpetstore/jpetstore.yaml** and **jpetstore/jpetstore-watson.yaml** and replace all instances of:
 
   - `<CLUSTER DOMAIN>` with your Ingress Subdomain (`ibmcloud cs cluster-get CLUSTER_NAME`)
-  - `<REGISTRY NAMESPACE>` with your Image registry URL. For example:`registry.ng.bluemix.net/mynamespace`
+  - `<REGISTRY NAMESPACE>` with your Image registry URL. For example:`us.icr.io/mynamespace`
 
 2. `kubectl create -f jpetstore.yaml`  - This creates the JPetstore app and database microservices
 3. `kubectl create -f jpetstore-watson.yaml`  - This creates the MMSSearch microservice
