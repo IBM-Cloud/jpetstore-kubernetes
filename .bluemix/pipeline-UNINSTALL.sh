@@ -8,9 +8,9 @@ kubectl delete secret mms-secret
 kubectl delete secret petstore-docker-registry
 
 # remove the images
-bx cr image-rm $DB_IMAGE_URL
-bx cr image-rm $MMS_IMAGE_URL
-bx cr image-rm $WEB_IMAGE_URL
+ibmcloud cr image-rm $DB_IMAGE_URL
+ibmcloud cr image-rm $MMS_IMAGE_URL
+ibmcloud cr image-rm $WEB_IMAGE_URL
 
 # delete the namespace
 kubectl delete namespace $TARGET_NAMESPACE

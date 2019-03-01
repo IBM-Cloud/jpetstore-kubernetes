@@ -1,12 +1,12 @@
 #!/bin/bash
-TARGET_USER=$(bx target | grep User | awk '{print $2}')
+TARGET_USER=$(ibmcloud target | grep User | awk '{print $2}')
 check_value "$TARGET_USER"
 echo "TARGET_USER=$TARGET_USER"
 
-INGRESS_HOSTNAME=$(bx cs cluster-get $PIPELINE_KUBERNETES_CLUSTER_NAME --json | grep ingressHostname | tr -d '":,' | awk '{print $2}')
+INGRESS_HOSTNAME=$(ibmcloud cs cluster-get $PIPELINE_KUBERNETES_CLUSTER_NAME --json | grep ingressHostname | tr -d '":,' | awk '{print $2}')
 echo "INGRESS_HOSTNAME=${INGRESS_HOSTNAME}"
 
-INGRESS_SECRETNAME=$(bx cs cluster-get $PIPELINE_KUBERNETES_CLUSTER_NAME --json | grep ingressSecretName | tr -d '":,' | awk '{print $2}')
+INGRESS_SECRETNAME=$(ibmcloud cs cluster-get $PIPELINE_KUBERNETES_CLUSTER_NAME --json | grep ingressSecretName | tr -d '":,' | awk '{print $2}')
 echo "INGRESS_SECRETNAME=${INGRESS_SECRETNAME}"
 
 if kubectl get namespace $TARGET_NAMESPACE; then
@@ -23,7 +23,7 @@ fi
 if kubectl get secret petstore-docker-registry --namespace $TARGET_NAMESPACE; then
   echo "Docker Registry secret already exists"
 else
-  REGISTRY_TOKEN=$(bx cr token-add --description "petstore-docker-registry for $TARGET_USER" --non-expiring --quiet)
+  REGISTRY_TOKEN=$(ibmcloud cr token-add --description "petstore-docker-registry for $TARGET_USER" --non-expiring --quiet)
   kubectl --namespace $TARGET_NAMESPACE create secret docker-registry petstore-docker-registry \
     --docker-server=${REGISTRY_URL} \
     --docker-password="${REGISTRY_TOKEN}" \

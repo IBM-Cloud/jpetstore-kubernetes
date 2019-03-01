@@ -10,9 +10,9 @@ MMS_IMAGE_URL=$REGISTRY_URL/$REGISTRY_NAMESPACE/$MMS_IMAGE_NAME
 WEB_IMAGE_URL=$REGISTRY_URL/$REGISTRY_NAMESPACE/$WEB_IMAGE_NAME
 
 set -e
-bx cr build ./jpetstore -t $WEB_IMAGE_URL
-bx cr build ./jpetstore/db -t $DB_IMAGE_URL
-bx cr build ./mmssearch -t $MMS_IMAGE_URL
+ibmcloud cr build ./jpetstore -t $WEB_IMAGE_URL
+ibmcloud cr build ./jpetstore/db -t $DB_IMAGE_URL
+ibmcloud cr build ./mmssearch -t $MMS_IMAGE_URL
 set +e
 
 mkdir -p $ARCHIVE_DIR
