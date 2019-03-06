@@ -5,7 +5,7 @@
 replicaCount: 2
 
 image:
-  repository: us.icr.io/<NAMESPACE> # Ex: us.icr.io/mynamespace
+  repository: <REGISTRY>/<NAMESPACE> # Ex: us.icr.io/mynamespace
   pullPolicy: Always
   pullSecret: ""
 

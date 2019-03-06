@@ -171,7 +171,7 @@ There are two different ways to deploy the three micro-services to a Kubernetes 
 
 3. Open `../helm/modernpets/values.yaml` and make the following changes.
 
-    - Update `repository` and replace `<NAMESPACE>` with your Container Registry namespace.
+    - Update `repository` and replace `<REGISTRY>` with your Container Registry and `<NAMESPACE>` with your Container Registry namespace.
     - Update `hosts` and replace `<Ingress Subdomain>` with your Ingress Subdomain.
 
 4. Repeat the previous step and update `../helm/mmssearch/values.yaml` with the same changes.
