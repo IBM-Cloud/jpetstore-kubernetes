@@ -24,7 +24,7 @@ Follow the below steps to create IBM Cloud services and resources used in this d
 
 4. Visit [IBM Cloud catalog](https://cloud.ibm.com/catalog/) and [create a **Watson Visual Recognition**](https://cloud.ibm.com/catalog/services/visual-recognition) service (choose the Lite plan). After creation, you will get a set of auto-generated service credentials. The **apikey** is required later.
 
-5. **Optionally** visit [Twilio](http://twilio.com), sign up for a free account and **buy a number** with MMS capabilities by creating a project/feature on the Dashboard. Locate the **Account SID** and **Auth Token** from the API Credentials in the [dashboard](https://www.twilio.com/console/sms/dashboard#). Locate you **Phone Number** on the respective [Twilo page](https://www.twilio.com/console/phone-numbers/incoming).
+5. **Optionally**,visit [Twilio](http://twilio.com), sign up for a free account and **buy a number** with MMS capabilities by creating a project/feature on the Dashboard. Locate the **Account SID** and **Auth Token** from the API Credentials in the [dashboard](https://www.twilio.com/console/sms/dashboard#). Locate you **Phone Number** on the respective [Twilio page](https://www.twilio.com/console/phone-numbers/incoming).
 
 ## Automated deployment
 
@@ -68,10 +68,10 @@ cd jpetstore-kubernetes
    cp mms-secrets.json.template mms-secrets.json
    ```
 
-2. Run `ibmcloud cs cluster-get CLUSTER_NAME` to get your **Ingress Subdomain** (make sure to replace CLUSTER_NAME with the name of the cluster you created above).
+2. Run `ibmcloud ks cluster get CLUSTER_NAME` to get your **Ingress Subdomain** (make sure to replace CLUSTER_NAME with the name of the cluster you created above).
 
 3. Open **mms-secrets.json** file and update the **Ingress Subdomain** in the **jpetstoreurl** field. This allows the mmssearch microservice to find the images that are part of the message back to the user.
-   Example: `http://jpetstore.yourclustername.us-south.containers.mybluemix.net`
+   Example: `http://jpetstore.yourclustername.us-south.containers.appdomain.cloud `
 
 4. Go to the [IBM Cloud catalog](https://cloud.ibm.com/catalog/) and [create a **Watson Visual Recognition**](https://cloud.ibm.com/catalog/services/visual-recognition) service (choose the Lite plan).
 
@@ -81,7 +81,7 @@ cd jpetstore-kubernetes
 
 ### Set up Twilio (optional)
 
-This step is only required if you want to use MMS text messaging during the demo (which is not possible in many countries outside the U.S.). 
+This step is only required if you want to use MMS text messaging during the demo (which is not possible in many countries outside the U.S.).
 
 Skip this section if you only want to interact using the web chat.
 
@@ -89,7 +89,7 @@ Skip this section if you only want to interact using the web chat.
 2. Open the **mms-secrets.json** file and replace:
 
    1.  **sid** and **token** values with your **AccountSID** and the **AuthToken** from the Twilio Account Dashboard.
-   2.  **number** with the number you just purchased in the format **+1XXXYYYZZZZ**.  
+   2.  **number** with the number you just purchased in the format **+1XXXYYYZZZZ**.
 
 3. Configure Twilio to send messages to the MMSSearch service
    1. Go to **Manage Numbers** on Twilio dashboard by clicking on **All Products & Services** on the left pane then click on your number.
@@ -167,7 +167,7 @@ There are two different ways to deploy the three micro-services to a Kubernetes 
 
 1. Install [Helm](https://docs.helm.sh/using_helm/#installing-helm). (`brew install kubernetes-helm` on MacOS)
 
-2. Find your **Ingress Subdomain** by running `ibmcloud cs cluster-get YOUR_CLUSTER_NAME` , it will look similar to "mycluster.us-south.containers.mybluemix.net".
+2. Find your **Ingress Subdomain** by running `ibmcloud ks cluster get YOUR_CLUSTER_NAME` , it will look similar to "mycluster.us-south.containers.appdomain.cloud".
 
 3. Open `../helm/modernpets/values.yaml` and make the following changes.
 
@@ -198,7 +198,7 @@ If you did not deploy using Helm, you can deploy using the yaml files and kubect
 
 1. Edit **jpetstore/jpetstore.yaml** and **jpetstore/jpetstore-watson.yaml** and replace all instances of:
 
-  - `<CLUSTER DOMAIN>` with your Ingress Subdomain (`ibmcloud cs cluster-get CLUSTER_NAME`)
+  - `<CLUSTER DOMAIN>` with your Ingress Subdomain (`ibmcloud ks cluster get CLUSTER_NAME`)
   - `<REGISTRY NAMESPACE>` with your Image registry URL. For example:`us.icr.io/mynamespace`
 
 2. `kubectl create -f jpetstore.yaml`  - This creates the JPetstore app and database microservices
@@ -242,14 +242,14 @@ You can now click on **view** (next to Logs) in your cluster dashboard to launch
 
 ![](readme_images/logging.png)
 
-Learn more: [Analyze logs and monitor the health of Kubernetes applications](https://cloud.ibm.com/docs/tutorials/kubernetes-log-analysis-kibana.html)
+Learn more: [Analyze logs and monitor the health of Kubernetes applications](https://cloud.ibm.com/docs/tutorials?topic=solution-tutorials-application-log-analysis)
 
 ## Monitoring
 
 To demo monitoring of the cluster, got to your cluster dashboard and click on **View** next to Metrics:
 
 ![](readme_images/monitoring.png)
-Learn more: [Analyze logs and monitor the health of Kubernetes applications](https://cloud.ibm.com/docs/tutorials/kubernetes-log-analysis-kibana.html)
+Learn more: [Analyze logs and monitor the health of Kubernetes applications](https://cloud.ibm.com/docs/tutorials?topic=solution-tutorials-application-log-analysis)
 
 ### Load Generation for demo purposes
 
@@ -311,4 +311,4 @@ There is a known helm issue. If an install of a given release fails the very fir
 
 ## Related Content
 
-IBM Cloud solution tutorial: [Migrate web applications from Virtual Machines to Kubernetes](https://cloud.ibm.com/docs/tutorials/vm-to-containers-and-kubernetes.html)
+IBM Cloud solution tutorial: [Migrate web applications from Virtual Machines to Kubernetes](https://cloud.ibm.com/docs/tutorials?topic=solution-tutorials-vm-to-containers-and-kubernetes)

@@ -12,4 +12,4 @@ image:
 ingress:
   enabled: true
   hosts:
-    - jpetstore.<Ingress Subdomain> # Ex: jpetstore.myclustername.us-south.containers.mybluemix.net
+    - jpetstore.<Ingress Subdomain> # Ex: jpetstore.myclustername.us-south.containers.appdomain.cloud 
