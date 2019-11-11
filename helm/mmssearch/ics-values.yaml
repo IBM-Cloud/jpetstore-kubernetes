@@ -11,4 +11,4 @@ image:
 ingress:
   enabled: true
   hosts:
-    - mmssearch.modernpets.us-south.containers.mybluemix.net
+    - mmssearch.modernpets.us-south.containers.appdomain.cloud 
