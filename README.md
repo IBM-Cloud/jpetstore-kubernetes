@@ -24,7 +24,7 @@ Follow the below steps to create IBM Cloud services and resources used in this d
 
 4. Visit [IBM Cloud catalog](https://cloud.ibm.com/catalog/) and [create a **Watson Visual Recognition**](https://cloud.ibm.com/catalog/services/visual-recognition) service (choose the Lite plan). After creation, you will get a set of auto-generated service credentials. The **apikey** is required later.
 
-5. **Optionally**,visit [Twilio](http://twilio.com), sign up for a free account and **buy a number** with MMS capabilities by creating a project/feature on the Dashboard. Locate the **Account SID** and **Auth Token** from the API Credentials in the [dashboard](https://www.twilio.com/console/sms/dashboard#). Locate you **Phone Number** on the respective [Twilio page](https://www.twilio.com/console/phone-numbers/incoming).
+5. **Optionally** visit [Twilio](http://twilio.com), sign up for a free account and **buy a number** with MMS capabilities by creating a project/feature on the Dashboard. Locate the **Account SID** and **Auth Token** from the API Credentials in the [dashboard](https://www.twilio.com/console/sms/dashboard#). Locate you **Phone Number** on the respective [Twilio page](https://www.twilio.com/console/phone-numbers/incoming).
 
 ## Automated deployment
 
