@@ -16,7 +16,7 @@ IBMers can access the demo script and additional collateral from [here](https://
 
 Follow the below steps to create IBM Cloud services and resources used in this demo. You will create a Kubernetes cluster, an instance of Watson Visual Recognition and an optional [Twilio](https://www.twilio.com/) account (if you want to shop for pets using text messaging).
 
-1. If you do not have Docker or Kubernetes tooling installed, see [Setting up the IBM Cloud Developer Tools CLI](https://cloud.ibm.com/docs/cli/idt/setting_up_idt.html).
+1. If you do not have Docker or Kubernetes tooling installed, see [Setting up the IBM Cloud Developer Tools CLI](https://cloud.ibm.com/docs/cli?topic=cloud-cli-getting-started#step1-install-idt).
 
 2. Set up a cluster by going to the [Kubernetes Service on IBM Cloud](http://www.ibm.com/cloud/container-service) and [provision a Standard **Paid** cluster](https://cloud.ibm.com/docs/containers/container_index.html#clusters) (it might take up to 15 minutes to provision, so be patient). A Free cluster will *not* work because this demo uses Ingress resources.
 
