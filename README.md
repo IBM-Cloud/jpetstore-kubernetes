@@ -93,7 +93,7 @@ Skip this section if you only want to interact using the web chat.
 
 3. Configure Twilio to send messages to the MMSSearch service
    1. Go to **Manage Numbers** on Twilio dashboard by clicking on **All Products & Services** on the left pane then click on your number.
-   2. In the **Messaging** section of the **Configure** page under **A message comes in**, select **Webhook**, set the URL to `**http://mmssearch.<Ingress Subdomain>/sms/receive**` and the METHOD to **HTTP POST**
+   2. In the **Messaging** section of the **Configure** page under **A message comes in**, select **Webhook**, set the URL to `http://mmssearch.<Ingress Subdomain>/sms/receive` and the METHOD to **HTTP POST**
 
 ![](readme_images/twilio.png)
 
