@@ -236,20 +236,11 @@ If you'd like to send and receive texts from the pet store on your Mac, do the f
 
 ## Logging
 
-To illustrate logging, go to your cluster dashboard (the Overview tab) on IBM Cloud,and choose **Enable Logging**.  Next, select the appropriate Cloud Foundry **Org** and **Space**, enable the **container** and **ingress** log sources and click the click on **Create**.
-
-You can now click on **view** (next to Logs) in your cluster dashboard to launch Kibana and see your logs:
-
-![](readme_images/logging.png)
-
-Learn more: [Analyze logs and monitor the health of Kubernetes applications](https://cloud.ibm.com/docs/tutorials?topic=solution-tutorials-application-log-analysis)
+Check this tutorial - [Analyze logs and monitor application health with LogDNA and Sysdig](https://cloud.ibm.com/docs/tutorials?topic=solution-tutorials-application-log-analysis)
 
 ## Monitoring
 
-To demo monitoring of the cluster, got to your cluster dashboard and click on **View** next to Metrics:
-
-![](readme_images/monitoring.png)
-Learn more: [Analyze logs and monitor the health of Kubernetes applications](https://cloud.ibm.com/docs/tutorials?topic=solution-tutorials-application-log-analysis)
+Check this tutorial - [Analyze logs and monitor application health with LogDNA and Sysdig](https://cloud.ibm.com/docs/tutorials?topic=solution-tutorials-application-log-analysis#monitor_cluster_sysdig)
 
 ### Load Generation for demo purposes
 

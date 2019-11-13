@@ -14,8 +14,8 @@ You will be using add-ons like Jaeger, Prometheus, Grafana, Servicegraph & Weave
    helm delete jpetstore --purge
    helm delete mmssearch --purge
    ```
-4. Upgrade Helm to v2.10. Use `helm version` to check the client and server's versions.
-   
+4. Upgrade the the latest version of Helm. Use `helm version` to check the client and server's versions.
+
    **Note:** To upgrade Helm client, refer [install latest client version](https://docs.helm.sh/using_helm/#installing-helm) and to upgrade Helm Tiller run this command `helm init --upgrade`.
 
 ## Setup istio
@@ -34,7 +34,7 @@ Install Istio in your cluster.
 2. Change the directory to the Istio file location. The location will vary depending on the latest Istio version.
 
    ```
-   cd istio-1.0.x
+   cd istio-1.x.x
    ```
 
 3. Add the `istioctl` client to your PATH. For example, run the following command on a MacOS or Linux system:
@@ -50,7 +50,7 @@ Install Istio in your cluster.
 1. If a service account has not already been installed for Tiller, install one by pointing to the istio's`PATH`
 
    ```bash
-   # from ~/istio-1.0.x
+   # from ~/istio-1.x.x
    kubectl create -f install/kubernetes/helm/helm-service-account.yaml
    ```
 
@@ -60,14 +60,20 @@ Install Istio in your cluster.
    helm init --service-account tiller
    ```
 
-3. Install Istio with [automatic sidecar injection](https://istio.io/docs/setup/kubernetes/sidecar-injection/#automatic-sidecar-injection) (requires Kubernetes >=1.9.0):
+3. Install Istio-init for CRDs
+
+   ```bash
+   helm install install/kubernetes/helm/istio-init --name istio-init --namespace istio-system
+   ```
+
+4. Install Istio with [automatic sidecar injection](https://istio.io/docs/setup/kubernetes/sidecar-injection/#automatic-sidecar-injection) (requires Kubernetes >=1.9.0):
 
    ```bash
    helm install install/kubernetes/helm/istio --name istio --namespace istio-system --set tracing.enabled=true,servicegraph.enabled=true,grafana.enabled=true
    ```
-   `tracing.enabled=true`enables to collect trace spans ; `servicegraph.enabled=true`enables and provides a web-based interface for viewing service graph of the service mesh. 
+   `tracing.enabled=true`enables to collect trace spans ; `servicegraph.enabled=true`enables and provides a web-based interface for viewing service graph of the service mesh.
 
-4. The Istio-Sidecar-injector will automatically inject Envoy containers into your application pods assuming running in namespaces labeled with `istio-injection=enabled`
+5. The Istio-Sidecar-injector will automatically inject Envoy containers into your application pods assuming running in namespaces labeled with `istio-injection=enabled`
 
    ```bash
    kubectl label namespace <namespace> istio-injection=enabled
@@ -75,7 +81,7 @@ Install Istio in your cluster.
 
    If you are followed the manual steps to deploy the demo, use `default` as your `<namespace>`. If you used the automated toolchain, use the namespace you configured in the toolchain. The default is `petstore`. To check the label, run this command `kubectl get namespaces -L istio-injection`
 
-5. Install JPetStore and Visual Search using the helm yaml files or by re-running the toolchain's `Deploy` stage.
+6. Install JPetStore and Visual Search using the helm yaml files or by re-running the toolchain's `Deploy` stage.
 
     ```sh
     # Change into the helm directory of JPetstore app
@@ -88,7 +94,7 @@ Install Istio in your cluster.
     helm install --name mmssearch ./mmssearch
     ```
 
-6. By default, Istio-enabled services are unable to access URLs outside of the cluster because iptables is used in the pod to transparently redirect all outbound traffic to the sidecar proxy, which only handles intra-cluster destinations.
+7. By default, Istio-enabled services are unable to access URLs outside of the cluster because iptables is used in the pod to transparently redirect all outbound traffic to the sidecar proxy, which only handles intra-cluster destinations.
 
     Create an `ServiceEntry` to allow access to an external HTTPS service:
 
@@ -142,7 +148,7 @@ istioctl create -f istio-monitoring.yaml
 In Kubernetes environments, execute the following command:
 
 ```sh
-kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=prometheus -o jsonpath='{.items[0].metadata.name}') 9090:9090 &   
+kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=prometheus -o jsonpath='{.items[0].metadata.name}') 9090:9090 &
 ```
 
 Visit <http://localhost:9090/graph> in your web browser and look for metrics starting with `istio`. Type `istio_request_count`in the **Expression** box and click **Execute**. Click on the **Graph** tab to see the istio_request_count metrics. You can add multiple graphs by clicking on **Add Graph**.
@@ -219,7 +225,7 @@ The URL is: http://localhost:4040.
 
 ### [Optional] Distributed tracing with Jaeger
 
-In `istio/ingressgateway.yaml`,Replace the `<Ingress Subdomain>` with your subdomain and run the below 
+In `istio/ingressgateway.yaml`,Replace the `<Ingress Subdomain>` with your subdomain and run the below
 
 ```sh
 kubectl create -f istio/ingressgateway.yaml
@@ -231,7 +237,7 @@ Setup access to the Jaeger dashboard URL using port-forwarding:
 kubectl port-forward -n istio-system $(kubectl get pod -n istio-system -l app=jaeger -o jsonpath='{.items[0].metadata.name}') 16686:16686 &
 ```
 
-Then open your browser at [http://localhost:16686](http://localhost:16686/) -> Select a trace and click **Find Traces**. If you click on the top (most recent) trace, you should see the details corresponding to your latest refresh. 
+Then open your browser at [http://localhost:16686](http://localhost:16686/) -> Select a trace and click **Find Traces**. If you click on the top (most recent) trace, you should see the details corresponding to your latest refresh.
 
 ![](images/jaeger.png)
 
