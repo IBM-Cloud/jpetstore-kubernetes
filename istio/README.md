@@ -14,7 +14,7 @@ You will be using add-ons like Jaeger, Prometheus, Grafana, Servicegraph & Weave
    helm delete jpetstore --purge
    helm delete mmssearch --purge
    ```
-4. Upgrade Helm to v2.10. Use `helm version` to check the client and server's versions.
+4. Upgrade the the latest version of Helm. Use `helm version` to check the client and server's versions.
 
    **Note:** To upgrade Helm client, refer [install latest client version](https://docs.helm.sh/using_helm/#installing-helm) and to upgrade Helm Tiller run this command `helm init --upgrade`.
 
