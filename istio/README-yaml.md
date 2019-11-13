@@ -31,7 +31,7 @@ Install Istio in your cluster.
 2. Change the directory to the Istio file location.
 
    ```
-   cd istio-0.8.0
+   cd istio-1.x.x
    ```
 
 3. Add the `istioctl` client to your PATH. For example, run the following command on a MacOS or Linux system:
@@ -130,7 +130,7 @@ istioctl create -f istio-monitoring.yaml
 In Kubernetes environments, execute the following command:
 
 ```sh
-kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=prometheus -o jsonpath='{.items[0].metadata.name}') 9090:9090 &   
+kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=prometheus -o jsonpath='{.items[0].metadata.name}') 9090:9090 &
 ```
 
 Visit <http://localhost:9090/graph> in your web browser and look for metrics starting with `istio`
@@ -202,7 +202,7 @@ The URL is: http://localhost:4040.
 
 ### Distributed tracing with Jaeger
 
-In `istio/ingressgateway.yaml`,Replace the `<Ingress Subdomain>` with your subdomain and run the below 
+In `istio/ingressgateway.yaml`,Replace the `<Ingress Subdomain>` with your subdomain and run the below
 
 ```sh
 kubectl create -f istio/ingressgateway.yaml
@@ -214,7 +214,7 @@ Setup access to the Jaeger dashboard URL using port-forwarding:
 kubectl port-forward -n istio-system $(kubectl get pod -n istio-system -l app=jaeger -o jsonpath='{.items[0].metadata.name}') 16686:16686 &
 ```
 
-Then open your browser at [http://localhost:16686](http://localhost:16686/) -> Select a trace and click **Find Traces**. If you click on the top (most recent) trace, you should see the details corresponding to your latest refresh. 
+Then open your browser at [http://localhost:16686](http://localhost:16686/) -> Select a trace and click **Find Traces**. If you click on the top (most recent) trace, you should see the details corresponding to your latest refresh.
 
 ![](images/jaeger.png)
 
