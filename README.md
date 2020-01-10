@@ -270,7 +270,7 @@ ibmcloud cr image-rm ${MYREGISTRY}/${MYNAMESPACE}/jpetstoreweb
 ibmcloud cr image-rm ${MYREGISTRY}/${MYNAMESPACE}/jpetstoredb
 
 # Delete your entire cluster!
-ibmcloud cs cluster-rm yourclustername
+ibmcloud ks cluster rm yourclustername
 ```
 
 ## Troubleshooting
