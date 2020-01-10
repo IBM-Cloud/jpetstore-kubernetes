@@ -3,10 +3,10 @@ TARGET_USER=$(ibmcloud target | grep User | awk '{print $2}')
 check_value "$TARGET_USER"
 echo "TARGET_USER=$TARGET_USER"
 
-INGRESS_HOSTNAME=$(ibmcloud ks cluster get $PIPELINE_KUBERNETES_CLUSTER_NAME --json | grep ingressHostname | tr -d '":,' | awk '{print $2}')
+INGRESS_HOSTNAME=$(ibmcloud ks cluster get --cluster $PIPELINE_KUBERNETES_CLUSTER_NAME --json | grep ingressHostname | tr -d '":,' | awk '{print $2}')
 echo "INGRESS_HOSTNAME=${INGRESS_HOSTNAME}"
 
-INGRESS_SECRETNAME=$(ibmcloud ks cluster get $PIPELINE_KUBERNETES_CLUSTER_NAME --json | grep ingressSecretName | tr -d '":,' | awk '{print $2}')
+INGRESS_SECRETNAME=$(ibmcloud ks cluster get --cluster $PIPELINE_KUBERNETES_CLUSTER_NAME --json | grep ingressSecretName | tr -d '":,' | awk '{print $2}')
 echo "INGRESS_SECRETNAME=${INGRESS_SECRETNAME}"
 
 if kubectl get namespace $TARGET_NAMESPACE; then

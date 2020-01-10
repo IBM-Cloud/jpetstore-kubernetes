@@ -1,7 +1,7 @@
 # update based on your IBM Container Registry namespace
 NAMESPACE=<YOUR_CONTAINER_REGISTRY>
 
-# update based on your Ingress Subdomain (use `ibmcloud ks cluster get <CLUSTERNAME>` to obtain)
+# update based on your Ingress Subdomain (use `ibmcloud ks cluster get --cluster <CLUSTERNAME>` to obtain)
 INGRESSSUBDOMAIN=jpetstore.<YOUR_INGRESS_SUBDOMAIN>
 
 # the IBM container registry

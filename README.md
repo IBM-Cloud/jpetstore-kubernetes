@@ -68,7 +68,7 @@ cd jpetstore-kubernetes
    cp mms-secrets.json.template mms-secrets.json
    ```
 
-2. Run `ibmcloud ks cluster get CLUSTER_NAME` to get your **Ingress Subdomain** (make sure to replace CLUSTER_NAME with the name of the cluster you created above).
+2. Run `ibmcloud ks cluster get --cluster CLUSTER_NAME` to get your **Ingress Subdomain** (make sure to replace CLUSTER_NAME with the name of the cluster you created above).
 
 3. Open **mms-secrets.json** file and update the **Ingress Subdomain** in the **jpetstoreurl** field. This allows the mmssearch microservice to find the images that are part of the message back to the user.
    Example: `http://jpetstore.yourclustername.us-south.containers.appdomain.cloud `
@@ -167,7 +167,7 @@ There are two different ways to deploy the three micro-services to a Kubernetes 
 
 1. Install [Helm](https://docs.helm.sh/using_helm/#installing-helm). (`brew install kubernetes-helm` on MacOS)
 
-2. Find your **Ingress Subdomain** by running `ibmcloud ks cluster get YOUR_CLUSTER_NAME` , it will look similar to "mycluster.us-south.containers.appdomain.cloud".
+2. Find your **Ingress Subdomain** by running `ibmcloud ks cluster get --cluster YOUR_CLUSTER_NAME` , it will look similar to "mycluster.us-south.containers.appdomain.cloud".
 
 3. Open `../helm/modernpets/values.yaml` and make the following changes.
 
@@ -198,7 +198,7 @@ If you did not deploy using Helm, you can deploy using the yaml files and kubect
 
 1. Edit **jpetstore/jpetstore.yaml** and **jpetstore/jpetstore-watson.yaml** and replace all instances of:
 
-  - `<CLUSTER DOMAIN>` with your Ingress Subdomain (`ibmcloud ks cluster get CLUSTER_NAME`)
+  - `<CLUSTER DOMAIN>` with your Ingress Subdomain (`ibmcloud ks cluster get --cluster CLUSTER_NAME`)
   - `<REGISTRY NAMESPACE>` with your Image registry URL. For example:`us.icr.io/mynamespace`
 
 2. `kubectl create -f jpetstore.yaml`  - This creates the JPetstore app and database microservices
@@ -270,7 +270,7 @@ ibmcloud cr image-rm ${MYREGISTRY}/${MYNAMESPACE}/jpetstoreweb
 ibmcloud cr image-rm ${MYREGISTRY}/${MYNAMESPACE}/jpetstoredb
 
 # Delete your entire cluster!
-ibmcloud ks cluster rm yourclustername
+ibmcloud ks cluster rm --cluster yourclustername
 ```
 
 ## Troubleshooting
