@@ -117,6 +117,7 @@
     "mms-image-name",
     "web-image-name",
     "prod-region",
+    "prod-resource-group",
     "prod-cluster-name",
     "prod-cluster-namespace",
     "watson-api-key"
@@ -242,6 +243,11 @@
         {
           "type": "select",
           "key": "prod-region"
+        },
+        {
+           "type": "select",
+           "key": "prod-resource-group",
+            "readonly": false
         },
         {
           "type": "label",
