@@ -60,12 +60,26 @@
       "type": "string",
       "disabled": false
     },
+    "prod-resource-group": {
+            "description": {
+                "$ref": "#/messages/deploy.rg"
+            },
+            "type": "string",
+            "validator": {
+                "v-type": "resource-group",
+                "params": ["api-key"]
+            }
+        },
     "prod-cluster-name": {
       "description": {
         "$ref": "#/messages/deploy.clusterNameDescription"
       },
       "type": "string",
-      "pattern": "\\S"
+      "pattern": "\\S",
+      "validator": {
+                "v-type": "k8s-cluster-name",
+                "params": ["prod-resource-group", "prod-region"]
+            }
     },
     "prod-cluster-namespace": {
       "description": {
