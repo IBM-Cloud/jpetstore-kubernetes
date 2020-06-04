@@ -139,27 +139,13 @@
 			"pattern": "\\S"
 		}
 	},
-	"app-name": {
-		"description": {
-			"$ref": "#/messages/deploy.appDescription"
-		},
-		"type": "string",
-		"pattern": "\\S"
-	},
-	"required": ["app-name", "api-key", "registry-region", "registry-namespace", "prod-region", "prod-resource-group", "prod-cluster-name", "prod-cluster-namespace", "db-image-name",
+	"required": ["api-key", "registry-region", "registry-namespace", "prod-region", "prod-resource-group", "prod-cluster-name", "prod-cluster-namespace", "db-image-name",
 		"mms-image-name",
 		"web-image-name", "watson-api-key"
 	],
 	"form": [{
 			"type": "validator",
 			"url": "/devops/validator/validator-v1.html"
-		}, {
-			"type": "text",
-			"readonly": false,
-			"title": {
-				"$ref": "#/messages/deploy.appName"
-			},
-			"key": "app-name"
 		}, {
 			"type": "password",
 			"readonly": false,
