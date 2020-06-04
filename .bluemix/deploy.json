@@ -1,299 +1,313 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema#",
-  "messages": {
-    "$i18n": "locales.yml"
-  },
-  "title": {
-    "$ref": "#/messages/deploy.title"
-  },
-  "description": {
-    "$ref": "#/messages/deploy.description"
-  },
-  "longDescription": {
-    "$ref": "#/messages/deploy.longDescription"
-  },
-  "type": "object",
-  "properties": {
-    "api-key": {
-      "description": {
-        "$ref": "#/messages/deploy.apikeyDescription"
-      },
-      "type": "string",
-      "pattern": "\\S"
-    },
-    "registry-region": {
-      "description": {
-        "$ref": "#/messages/deploy.registryRegionDescription"
-      },
-      "type": "string",
-      "disabled": false
-    },
-    "registry-namespace": {
-      "description": {
-        "$ref": "#/messages/deploy.registrynsDescription"
-      },
-      "type": "string",
-      "pattern": "^[a-z0-9][-_a-z0-9]{2,28}[a-z0-9]$"
-    },
-    "db-image-name": {
-      "title": { "$ref": "#/messages/deploy.dbImageName" },
-      "type": "string",
-      "pattern": "\\S",
-      "readonly": true
-    },
-    "mms-image-name": {
-      "title": { "$ref": "#/messages/deploy.mmsImageName" },
-      "type": "string",
-      "pattern": "\\S",
-      "readonly": true
-    },
-    "web-image-name": {
-      "title": { "$ref": "#/messages/deploy.webImageName" },
-      "type": "string",
-      "pattern": "\\S",
-      "readonly": true
-    },
-    "prod-region": {
-      "description": {
-        "$ref": "#/messages/deploy.regionDescription"
-      },
-      "type": "string",
-      "disabled": false
-    },
-    "prod-cluster-name": {
-      "description": {
-        "$ref": "#/messages/deploy.clusterNameDescription"
-      },
-      "type": "string",
-      "pattern": "\\S"
-    },
-    "prod-cluster-namespace": {
-      "description": {
-        "$ref": "#/messages/deploy.namespaceDescription"
-      },
-      "type": "string",
-      "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
-    },
-    "watson-api-key": {
-      "title": { "$ref": "#/messages/deploy.watsonApiKey" },
-      "type": "string",
-      "pattern": "\\S"
-    },
-    "twilio-sid": {
-      "title": { "$ref": "#/messages/deploy.twilioSid" },
-      "type": "string",
-      "pattern": "\\S"
-    },
-    "twilio-token": {
-      "title": { "$ref": "#/messages/deploy.twilioToken" },
-      "type": "string",
-      "pattern": "\\S"
-    },
-    "twilio-number": {
-      "title": { "$ref": "#/messages/deploy.twilioNumber" },
-      "type": "string",
-      "pattern": "\\S"
-    }
-  },
-  "required": [
-    "api-key",
-    "registry-region",
-    "registry-namespace",
-    "db-image-name",
-    "mms-image-name",
-    "web-image-name",
-    "prod-region",
-    "prod-cluster-name",
-    "prod-cluster-namespace",
-    "watson-api-key"
-  ],
-  "form": [
-    {
-      "type": "validator",
-      "url": "/devops/setup/bm-helper/custom_helper.html"
-    },
-    {
-      "type": "password",
-      "readonly": false,
-      "title": {
-        "$ref": "#/messages/deploy.apikey"
-      },
-      "key": "api-key"
-    },
-    {
-      "type": "section",
-      "title": { "$ref": "#/messages/deploy.crSection" },
-      "items": [
-        {
-          "type": "table",
-          "columnCount": 3,
-          "widths": [
-            "50%",
-            "3%",
-            "47%"
-          ],
-          "items": [
-            {
-              "type": "label",
-              "title": {
-                "$ref": "#/messages/deploy.containerregRegion"
-              }
-            },
-            {
-              "type": "label",
-              "title": ""
-            },
-            {
-              "type": "label",
-              "title": {
-                "$ref": "#/messages/deploy.containerregns"
-              }
-            },
-            {
-              "type": "select",
-              "title": {
-                "$ref": "#/messages/deploy.imgregRegion"
-              },
-              "key": "registry-region"
-            },
-            {
-              "type": "label",
-              "title": ""
-            },
-            {
-              "type": "select",
-              "readonly": false,
-              "title": {
-                "$ref": "#/messages/deploy.imgregNs"
-              },
-              "key": "registry-namespace"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "section",
-      "title": { "$ref": "#/messages/deploy.imageName" },
-      "items": [
-        {
-          "type": "table",
-          "columnCount": 3,
-          "widths": ["33%", "33%", "33%", "33%"],
-          "items": [
-            "web-image-name",
-            "db-image-name",
-            "mms-image-name"
-          ]
-        }
-      ]
-    },
-    {
-      "type": "table",
-      "columnCount": 5,
-      "widths": [
-        "32%",
-        "2%",
-        "32%",
-        "2%",
-        "32%"
-      ],
-      "items": [
-        {
-          "type": "label",
-          "title": {
-            "$ref": "#/messages/region"
-          }
-        },
-        {
-          "type": "label",
-          "title": ""
-        },
-        {
-          "type": "label",
-          "title": {
-            "$ref": "#/messages/deploy.cluster"
-          }
-        },
-        {
-          "type": "label",
-          "title": ""
-        },
-        {
-          "type": "label",
-          "title": {
-            "$ref": "#/messages/deploy.clusterNs"
-          }
-        },
-        {
-          "type": "select",
-          "key": "prod-region"
-        },
-        {
-          "type": "label",
-          "title": ""
-        },
-        {
-          "type": "select",
-          "key": "prod-cluster-name",
-          "readonly": false
-        },
-        {
-          "type": "label",
-          "title": ""
-        },
-        {
-          "type": "text",
-          "key": "prod-cluster-namespace",
-          "readonly": false
-        }
-      ]
-    },
-    {
-      "type": "table",
-      "columnCount": 1,
-      "widths": [
-        "100%"
-      ],
-      "items": [
-        {
-          "type": "label",
-          "title": {
-            "$ref": "#/messages/deploy.clusterDescription"
-          }
-        }
-      ]
-    },
-    {
-      "type": "table",
-      "columnCount": 1,
-      "widths": [
-        "100%"
-      ],
-      "items": [
-        {
-          "type": "label",
-          "title": {
-            "$ref": "#/messages/deploy.clusternsDescription"
-          }
-        }
-      ]
-    },
-    {
-      "type": "section",
-      "title": { "$ref": "#/messages/deploy.requiredServices" },
-      "items": [
-        "watson-api-key"
-      ]
-    },
-    {
-      "type": "section",
-      "title": { "$ref": "#/messages/deploy.optionalServices" },
-      "items": [
-        "twilio-sid",
-        "twilio-token",
-        "twilio-number"
-      ]
-    }
-  ]
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"messages": {
+		"$i18n": "locales.yml"
+	},
+	"title": {
+		"$ref": "#/messages/deploy.title"
+	},
+	"description": {
+		"$ref": "#/messages/deploy.description"
+	},
+	"longDescription": {
+		"$ref": "#/messages/deploy.longDescription"
+	},
+	"type": "object",
+	"properties": {
+		"api-key": {
+			"description": {
+				"$ref": "#/messages/deploy.apikeyDescription"
+			},
+			"type": "string",
+			"pattern": "\\S",
+			"validator": {
+				"v-type": "api-key"
+			}
+		},
+		"registry-region": {
+			"description": {
+				"$ref": "#/messages/deploy.registryRegionDescription"
+			},
+			"type": "string",
+			"disabled": false,
+			"validator": {
+				"v-type": "k8s-region",
+				"params": ["api-key"]
+			}
+		},
+		"registry-namespace": {
+			"description": {
+				"$ref": "#/messages/deploy.registrynsDescription"
+			},
+			"type": "string",
+			"pattern": "^[a-z0-9][-_a-z0-9]{2,28}[a-z0-9]$",
+			"validator": {
+				"v-type": "k8s-registry-namespace",
+				"params": ["registry-region"],
+				"validate": false
+			}
+		},
+		"db-image-name": {
+			"title": {
+				"$ref": "#/messages/deploy.dbImageName"
+			},
+			"type": "string",
+			"pattern": "\\S",
+			"readonly": true
+		},
+		"mms-image-name": {
+			"title": {
+				"$ref": "#/messages/deploy.mmsImageName"
+			},
+			"type": "string",
+			"pattern": "\\S",
+			"readonly": true
+		},
+		"web-image-name": {
+			"title": {
+				"$ref": "#/messages/deploy.webImageName"
+			},
+			"type": "string",
+			"pattern": "\\S",
+			"readonly": true
+		},
+		"prod-region": {
+			"description": {
+				"$ref": "#/messages/region"
+			},
+			"type": "string",
+			"disabled": false,
+			"validator": {
+				"v-type": "k8s-region",
+				"params": ["api-key"]
+			}
+		},
+		"prod-resource-group": {
+			"description": {
+				"$ref": "#/messages/deploy.rg"
+			},
+			"type": "string",
+			"validator": {
+				"v-type": "resource-group",
+				"params": ["api-key"]
+			}
+		},
+		"prod-cluster-name": {
+			"description": {
+				"$ref": "#/messages/deploy.cluster"
+			},
+			"type": "string",
+			"pattern": "\\S",
+			"validator": {
+				"v-type": "k8s-cluster-name",
+				"params": ["prod-resource-group", "prod-region"]
+			}
+		},
+		"prod-cluster-namespace": {
+			"description": {
+				"$ref": "#/messages/deploy.clusterNs"
+			},
+			"type": "string",
+			"pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
+		},
+		"watson-api-key": {
+			"title": {
+				"$ref": "#/messages/deploy.watsonApiKey"
+			},
+			"type": "string",
+			"pattern": "\\S"
+		},
+		"watson-url": {
+			"title": {
+				"$ref": "#/messages/deploy.watsonUrl"
+			},
+			"type": "string",
+			"pattern": "\\S"
+		},
+		"twilio-sid": {
+			"title": {
+				"$ref": "#/messages/deploy.twilioSid"
+			},
+			"type": "string",
+			"pattern": "\\S"
+		},
+		"twilio-token": {
+			"title": {
+				"$ref": "#/messages/deploy.twilioToken"
+			},
+			"type": "string",
+			"pattern": "\\S"
+		},
+		"twilio-number": {
+			"title": {
+				"$ref": "#/messages/deploy.twilioNumber"
+			},
+			"type": "string",
+			"pattern": "\\S"
+		}
+	},
+	"required": ["api-key", "registry-region", "registry-namespace", "prod-region", "prod-resource-group", "prod-cluster-name", "prod-cluster-namespace", "db-image-name",
+		"mms-image-name",
+		"web-image-name", "watson-api-key", "watson-url"
+	],
+	"form": [{
+			"type": "validator",
+			"url": "/devops/validator/validator-v1.html"
+		}, {
+			"type": "password",
+			"readonly": false,
+			"title": {
+				"$ref": "#/messages/deploy.apikey"
+			},
+			"key": "api-key"
+		},
+		{
+			"type": "table",
+			"columnCount": 3,
+			"widths": ["50%", "3%", "47%"],
+			"items": [{
+				"type": "label",
+				"title": {
+					"$ref": "#/messages/deploy.containerregRegion"
+				}
+			}, {
+				"type": "label",
+				"title": ""
+			}, {
+				"type": "label",
+				"title": {
+					"$ref": "#/messages/deploy.containerregns"
+				}
+			}, {
+				"type": "select",
+				"title": {
+					"$ref": "#/messages/deploy.containerregRegion"
+				},
+				"key": "registry-region"
+			}, {
+				"type": "label",
+				"title": ""
+			}, {
+				"type": "select",
+				"readonly": false,
+				"title": {
+					"$ref": "#/messages/deploy.containerregns"
+				},
+				"key": "registry-namespace"
+			}]
+		}, {
+			"type": "table",
+			"columnCount": 7,
+			"widths": ["24%", "2%", "24%", "3%", "23%", "1%", "23%"],
+			"items": [{
+					"type": "label",
+					"title": {
+						"$ref": "#/messages/region"
+					}
+				}, {
+					"type": "label",
+					"title": ""
+				},
+				{
+					"type": "label",
+					"title": {
+						"$ref": "#/messages/deploy.rg"
+					}
+				}, {
+					"type": "label",
+					"title": ""
+				},
+				{
+					"type": "label",
+					"title": {
+						"$ref": "#/messages/deploy.cluster"
+					}
+				}, {
+					"type": "label",
+					"title": ""
+				},
+				{
+					"type": "label",
+					"title": {
+						"$ref": "#/messages/deploy.clusterNs"
+					}
+				}, {
+					"type": "select",
+					"key": "prod-region"
+				}, {
+					"type": "label",
+					"title": ""
+				},
+				{
+					"type": "select",
+					"key": "prod-resource-group",
+					"readonly": false
+				}, {
+					"type": "label",
+					"title": ""
+				},
+				{
+					"type": "select",
+					"key": "prod-cluster-name",
+					"readonly": false
+				}, {
+					"type": "label",
+					"title": ""
+				},
+				{
+					"type": "text",
+					"key": "prod-cluster-namespace",
+					"readonly": false
+				}
+			]
+		}, {
+			"type": "table",
+			"columnCount": 1,
+			"widths": ["100%"],
+			"items": [{
+				"type": "label",
+				"title": {
+					"$ref": "#/messages/deploy.clusterDescription"
+				}
+			}]
+		}, {
+			"type": "table",
+			"columnCount": 1,
+			"widths": ["100%"],
+			"items": [{
+				"type": "label",
+				"title": {
+					"$ref": "#/messages/deploy.clusternsDescription"
+				}
+			}]
+		},
+		{
+			"type": "section",
+			"title": {
+				"$ref": "#/messages/deploy.requiredServices"
+			},
+			"items": [
+				"watson-api-key"
+			]
+		}, {
+			"type": "section",
+			"title": {
+				"$ref": "#/messages/deploy.requiredServices"
+			},
+			"items": [
+				"watson-url"
+			]
+		},
+		{
+			"type": "section",
+			"title": {
+				"$ref": "#/messages/deploy.optionalServices"
+			},
+			"items": [
+				"twilio-sid",
+				"twilio-token",
+				"twilio-number"
+			]
+		}
+	]
 }

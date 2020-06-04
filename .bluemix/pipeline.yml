@@ -43,6 +43,8 @@ stages:
     type: text
   - name: WATSON_VR_API_KEY
     value: ${WATSON_VR_API_KEY}
+  - name: WATSON_VR_URL
+    value: ${WATSON_VR_URL}
   - name: TWILIO_SID
     value: ${TWILIO_SID}
   - name: TWILIO_TOKEN
