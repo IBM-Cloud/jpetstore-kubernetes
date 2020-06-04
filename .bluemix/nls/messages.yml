@@ -5,6 +5,9 @@ deploy.title: "Delivery Pipeline"
 deploy.description: "JPetStore"
 deploy.longDescription: "The Delivery Pipeline automates continuous deployment."
 
+deploy.appDescription: "The name of your app"
+deploy.appName: "App name"
+
 deploy.apikey: "IBM Cloud API Key"
 deploy.apikeyDescription: "The IBM Cloud API key is used to access the IBM Container Service API and interact with the cluster. You can obtain your API key with 'ibmcloud iam api-key-create' or via the console at https://console.ng.bluemix.net/iam/#/apikeys by clicking **Create API key** (Each API key only can be viewed once)."
 
