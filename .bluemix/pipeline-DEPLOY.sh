@@ -19,6 +19,7 @@ fi
 # kubectl get secret $INGRESS_SECRETNAME -o yaml | sed 's/namespace: default/namespace: '$TARGET_NAMESPACE'/' | kubectl create -f -
 
 kubectl get secret all-icr-io -n default -o yaml | sed 's/namespace: default/namespace: '$TARGET_NAMESPACE'/' | kubectl create -f -
+kubectl patch -n ${TARGET_NAMESPACE} serviceaccount/default -p '{"imagePullSecrets":[{"name": "all-icr-io"}]}'
 
 # create mmssearch secret file
 cat > "mms-secrets.json" << EOF
@@ -43,15 +44,21 @@ kubectl delete secret mms-secret --namespace $TARGET_NAMESPACE
 kubectl --namespace $TARGET_NAMESPACE create secret generic mms-secret --from-file=mms-secrets=./mms-secrets.json
 
 ## Reset tiller
-# helm reset --force
+helm reset --force
 
 ## Setup tiller 
-# kubectl create serviceaccount tiller -n kube-system
-# kubectl create clusterrolebinding tiller --clusterrole=cluster-admin --serviceaccount=kube-system:tiller -n kube-system
+kubectl create serviceaccount tiller -n kube-system
+kubectl create clusterrolebinding tiller --clusterrole=cluster-admin --serviceaccount=kube-system:tiller -n kube-system
+kubectl --namespace kube-system patch deploy tiller-deploy \
+ -p '{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}' 
+ 
+## install helm tiller into cluster
+helm init --upgrade --service-account tiller
+helm version
+kubectl -n kube-system wait --for=condition=Ready pod -l name=tiller --timeout=180s
 
-## reset and install helm tiller into cluster
-helm init --upgrade 
-
+# Delete any existing deployments
+helm delete jpetstore --purge
 # install release named jpetstore
 helm upgrade --install --namespace $TARGET_NAMESPACE --debug \
   --set image.repository=$REGISTRY_URL/$REGISTRY_NAMESPACE \
@@ -62,6 +69,8 @@ helm upgrade --install --namespace $TARGET_NAMESPACE --debug \
   --recreate-pods \
   --wait jpetstore ./helm/modernpets
 
+# Delete any existing deployments
+helm delete mmssearch --purge
 # install release named mmssearch
 helm upgrade --install --namespace $TARGET_NAMESPACE --debug \
   --set image.repository=$REGISTRY_URL/$REGISTRY_NAMESPACE \
