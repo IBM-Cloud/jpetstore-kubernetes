@@ -59,7 +59,6 @@ helm upgrade --install --namespace $TARGET_NAMESPACE --debug \
   --set image.pullPolicy=Always \
   --set ingress.hosts={jpetstore.$INGRESS_HOSTNAME} \
   --set ingress.secretName=$INGRESS_SECRETNAME \
-  --recreate-pods \
   --wait jpetstore ./helm/modernpets
 
 # install release named mmssearch
@@ -69,5 +68,4 @@ helm upgrade --install --namespace $TARGET_NAMESPACE --debug \
   --set image.pullPolicy=Always \
   --set ingress.hosts={mmssearch.$INGRESS_HOSTNAME} \
   --set ingress.secretName=$INGRESS_SECRETNAME \
-  --recreate-pods \
   --wait mmssearch ./helm/mmssearch
