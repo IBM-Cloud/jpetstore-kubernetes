@@ -117,6 +117,13 @@
 			"type": "string",
 			"pattern": "\\S"
 		},
+		"watson-url": {
+			"title": {
+				"$ref": "#/messages/deploy.watsonUrl"
+			},
+			"type": "string",
+			"pattern": "\\S"
+		},
 		"twilio-sid": {
 			"title": {
 				"$ref": "#/messages/deploy.twilioSid"
@@ -141,7 +148,7 @@
 	},
 	"required": ["api-key", "registry-region", "registry-namespace", "prod-region", "prod-resource-group", "prod-cluster-name", "prod-cluster-namespace", "db-image-name",
 		"mms-image-name",
-		"web-image-name", "watson-api-key"
+		"web-image-name", "watson-api-key", "watson-url"
 	],
 	"form": [{
 			"type": "validator",
@@ -281,6 +288,14 @@
 			},
 			"items": [
 				"watson-api-key"
+			]
+		}, {
+			"type": "section",
+			"title": {
+				"$ref": "#/messages/deploy.requiredServices"
+			},
+			"items": [
+				"watson-url"
 			]
 		},
 		{
