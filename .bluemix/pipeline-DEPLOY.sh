@@ -38,12 +38,19 @@ cat > "mms-secrets.json" << EOF
 }
 EOF
 
-# create mmssearch secret
+## create mmssearch secret
 kubectl delete secret mms-secret --namespace $TARGET_NAMESPACE
 kubectl --namespace $TARGET_NAMESPACE create secret generic mms-secret --from-file=mms-secrets=./mms-secrets.json
 
-## install helm tiller into cluster
-helm init
+## Reset tiller
+helm reset --force
+
+## Setup tiller 
+kubectl create serviceaccount tiller -n kube-system
+kubectl create clusterrolebinding tiller --clusterrole=cluster-admin --serviceaccount=kube-system:tiller -n kube-system
+
+## reset and install helm tiller into cluster
+helm init --service-account tiller
 
 # install release named jpetstore
 helm upgrade --install --namespace $TARGET_NAMESPACE --debug \
