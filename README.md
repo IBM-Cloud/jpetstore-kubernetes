@@ -22,7 +22,7 @@ Follow the below steps to create IBM Cloud services and resources used in this d
 
 3. Follow the instructions in the **Access** tab of your cluster to gain access to your cluster using [**kubectl**](https://kubernetes.io/docs/reference/kubectl/overview/).
 
-4. Visit [IBM Cloud catalog](https://cloud.ibm.com/catalog/) and [create a **Watson Visual Recognition**](https://cloud.ibm.com/catalog/services/visual-recognition) service (choose the Lite plan). After creation, you will get a set of auto-generated service credentials. The **apikey** is required later.
+4. Visit [IBM Cloud catalog](https://cloud.ibm.com/catalog/) and [create a **Watson Visual Recognition**](https://cloud.ibm.com/catalog/services/visual-recognition) service (choose the Lite plan). After creation, you will get a set of auto-generated service credentials. The **apikey** and **URL** are required later.
 
 5. **Optionally** visit [Twilio](http://twilio.com), sign up for a free account and **buy a number** with MMS capabilities by creating a project/feature on the Dashboard. Locate the **Account SID** and **Auth Token** from the API Credentials in the [dashboard](https://www.twilio.com/console/sms/dashboard#). Locate you **Phone Number** on the respective [Twilio page](https://www.twilio.com/console/phone-numbers/incoming).
 
@@ -75,9 +75,8 @@ cd jpetstore-kubernetes
 
 4. Go to the [IBM Cloud catalog](https://cloud.ibm.com/catalog/) and [create a **Watson Visual Recognition**](https://cloud.ibm.com/catalog/services/visual-recognition) service (choose the Lite plan).
 
-5. After creation, you will get a set of auto-generated service credentials. Carefully copy these into the **watson** section of **mms-secrets.json** file.
+5. After creation, you will get a set of auto-generated service credentials. Carefully copy the **API key** and **URL** into the **watson** section of **mms-secrets.json** file.
 
-   ![](readme_images/watson_credentials.png)
 
 ### Set up Twilio (optional)
 
