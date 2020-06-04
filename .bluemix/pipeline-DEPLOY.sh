@@ -1,6 +1,5 @@
 #!/bin/bash
 TARGET_USER=$(ibmcloud target | grep User | awk '{print $2}')
-check_value "$TARGET_USER"
 echo "TARGET_USER=$TARGET_USER"
 
 INGRESS_HOSTNAME=$(ibmcloud ks cluster get --cluster $PIPELINE_KUBERNETES_CLUSTER_NAME --json | grep ingressHostname | tr -d '":,' | awk '{print $2}')
@@ -19,20 +18,7 @@ fi
 # copy the tls cert over
 # kubectl get secret $INGRESS_SECRETNAME -o yaml | sed 's/namespace: default/namespace: '$TARGET_NAMESPACE'/' | kubectl create -f -
 
-# a secret to access the registry
-if kubectl get secret petstore-docker-registry --namespace $TARGET_NAMESPACE; then
-  echo "Docker Registry secret already exists"
-else
-  REGISTRY_TOKEN=$(ibmcloud cr token-add --description "petstore-docker-registry for $TARGET_USER" --non-expiring --quiet)
-  kubectl --namespace $TARGET_NAMESPACE create secret docker-registry petstore-docker-registry \
-    --docker-server=${REGISTRY_URL} \
-    --docker-password="${REGISTRY_TOKEN}" \
-    --docker-username=token \
-    --docker-email="${TARGET_USER}" || exit 1
-fi
-
-# create the imagePullSecret https://cloud.ibm.com/docs/containers/cs_images.html#store_imagePullSecret
-kubectl patch -n $TARGET_NAMESPACE serviceaccount/default -p '{"imagePullSecrets":[{"name": "petstore-docker-registry"}]}'
+kubectl get secret all-icr-io -n default -o yaml | sed 's/namespace: default/namespace: '$TARGET_NAMESPACE'/' | kubectl create -f -
 
 # create mmssearch secret file
 cat > "mms-secrets.json" << EOF
@@ -40,7 +26,7 @@ cat > "mms-secrets.json" << EOF
   "jpetstoreurl": "http://jpetstore.$INGRESS_HOSTNAME",
   "watson": 
   {
-    "url": "https://gateway.watsonplatform.net/visual-recognition/api",
+    "url": "$WATSON_VR_URL",
     "note": "It may take up to 5 minutes for this key to become active",
     "api_key": "$WATSON_VR_API_KEY"
   },
