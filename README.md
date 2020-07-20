@@ -235,11 +235,11 @@ If you'd like to send and receive texts from the pet store on your Mac, do the f
 
 ## Logging
 
-Check this tutorial - [Analyze logs and monitor application health with LogDNA and Sysdig](https://cloud.ibm.com/docs/tutorials?topic=solution-tutorials-application-log-analysis)
+Check this tutorial - [Analyze logs and monitor application health with LogDNA and Sysdig](https://cloud.ibm.com/docs/solution-tutorials?topic=solution-tutorials-application-log-analysis)
 
 ## Monitoring
 
-Check this tutorial - [Analyze logs and monitor application health with LogDNA and Sysdig](https://cloud.ibm.com/docs/tutorials?topic=solution-tutorials-application-log-analysis#monitor_cluster_sysdig)
+Check this tutorial - [Analyze logs and monitor application health with LogDNA and Sysdig](https://cloud.ibm.com/docs/solution-tutorials?topic=solution-tutorials-application-log-analysis#monitor_cluster_sysdig)
 
 ### Load Generation for demo purposes
 
@@ -301,4 +301,4 @@ There is a known helm issue. If an install of a given release fails the very fir
 
 ## Related Content
 
-IBM Cloud solution tutorial: [Migrate web applications from Virtual Machines to Kubernetes](https://cloud.ibm.com/docs/tutorials?topic=solution-tutorials-vm-to-containers-and-kubernetes)
+IBM Cloud solution tutorial: [Migrate web applications from Virtual Machines to Kubernetes](https://cloud.ibm.com/docs/solution-tutorials?topic=solution-tutorials-vm-to-containers-and-kubernetes)
