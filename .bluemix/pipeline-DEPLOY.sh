@@ -53,9 +53,9 @@ kubectl --namespace kube-system patch deploy tiller-deploy \
  -p '{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}' 
  
 ## install helm tiller into cluster
-helm init --upgrade --service-account tiller
+# helm init --upgrade --service-account tiller
 helm version
-kubectl -n kube-system wait --for=condition=Ready pod -l name=tiller --timeout=180s
+# kubectl -n kube-system wait --for=condition=Ready pod -l name=tiller --timeout=180s
 
 # Delete any existing deployments
 helm delete jpetstore --purge
