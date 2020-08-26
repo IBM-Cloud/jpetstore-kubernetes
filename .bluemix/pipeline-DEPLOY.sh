@@ -42,15 +42,6 @@ EOF
 ## create mmssearch secret
 kubectl delete secret mms-secret --namespace $TARGET_NAMESPACE
 kubectl --namespace $TARGET_NAMESPACE create secret generic mms-secret --from-file=mms-secrets=./mms-secrets.json
-
-## Reset tiller
-# helm reset --force
-
-## Setup tiller 
-# kubectl create serviceaccount tiller -n kube-system
-# kubectl create clusterrolebinding tiller --clusterrole=cluster-admin --serviceaccount=kube-system:tiller -n kube-system
-# kubectl --namespace kube-system patch deploy tiller-deploy \
-# -p '{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}' 
  
 ## For Helm 3
 echo "=========================================================="
@@ -83,14 +74,9 @@ elif [ "${CLIENT_VERSION}" != "${LOCAL_VERSION}" ]; then
   cd $WORKING_DIR
 fi
 set -e
-helm version ${HELM_TLS_OPTION}
 
-
-## install helm tiller into cluster
-# helm init --upgrade --service-account tiller
 echo "helm version"
-helm version
-# kubectl -n kube-system wait --for=condition=Ready pod -l name=tiller --timeout=180s
+helm version ${HELM_TLS_OPTION}
 
 # install release named jpetstore
 helm upgrade --install --namespace $TARGET_NAMESPACE --debug \
@@ -99,7 +85,6 @@ helm upgrade --install --namespace $TARGET_NAMESPACE --debug \
   --set image.pullPolicy=Always \
   --set ingress.hosts={jpetstore.$INGRESS_HOSTNAME} \
   --set ingress.secretName=$INGRESS_SECRETNAME \
-  --recreate-pods \
   --wait jpetstore ./helm/modernpets
 
 # install release named mmssearch
@@ -109,5 +94,4 @@ helm upgrade --install --namespace $TARGET_NAMESPACE --debug \
   --set image.pullPolicy=Always \
   --set ingress.hosts={mmssearch.$INGRESS_HOSTNAME} \
   --set ingress.secretName=$INGRESS_SECRETNAME \
-  --recreate-pods \
   --wait mmssearch ./helm/mmssearch
