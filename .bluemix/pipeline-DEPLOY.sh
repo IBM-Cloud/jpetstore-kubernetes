@@ -42,23 +42,42 @@ EOF
 ## create mmssearch secret
 kubectl delete secret mms-secret --namespace $TARGET_NAMESPACE
 kubectl --namespace $TARGET_NAMESPACE create secret generic mms-secret --from-file=mms-secrets=./mms-secrets.json
-
-## Reset tiller
-helm reset --force
-
-## Setup tiller 
-kubectl create serviceaccount tiller -n kube-system
-kubectl create clusterrolebinding tiller --clusterrole=cluster-admin --serviceaccount=kube-system:tiller -n kube-system
-kubectl --namespace kube-system patch deploy tiller-deploy \
- -p '{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}' 
  
-## install helm tiller into cluster
-helm init --upgrade --service-account tiller
-helm version
-kubectl -n kube-system wait --for=condition=Ready pod -l name=tiller --timeout=180s
+## For Helm 3
+echo "=========================================================="
+echo "CHECKING HELM 3 VERSION (if absent will install latest Helm 3 version) "
+set +e
+LOCAL_VERSION=$( helm version ${HELM_TLS_OPTION} --template="{{ .Version }}" | cut -c 2- )
+# if no Helm 3 locally installed, LOCAL_VERSION will be empty -- will install latest then
+set -e
+if [ -z "${HELM_VERSION}" ]; then
+  CLIENT_VERSION=${LOCAL_VERSION} 
+else
+  CLIENT_VERSION=${HELM_VERSION}
+fi
+set +e
+if [ -z "${CLIENT_VERSION}" ]; then # Helm 3 not present yet and no explicit required version, install latest
+  echo "Installing latest Helm 3 client"
+  WORKING_DIR=$(pwd)
+  mkdir ~/tmpbin && cd ~/tmpbin
+  HELM_INSTALL_DIR=$(pwd)
+  curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+  export PATH=${HELM_INSTALL_DIR}:$PATH
+  cd $WORKING_DIR
+elif [ "${CLIENT_VERSION}" != "${LOCAL_VERSION}" ]; then
+  echo -e "Installing Helm 3 client ${CLIENT_VERSION}"
+  WORKING_DIR=$(pwd)
+  mkdir ~/tmpbin && cd ~/tmpbin
+  curl -L https://get.helm.sh/helm-v${CLIENT_VERSION}-linux-amd64.tar.gz -o helm.tar.gz && tar -xzvf helm.tar.gz
+  cd linux-amd64
+  export PATH=$(pwd):$PATH
+  cd $WORKING_DIR
+fi
+set -e
 
-# Delete any existing deployments
-helm delete jpetstore --purge
+echo "helm version"
+helm version ${HELM_TLS_OPTION}
+
 # install release named jpetstore
 helm upgrade --install --namespace $TARGET_NAMESPACE --debug \
   --set image.repository=$REGISTRY_URL/$REGISTRY_NAMESPACE \
@@ -66,11 +85,8 @@ helm upgrade --install --namespace $TARGET_NAMESPACE --debug \
   --set image.pullPolicy=Always \
   --set ingress.hosts={jpetstore.$INGRESS_HOSTNAME} \
   --set ingress.secretName=$INGRESS_SECRETNAME \
-  --recreate-pods \
   --wait jpetstore ./helm/modernpets
 
-# Delete any existing deployments
-helm delete mmssearch --purge
 # install release named mmssearch
 helm upgrade --install --namespace $TARGET_NAMESPACE --debug \
   --set image.repository=$REGISTRY_URL/$REGISTRY_NAMESPACE \
@@ -78,5 +94,4 @@ helm upgrade --install --namespace $TARGET_NAMESPACE --debug \
   --set image.pullPolicy=Always \
   --set ingress.hosts={mmssearch.$INGRESS_HOSTNAME} \
   --set ingress.secretName=$INGRESS_SECRETNAME \
-  --recreate-pods \
   --wait mmssearch ./helm/mmssearch

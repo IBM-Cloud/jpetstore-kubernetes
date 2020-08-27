@@ -16,7 +16,7 @@ You will be using add-ons like Jaeger, Prometheus, Grafana, Servicegraph & Weave
    ```
 4. Upgrade the the latest version of Helm. Use `helm version` to check the client and server's versions.
 
-   **Note:** To upgrade Helm client, refer [install latest client version](https://docs.helm.sh/using_helm/#installing-helm) and to upgrade Helm Tiller run this command `helm init --upgrade`.
+   **Note:** To upgrade Helm client, refer [install latest client version](https://docs.helm.sh/using_helm/#installing-helm) and to upgrade Helm run this command `helm upgrade`.
 
 ## Setup istio
 
@@ -54,26 +54,20 @@ Install Istio in your cluster.
    kubectl create -f install/kubernetes/helm/helm-service-account.yaml
    ```
 
-2. Install Tiller on your cluster with the service account:
-
-   ```bash
-   helm init --service-account tiller
-   ```
-
-3. Install Istio-init for CRDs
+2. Install Istio-init for CRDs
 
    ```bash
    helm install install/kubernetes/helm/istio-init --name istio-init --namespace istio-system
    ```
 
-4. Install Istio with [automatic sidecar injection](https://istio.io/docs/setup/kubernetes/sidecar-injection/#automatic-sidecar-injection) (requires Kubernetes >=1.9.0):
+3. Install Istio with [automatic sidecar injection](https://istio.io/docs/setup/kubernetes/sidecar-injection/#automatic-sidecar-injection) (requires Kubernetes >=1.9.0):
 
    ```bash
    helm install install/kubernetes/helm/istio --name istio --namespace istio-system --set tracing.enabled=true,servicegraph.enabled=true,grafana.enabled=true
    ```
    `tracing.enabled=true`enables to collect trace spans ; `servicegraph.enabled=true`enables and provides a web-based interface for viewing service graph of the service mesh.
 
-5. The Istio-Sidecar-injector will automatically inject Envoy containers into your application pods assuming running in namespaces labeled with `istio-injection=enabled`
+4. The Istio-Sidecar-injector will automatically inject Envoy containers into your application pods assuming running in namespaces labeled with `istio-injection=enabled`
 
    ```bash
    kubectl label namespace <namespace> istio-injection=enabled
@@ -81,7 +75,7 @@ Install Istio in your cluster.
 
    If you are followed the manual steps to deploy the demo, use `default` as your `<namespace>`. If you used the automated toolchain, use the namespace you configured in the toolchain. The default is `petstore`. To check the label, run this command `kubectl get namespaces -L istio-injection`
 
-6. Install JPetStore and Visual Search using the helm yaml files or by re-running the toolchain's `Deploy` stage.
+5. Install JPetStore and Visual Search using the helm yaml files or by re-running the toolchain's `Deploy` stage.
 
     ```sh
     # Change into the helm directory of JPetstore app
@@ -94,7 +88,7 @@ Install Istio in your cluster.
     helm install --name mmssearch ./mmssearch
     ```
 
-7. By default, Istio-enabled services are unable to access URLs outside of the cluster because iptables is used in the pod to transparently redirect all outbound traffic to the sidecar proxy, which only handles intra-cluster destinations.
+6. By default, Istio-enabled services are unable to access URLs outside of the cluster because iptables is used in the pod to transparently redirect all outbound traffic to the sidecar proxy, which only handles intra-cluster destinations.
 
     Create an `ServiceEntry` to allow access to an external HTTPS service:
 
