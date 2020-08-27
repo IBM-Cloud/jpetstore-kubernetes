@@ -254,8 +254,8 @@ loadtest http://jpetstore.<Ingress Subdomain>/
 
 ```bash
 # Use "helm delete" to delete the two apps
-helm delete jpetstore --purge
-helm delete mmssearch --purge
+helm uninstall jpetstore
+helm uninstall mmssearch
 
 # Delete the secrets stored in our cluster
 kubectl delete secret mms-secret
