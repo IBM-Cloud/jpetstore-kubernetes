@@ -182,10 +182,10 @@ There are two different ways to deploy the three micro-services to a Kubernetes 
     cd ../helm
 
     # Create the JPetstore app
-    helm install --name jpetstore ./modernpets
+    helm install jpetstore ./modernpets
 
     # Ceate the MMSSearch microservice
-    helm install --name mmssearch ./mmssearch
+    helm install mmssearch ./mmssearch
     ```
 
 ### Option 2: Deploy using YAML files
