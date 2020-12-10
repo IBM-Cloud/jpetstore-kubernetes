@@ -193,32 +193,6 @@ func receiveSimulatorHandler(w http.ResponseWriter, r *http.Request) {
 	// Copy image data to a buffer
 	io.Copy(&imageBuffer, imageFile)
 
-	//parse the data POSTed
-	/*r.ParseMultipartForm(32 << 20)
-	fmt.Println("I am here")
-	file, header, err := r.FormFile("picture") // file has the image
-	imageName := strings.Split(header.Filename, ".")
-	if err != nil {
-		fmt.Fprintf(w, "Error reading uploaded image")
-		fmt.Println("whoops:", err)
-		return
-	}
-	defer file.Close()
-
-	// grab the image
-	bodyImage := &bytes.Buffer{}             // address of a buffer
-	writer := multipart.NewWriter(bodyImage) //writer that will write to bodyImage
-	part, err := writer.CreateFormFile("images_file", header.Filename)
-	if err != nil {
-		fmt.Println("whoops:", err)
-	}
-	_, err = io.Copy(part, file) //copy contents from file to part
-	var imageBuffer bytes.Buffer
-	io.Copy(&imageBuffer, file)
-	err = writer.Close()
-	if err != nil {
-		fmt.Println("whoops:", err)
-	}*/
 	// Make tensor
 	tensor, err := makeTensorFromImage(&imageBuffer, imageName[:1][0])
 	if err != nil {
@@ -362,10 +336,11 @@ func parseResponse(probabilities []float32) (string, string) {
 
 		if strings.LastIndex(bestResponse, " ") != -1 {
 			bestResponse = bestResponse[strings.LastIndex(bestResponse, " ")+1:]
+			if !contains(input, bestResponse) {
+				bestResponse = bestResponse2[strings.LastIndex(bestResponse2, " ")+1:]
+			}
 		}
-		if !contains(input, bestResponse) {
-			bestResponse = bestResponse2[strings.LastIndex(bestResponse2, " ")+1:]
-		}
+
 		bestResponse = strings.ToLower(bestResponse)
 
 		dbLoc := "/jpetstore"
