@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"bytes"
 	"database/sql"
 	"encoding/json"
@@ -8,25 +9,20 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
-	"mime/multipart"
 	"net/http"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 
 	"bitbucket.org/ckvist/twilio/twiml"
 	_ "github.com/go-sql-driver/mysql"
+	tf "github.com/tensorflow/tensorflow/tensorflow/go"
 )
 
-// MMSSecret holds all Watson and Twilio and other credentials
+// MMSSecret holds all Twilio and other credentials
 type MMSSecret struct {
 	JPetstoreURL string `json:"jpetstoreurl"`
-	WatsonSecret struct {
-		URL     string `json:"url"`
-		Note    string `json:"note"`
-		APIKey  string `json:"api_key"`
-		APIKey2 string `json:"apikey"`
-	} `json:"watson"`
 	TwilioSecret struct {
 		AccountSID   string `json:"sid"`
 		AccountToken string `json:"token"`
@@ -76,12 +72,25 @@ type SimulatorResponse struct {
 	IMAGEURL string `json:"imageURL"`
 }
 
+type ClassifyResult struct {
+	Filename string        `json:"filename"`
+	Labels   []LabelResult `json:"labels"`
+}
+
+type LabelResult struct {
+	Label       string  `json:"label"`
+	Probability float32 `json:"probability"`
+}
+
+var (
+	graphModel   *tf.Graph
+	sessionModel *tf.Session
+	labels       []string
+)
+
 var mmsSecretsFileName = "mms-secrets.json"
-var watsonVRURLStr string
-var watsonVersion = "2016-05-20"
 
 // var twilioSecrets TwilioSecret
-// var watsonSecrets WatsonSecret
 var mmsSecrets MMSSecret
 var db *sql.DB
 var (
@@ -96,7 +105,7 @@ var (
 func main() {
 	var mmsSecretFile []byte
 
-	// Get Watson secrets
+	// Get mmssearch secrets
 	mmsSecretFile, err := ioutil.ReadFile("/etc/secrets/" + mmsSecretsFileName)
 	if err != nil {
 		// If you can't find it in /etc/secrets, check the current dir
@@ -111,35 +120,84 @@ func main() {
 	if err != nil {
 		fmt.Println("Something is wrong with your JSON : ", err)
 	}
-	fmt.Println("(Updated2) Watson URL: ", mmsSecrets.WatsonSecret.URL)
-
-	// if api_key is empty, check apikey
-	if mmsSecrets.WatsonSecret.APIKey == "" {
-		mmsSecrets.WatsonSecret.APIKey = mmsSecrets.WatsonSecret.APIKey2
-	}
-	watsonVRURLStr = mmsSecrets.WatsonSecret.URL + "/v3/classify"
 
 	// fmt.Println("Twilio SID: ", mmsSecrets.TwilioSecret.AccountSID)
 	// fmt.Println("Twilio Token: ", mmsSecrets.TwilioSecret.AccountToken)
 	// fmt.Println("Twilio Number: ", mmsSecrets.TwilioSecret.Number)
 	fmt.Println("JPetStore URL: ", mmsSecrets.JPetstoreURL)
 
+	if err := loadModel(); err != nil {
+		log.Fatal(err)
+		return
+	}
 	http.HandleFunc("/sms/receive", receiveSMSHandler)
 	http.HandleFunc("/simulator/receive", receiveSimulatorHandler)
+
 	http.Handle("/", http.FileServer(http.Dir("./static")))
 	fmt.Println("http://localhost:8080/")
 	http.ListenAndServe(":8080", nil)
 
 }
 
+func loadModel() error {
+	fmt.Println("Loading model...")
+	// Load inception model
+	model, err := ioutil.ReadFile("/model/tensorflow_inception_graph.pb")
+	if err != nil {
+		return err
+	}
+	graphModel = tf.NewGraph()
+	if err := graphModel.Import(model, ""); err != nil {
+		return err
+	}
+
+	sessionModel, err = tf.NewSession(graphModel, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Load labels
+	labelsFile, err := os.Open("/model/imagenet_comp_graph_label_strings.txt")
+	if err != nil {
+		return err
+	}
+	defer labelsFile.Close()
+	scanner := bufio.NewScanner(labelsFile)
+	// Labels are separated by newlines
+	for scanner.Scan() {
+		labels = append(labels, scanner.Text())
+	}
+	if err := scanner.Err(); err != nil {
+		return err
+	}
+	return nil
+}
+
+func contains(s []string, searchterm string) bool {
+	i := sort.SearchStrings(s, searchterm)
+	return i < len(s) && s[i] == searchterm
+}
+
 // Handles responses when using the web chat interface
 func receiveSimulatorHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("New message received from simulator")
+	imageFile, header, err := r.FormFile("picture")
+	// Will contain filename and extension
+	imageName := strings.Split(header.Filename, ".")
+	if err != nil {
+		responseError(w, "Could not read image", http.StatusBadRequest)
+		return
+	}
+	defer imageFile.Close()
+	var imageBuffer bytes.Buffer
+	// Copy image data to a buffer
+	io.Copy(&imageBuffer, imageFile)
 
-	var Buf bytes.Buffer
 	//parse the data POSTed
-	r.ParseMultipartForm(32 << 20)
+	/*r.ParseMultipartForm(32 << 20)
+	fmt.Println("I am here")
 	file, header, err := r.FormFile("picture") // file has the image
+	imageName := strings.Split(header.Filename, ".")
 	if err != nil {
 		fmt.Fprintf(w, "Error reading uploaded image")
 		fmt.Println("whoops:", err)
@@ -155,44 +213,37 @@ func receiveSimulatorHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("whoops:", err)
 	}
 	_, err = io.Copy(part, file) //copy contents from file to part
-
+	var imageBuffer bytes.Buffer
+	io.Copy(&imageBuffer, file)
 	err = writer.Close()
 	if err != nil {
 		fmt.Println("whoops:", err)
-	}
-	// call Watson visual recognition API
-	req, _ := http.NewRequest("POST", watsonVRURLStr, bodyImage)
-	req.Header.Add("Accept", "application/json")
-	req.Header.Set("Content-Type", writer.FormDataContentType())
-	req.SetBasicAuth("apikey", mmsSecrets.WatsonSecret.APIKey)
-	msgQ := req.URL.Query()
-	msgQ.Add("api_key", mmsSecrets.WatsonSecret.APIKey)
-	msgQ.Add("version", watsonVersion)
-	req.URL.RawQuery = msgQ.Encode()
-	client := &http.Client{}
-	watsonResp, err := client.Do(req)
+	}*/
+	// Make tensor
+	tensor, err := makeTensorFromImage(&imageBuffer, imageName[:1][0])
 	if err != nil {
-		fmt.Println("Error calling Watson:", err)
-		fmt.Println("Trying again with http instead (Istio)")
-		// TODO: Need a better way of determining if running with ISTIO. env var?
-		// If running with Istio, communication with Envoy sidecar is http. Envoy will use HTTPS.
-		req.URL.Scheme = "http"
-		req.URL.Host = req.URL.Host + ":443"
-		watsonResp, err = client.Do(req)
-		if err != nil {
-			fmt.Println("Error calling Watson (Istio):", err)
-		}
+		responseError(w, "Invalid image", http.StatusBadRequest)
+		return
 	}
-	// parse data from Watson
-	textResponse, dbMediaURL := parseWatsonResponse(watsonResp)
-	Buf.Reset()
 
-	// format response
+	// Run inference
+	output, err := sessionModel.Run(
+		map[tf.Output]*tf.Tensor{
+			graphModel.Operation("input").Output(0): tensor,
+		},
+		[]tf.Output{
+			graphModel.Operation("output").Output(0),
+		},
+		nil)
+	if err != nil {
+		responseError(w, "Could not run inference", http.StatusInternalServerError)
+		return
+	}
+	textResponse, dbMediaURL := parseResponse(output[0].Value().([][]float32)[0])
 	sResponse := SimulatorResponse{
 		Response: textResponse,
 		IMAGEURL: dbMediaURL,
 	}
-
 	b, _ := json.Marshal(sResponse)
 	fmt.Fprintf(w, string(b))
 }
@@ -217,21 +268,48 @@ func receiveSMSHandler(w http.ResponseWriter, r *http.Request) {
 	if numMedia == 0 {
 		twilioResponse = "No images provided"
 	} else {
-		req, _ := http.NewRequest("POST", watsonVRURLStr, nil)
-		req.Header.Add("Accept", "application/json")
-		req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
-		req.SetBasicAuth("apikey", mmsSecrets.WatsonSecret.APIKey)
-		msgQ := req.URL.Query()
-		msgQ.Add("api_key", mmsSecrets.WatsonSecret.APIKey)
-		msgQ.Add("version", watsonVersion)
-		msgQ.Add("url", mediaURL)
-		req.URL.RawQuery = msgQ.Encode()
-		client := &http.Client{}
-		watsonResp, err := client.Do(req)
-		if err != nil {
-			fmt.Println("whoops:", err)
+		response, e := http.Get(mediaURL)
+		if e != nil {
+			log.Fatal(e)
 		}
-		twilioResponse, dbMediaURL = parseWatsonResponse(watsonResp)
+		defer response.Body.Close()
+
+		//open a file for writing
+		file, err := os.Create("/tmp/asdf.jpg")
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer file.Close()
+
+		// Use io.Copy to just dump the response body to the file. This supports huge files
+		_, err = io.Copy(file, response.Body)
+		var imageBuffer bytes.Buffer
+		io.Copy(&imageBuffer, response.Body)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		tensor, err := makeTensorFromImage(&imageBuffer, "jpg")
+		if err != nil {
+			responseError(w, "Invalid image", http.StatusBadRequest)
+			return
+		}
+
+		// Run inference
+		output, err := sessionModel.Run(
+			map[tf.Output]*tf.Tensor{
+				graphModel.Operation("input").Output(0): tensor,
+			},
+			[]tf.Output{
+				graphModel.Operation("output").Output(0),
+			},
+			nil)
+		if err != nil {
+			responseError(w, "Could not run inference", http.StatusInternalServerError)
+			return
+		}
+
+		twilioResponse, dbMediaURL = parseResponse(output[0].Value().([][]float32)[0])
 	}
 
 	resp := twiml.NewResponse()
@@ -252,26 +330,41 @@ func receiveSMSHandler(w http.ResponseWriter, r *http.Request) {
 	resp.Send(w)
 }
 
-func parseWatsonResponse(watsonResp *http.Response) (string, string) {
-	watsonJSON := &ClassifiedImages{}
-	watsonBody, err := ioutil.ReadAll(watsonResp.Body)
-	if err != nil {
-		fmt.Println("whoops:", err)
+type ByProbability []LabelResult
+
+func (a ByProbability) Len() int           { return len(a) }
+func (a ByProbability) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a ByProbability) Less(i, j int) bool { return a[i].Probability > a[j].Probability }
+
+func parseResponse(probabilities []float32) (string, string) {
+	var resultLabels []LabelResult
+	for i, p := range probabilities {
+		if i >= len(labels) {
+			break
+		}
+		resultLabels = append(resultLabels, LabelResult{Label: labels[i], Probability: p})
 	}
-	err = json.Unmarshal(watsonBody, &watsonJSON)
-	if err != nil {
-		fmt.Println("whoops:", err)
-	}
+	// Sort by probability
+	sort.Sort(ByProbability(resultLabels))
+	// Return top 5 labels
 
 	var response = ""
 	var dbMediaURL = ""
-	bestResponse := watsonJSON.Images[0].Classifiers[0].Classes[0].Class
-	bestScore := watsonJSON.Images[0].Classifiers[0].Classes[0].Score
+	bestResponse := resultLabels[0].Label
+	bestScore := resultLabels[0].Probability
 
-	if bestScore > 0.5 {
+	bestResponse2 := resultLabels[1].Label
+
+	if bestScore > 0.2 {
 		// strip response to first word and lowercase
+		input := []string{"cat", "dog", "fish", "reptile", "bulldog"}
+		sort.Strings(input)
+
 		if strings.LastIndex(bestResponse, " ") != -1 {
-			bestResponse = bestResponse[:strings.LastIndex(bestResponse, " ")-1]
+			bestResponse = bestResponse[strings.LastIndex(bestResponse, " ")+1:]
+		}
+		if !contains(input, bestResponse) {
+			bestResponse = bestResponse2[strings.LastIndex(bestResponse2, " ")+1:]
 		}
 		bestResponse = strings.ToLower(bestResponse)
 

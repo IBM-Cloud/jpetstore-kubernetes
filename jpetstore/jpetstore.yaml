@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: jpetstoreweb
-        image: <REGISTRY NAMESPACE>/jpetstoreweb
+        image: us.icr.io/mods15/jpetstoreweb
         env:
           - name: VERSION
             value: "1"
@@ -89,7 +89,6 @@ metadata:
 spec:
   rules:
   - host: jpetstore.<CLUSTER DOMAIN>
-    http:
       paths:
       - path: /
         backend:
