@@ -25,12 +25,6 @@ kubectl patch -n ${TARGET_NAMESPACE} serviceaccount/default -p '{"imagePullSecre
 cat > "mms-secrets.json" << EOF
 {
   "jpetstoreurl": "http://jpetstore.$INGRESS_HOSTNAME",
-  "watson": 
-  {
-    "url": "$WATSON_VR_URL",
-    "note": "It may take up to 5 minutes for this key to become active",
-    "api_key": "$WATSON_VR_API_KEY"
-  },
   "twilio": {
     "sid": "$TWILIO_SID",
     "token": "$TWILIO_TOKEN",

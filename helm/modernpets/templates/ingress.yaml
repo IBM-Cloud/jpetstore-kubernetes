@@ -18,16 +18,3 @@ spec:
               serviceName: web
               servicePort: 80
   {{- end }}
-
-#---
-#kind: EgressRule
-#apiVersion: config.istio.io/v1alpha2
-#metadata:
-#  name: watson-egress-rule
-#spec:
-#  destination:
-#    service: gateway-a.watsonplatform.net
-#  ports:
-#    - port: 80
-#      protocol: http
-##      protocol: https

@@ -36,9 +36,6 @@ region: "Cluster region"
 organization: "Organization"
 space: "Space"
 
-deploy.requiredServices: "Required Services"
-deploy.watsonApiKey: "Watson Visual Recognition API Key"
-deploy.watsonUrl: "Watson Visual Recognition instance URL"
 
 deploy.optionalServices: "Optional Services"
 deploy.twilioSid: "Twilio Account SID"
