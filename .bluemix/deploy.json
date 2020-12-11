@@ -110,20 +110,6 @@
 			"type": "string",
 			"pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
 		},
-		"watson-api-key": {
-			"title": {
-				"$ref": "#/messages/deploy.watsonApiKey"
-			},
-			"type": "string",
-			"pattern": "\\S"
-		},
-		"watson-url": {
-			"title": {
-				"$ref": "#/messages/deploy.watsonUrl"
-			},
-			"type": "string",
-			"pattern": "\\S"
-		},
 		"twilio-sid": {
 			"title": {
 				"$ref": "#/messages/deploy.twilioSid"
@@ -148,7 +134,7 @@
 	},
 	"required": ["api-key", "registry-region", "registry-namespace", "prod-region", "prod-resource-group", "prod-cluster-name", "prod-cluster-namespace", "db-image-name",
 		"mms-image-name",
-		"web-image-name", "watson-api-key", "watson-url"
+		"web-image-name"
 	],
 	"form": [{
 			"type": "validator",
@@ -280,23 +266,6 @@
 					"$ref": "#/messages/deploy.clusternsDescription"
 				}
 			}]
-		},
-		{
-			"type": "section",
-			"title": {
-				"$ref": "#/messages/deploy.requiredServices"
-			},
-			"items": [
-				"watson-api-key"
-			]
-		}, {
-			"type": "section",
-			"title": {
-				"$ref": "#/messages/deploy.requiredServices"
-			},
-			"items": [
-				"watson-url"
-			]
 		},
 		{
 			"type": "section",

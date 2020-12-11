@@ -12,7 +12,7 @@ Run the below commands
 
 ```sh
 kubectl delete -f jpetstore.yaml
-kubectl delete -f jpetstore-watson.yaml
+kubectl delete -f jpetstore-mmssearch.yaml
 ```
 
 ## Setup istio
@@ -77,7 +77,7 @@ For this option, you need to update the YAML files to point to your registry nam
 4. This creates the MMSSearch microservice with Envoy sidecar
 
    ```sh
-   kubectl create -f jpetstore/jpetstore-watson.yaml
+   kubectl create -f jpetstore/jpetstore-mmssearch.yaml
    ```
 
 5. By default, Istio-enabled services are unable to access URLs outside of the cluster because iptables is used in the pod to transparently redirect all outbound traffic to the sidecar proxy, which only handles intra-cluster destinations.

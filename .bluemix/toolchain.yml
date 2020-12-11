@@ -42,8 +42,6 @@ services:
           TARGET_REGION_ID: '{{form.pipeline.parameters.prod-region}}'
           TARGET_CLUSTER_NAME: '{{form.pipeline.parameters.prod-cluster-name}}'
           TARGET_NAMESPACE: '{{form.pipeline.parameters.prod-cluster-namespace}}'
-          WATSON_VR_API_KEY: '{{form.pipeline.parameters.watson-api-key}}'
-          WATSON_VR_URL: '{{form.pipeline.parameters.watson-url}}'
           TWILIO_SID: '{{form.pipeline.parameters.twilio-sid}}'
           TWILIO_TOKEN: '{{form.pipeline.parameters.twilio-token}}'
           TWILIO_NUMBER: '{{form.pipeline.parameters.twilio-number}}'

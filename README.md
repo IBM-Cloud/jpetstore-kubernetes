@@ -4,17 +4,17 @@ This demo modernizes an existing Java web application (JPetStore) by:
 
 1. building Docker containers from the legacy stack
 2. moving the app to [IBM Cloud Kubernetes Service](https://www.ibm.com/cloud/container-service)
-3. and extending it with [Watson Visual Recognition](https://www.ibm.com/watson/services/visual-recognition/) and [Twilio](https://www.twilio.com/) text messaging (or a web chat interface).
+3. and extending it with image(visual) classification and [Twilio](https://www.twilio.com/) text messaging (or a web chat interface).
 
 IBMers can access the demo script and additional collateral from [here](https://github.ibm.com/Bluemix/cloud-portfolio-solutions/tree/master/demos/modernize-jpetstore).
 
-![](readme_images/architecture.png)
+![](readme_images/architecture_new.png)
 
 [![Containerized Applications with IBM Cloud Kubernetes Service](readme_images/youtube_play.png)](https://youtu.be/26RjSa0UZp0 "Containerized Applications with IBM Cloud Kubernetes")
 
 ## Before you begin
 
-Follow the below steps to create IBM Cloud services and resources used in this demo. You will create a Kubernetes cluster, an instance of Watson Visual Recognition and an optional [Twilio](https://www.twilio.com/) account (if you want to shop for pets using text messaging).
+Follow the below steps to create IBM Cloud services and resources used in this demo. You will create a Kubernetes cluster, and an optional [Twilio](https://www.twilio.com/) account (if you want to shop for pets using text messaging).
 
 1. If you do not have Docker or Kubernetes tooling installed, see [Setting up the IBM Cloud Developer Tools CLI](https://cloud.ibm.com/docs/cli?topic=cloud-cli-getting-started#step1-install-idt).
 
@@ -22,9 +22,7 @@ Follow the below steps to create IBM Cloud services and resources used in this d
 
 3. Follow the instructions in the **Access** tab of your cluster to gain access to your cluster using [**kubectl**](https://kubernetes.io/docs/reference/kubectl/overview/).
 
-4. Visit [IBM Cloud catalog](https://cloud.ibm.com/catalog/) and [create a **Watson Visual Recognition**](https://cloud.ibm.com/catalog/services/visual-recognition) service (choose the Lite plan). After creation, you will get a set of auto-generated service credentials. The **apikey** and **URL** are required later.
-
-5. **Optionally** visit [Twilio](http://twilio.com), sign up for a free account and **buy a number** with MMS capabilities by creating a project/feature on the Dashboard. Locate the **Account SID** and **Auth Token** from the API Credentials in the [dashboard](https://www.twilio.com/console/sms/dashboard#). Locate you **Phone Number** on the respective [Twilio page](https://www.twilio.com/console/phone-numbers/incoming).
+4. **Optionally** visit [Twilio](http://twilio.com), sign up for a free account and **buy a number** with MMS capabilities by creating a project/feature on the Dashboard. Locate the **Account SID** and **Auth Token** from the API Credentials in the [dashboard](https://www.twilio.com/console/sms/dashboard#). Locate you **Phone Number** on the respective [Twilio page](https://www.twilio.com/console/phone-numbers/incoming).
 
 ## Automated deployment
 
@@ -54,11 +52,11 @@ cd jpetstore-kubernetes
 | Folder | Description |
 | ---- | ----------- |
 |[**jpetstore**](/jpetstore)| Traditional Java JPetStore application |
-|[**mmssearch**](/mmssearch)| New Golang microservice (which uses Watson to identify the content of an image) |
+|[**mmssearch**](/mmssearch)| New Golang microservice (used to identify the content of an image) |
 |[**helm**](/helm)| Helm charts for templated Kubernetes deployments |
 |[**pet-images**](/pet-images)| Pet images (which can be used for the demo) |
 
-### Set up Watson Visual Recognition
+### Create a Kubernetes secret
 
 1. Create a file with the name **mms-secrets.json** by using the existing template:
 
@@ -72,10 +70,6 @@ cd jpetstore-kubernetes
 
 3. Open **mms-secrets.json** file and update the **Ingress Subdomain** in the **jpetstoreurl** field. This allows the mmssearch microservice to find the images that are part of the message back to the user.
    Example: `http://jpetstore.yourclustername.us-south.containers.appdomain.cloud `
-
-4. Go to the [IBM Cloud catalog](https://cloud.ibm.com/catalog/) and [create a **Watson Visual Recognition**](https://cloud.ibm.com/catalog/services/visual-recognition) service (choose the Lite plan).
-
-5. After creation, you will get a set of auto-generated service credentials. Carefully copy the **API key** and **URL** into the **watson** section of **mms-secrets.json** file.
 
 
 ### Set up Twilio (optional)
@@ -99,7 +93,7 @@ Skip this section if you only want to interact using the web chat.
 
 ### Create Kubernetes secrets
 
-Next, use the `kubectl` command to allow your Kubernetes cluster access to the secrets you just created. This will allow it to access the visual recognition and Twilio services:
+Next, use the `kubectl` command to allow your Kubernetes cluster access to the secrets you just created. This will allow it to access the JPetStore frontend and Twilio services:
 
 ```bash
 # from the jpetstore-kubernetes directory
@@ -192,13 +186,13 @@ There are two different ways to deploy the three micro-services to a Kubernetes 
 
 If you did not deploy using Helm, you can deploy using the yaml files and kubectl. For this option, you need to update the YAML files to point to your registry namespace and Kubernetes cluster Ingress subdomain:
 
-1. Edit **jpetstore/jpetstore.yaml** and **jpetstore/jpetstore-watson.yaml** and replace all instances of:
+1. Edit **jpetstore/jpetstore.yaml** and **jpetstore/jpetstore-mmssearch.yaml** and replace all instances of:
 
   - `<CLUSTER DOMAIN>` with your Ingress Subdomain (`ibmcloud ks cluster get --cluster CLUSTER_NAME`)
   - `<REGISTRY NAMESPACE>` with your Image registry URL. For example:`us.icr.io/mynamespace`
 
 2. `kubectl create -f jpetstore.yaml`  - This creates the JPetstore app and database microservices
-3. `kubectl create -f jpetstore-watson.yaml`  - This creates the MMSSearch microservice
+3. `kubectl create -f jpetstore-mmssearch.yaml`  - This creates the MMSSearch microservice
 
 ## You're Done!
 

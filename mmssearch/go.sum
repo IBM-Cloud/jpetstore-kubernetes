@@ -1,0 +1,7 @@
+bitbucket.org/ckvist/twilio v0.0.0-20170512072134-13c593a1721b h1:EgVTZyg+IROzDLG86gbfoLk4k6nwypmTHmjXDgYMzD4=
+bitbucket.org/ckvist/twilio v0.0.0-20170512072134-13c593a1721b/go.mod h1:tZckALWIGoGfdoe/aKzxBL5qViz4qXogqZx1UViXWME=
+github.com/go-sql-driver/mysql v1.5.0 h1:ozyZYNQW3x3HtqT1jira07DN2PArx2v7/mN66gGcHOs=
+github.com/go-sql-driver/mysql v1.5.0/go.mod h1:DCzpHaOWr8IXmIStZouvnhqoel9Qv2LBy8hT2VhHyBg=
+github.com/julienschmidt/httprouter v1.2.0/go.mod h1:SYymIcj16QtmaHHD7aYtjjsJG7VTCxuUUipMqKk8s4w=
+github.com/tensorflow/tensorflow v1.12.0 h1:fT4okrN4BkpgotWmDwS56wM6BdkRpTL0lLMzvkM+bLo=
+github.com/tensorflow/tensorflow v1.12.0/go.mod h1:itOSERT4trABok4UOoG+X4BoKds9F3rIsySdn+Lvu90=

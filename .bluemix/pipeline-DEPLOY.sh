@@ -2,10 +2,10 @@
 TARGET_USER=$(ibmcloud target | grep User | awk '{print $2}')
 echo "TARGET_USER=$TARGET_USER"
 
-INGRESS_HOSTNAME=$(ibmcloud ks cluster get --cluster $PIPELINE_KUBERNETES_CLUSTER_NAME --json | grep ingressHostname | tr -d '":,' | awk '{print $2}')
+INGRESS_HOSTNAME=$(ibmcloud ks cluster get --cluster $PIPELINE_KUBERNETES_CLUSTER_NAME --json | jq -r 'if .ingressHostname then .ingressHostname else .ingress.hostname end')
 echo "INGRESS_HOSTNAME=${INGRESS_HOSTNAME}"
 
-INGRESS_SECRETNAME=$(ibmcloud ks cluster get --cluster $PIPELINE_KUBERNETES_CLUSTER_NAME --json | grep ingressSecretName | tr -d '":,' | awk '{print $2}')
+INGRESS_SECRETNAME=$(ibmcloud ks cluster get --cluster $PIPELINE_KUBERNETES_CLUSTER_NAME --json | jq -r 'if .ingressSecretName then .ingressSecretName else .ingress.secretName end')
 echo "INGRESS_SECRETNAME=${INGRESS_SECRETNAME}"
 
 if kubectl get namespace $TARGET_NAMESPACE; then
@@ -25,12 +25,6 @@ kubectl patch -n ${TARGET_NAMESPACE} serviceaccount/default -p '{"imagePullSecre
 cat > "mms-secrets.json" << EOF
 {
   "jpetstoreurl": "http://jpetstore.$INGRESS_HOSTNAME",
-  "watson": 
-  {
-    "url": "$WATSON_VR_URL",
-    "note": "It may take up to 5 minutes for this key to become active",
-    "api_key": "$WATSON_VR_API_KEY"
-  },
   "twilio": {
     "sid": "$TWILIO_SID",
     "token": "$TWILIO_TOKEN",
