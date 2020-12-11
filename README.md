@@ -8,7 +8,7 @@ This demo modernizes an existing Java web application (JPetStore) by:
 
 IBMers can access the demo script and additional collateral from [here](https://github.ibm.com/Bluemix/cloud-portfolio-solutions/tree/master/demos/modernize-jpetstore).
 
-![](readme_images/architecture.png)
+![](readme_images/architecture_new.png)
 
 [![Containerized Applications with IBM Cloud Kubernetes Service](readme_images/youtube_play.png)](https://youtu.be/26RjSa0UZp0 "Containerized Applications with IBM Cloud Kubernetes")
 
@@ -93,7 +93,7 @@ Skip this section if you only want to interact using the web chat.
 
 ### Create Kubernetes secrets
 
-Next, use the `kubectl` command to allow your Kubernetes cluster access to the secrets you just created. This will allow it to access the visual recognition and Twilio services:
+Next, use the `kubectl` command to allow your Kubernetes cluster access to the secrets you just created. This will allow it to access the JPetStore frontend and Twilio services:
 
 ```bash
 # from the jpetstore-kubernetes directory
