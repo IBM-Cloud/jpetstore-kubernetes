@@ -20,4 +20,9 @@
     update sequence set nextid = #nextId# where name = #name#
   </update>
 
+  <select id="incrementAndReturnModified" resultMap="result">
+    update sequence set nextid = nextid + 1 where name = #name# returning name, nextid
+  </select>
+
 </sqlMap>
+

@@ -15,14 +15,13 @@ public class SqlMapSequenceDao extends SqlMapClientDaoSupport {
    */
   public int getNextId(String name) throws DataAccessException {
     Sequence sequence = new Sequence(name, -1);
-    sequence = (Sequence) getSqlMapClientTemplate().queryForObject("getSequence", sequence);
+    sequence = (Sequence) getSqlMapClientTemplate().queryForObject("incrementAndReturnModified", sequence);
     if (sequence == null) {
       throw new DataRetrievalFailureException(
-					"Could not get next value of sequence '" + name + "': sequence does not exist");
+                                "Could not get next value of sequence '" + name + "': sequence does not exist");
     }
-    Object parameterObject = new Sequence(name, sequence.getNextId() + 1);
-    getSqlMapClientTemplate().update("updateSequence", parameterObject, 1);
     return sequence.getNextId();
   }
 
 }
+
